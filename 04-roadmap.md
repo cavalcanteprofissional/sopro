@@ -6,19 +6,21 @@ Estimativas em semanas de trabalho parcial; ajuste conforme sua disponibilidade.
 
 **Objetivo:** provar que o conceito funciona antes de construir.
 
-- Montar glossário seed com ~200 termos de tecnologia (ver `07-glossario-seed-modelo.md`).
+- Montar o glossário seed com ~200 termos de tecnologia no formato do `07-glossario-seed-modelo.md` (JSON/CSV), em lotes de ~50 entradas via prompts `A1`/`B2` até chegar a ~200.
+- Revisar amostra de ≥20 termos (promover `needs_review=false`), preencher o manifesto do pacote (`tech-en-pt` v0.1.0: versão, licença, autores) e validar com o checklist do `07` §6.
+- Fixar a stoplist inicial com as candidatas do `07` §4.
 - Gravar 3 aulas/vídeos de ~10 min em inglês (IA/tecnologia) e **anotar manualmente** os termos falados com marcação de tempo (conjunto de referência).
 - Transcrever com Whisper local e medir quantos termos do glossário aparecem corretos no texto.
 - Escolher a máquina de referência (CPU, RAM) para as metas de desempenho.
 
-**DoD:** planilha com taxa de acerto dos termos na transcrição; decisão sobre modelo inicial.
+**DoD:** planilha com taxa de acerto dos termos na transcrição; decisão sobre modelo inicial; pacote `tech-en-pt` v0.1.0 com manifesto preenchido e checklist do `07` §6 aprovado.
 
 ## Fase 1 — Pipeline em linha de comando (2 semanas)
 
 - Captura de loopback e microfone no Windows com etiquetas de fonte.
 - VAD + segmentação.
 - `STTProvider` local funcionando com dica de vocabulário.
-- Matcher básico (n-gramas + aliases) imprimindo termos no terminal com marcação de tempo.
+- Matcher básico (n-gramas + aliases + stoplist do `07` §4) imprimindo termos no terminal com marcação de tempo; fixtures de teste a partir das entradas de exemplo do `07` (fairness, token, bias, transformer…).
 - Modo benchmark: processa arquivo de áudio e compara com a anotação.
 
 **DoD:** recall e precisão medidos no conjunto da Fase 0; latência por etapa registrada.
@@ -27,14 +29,15 @@ Estimativas em semanas de trabalho parcial; ajuste conforme sua disponibilidade.
 
 - Pop-up conforme especificação (sem foco, sempre no topo, fila, cooldown).
 - SQLite com esquema e migrações; histórico por sessão.
+- Importador de pacotes de domínio JSON/CSV (formato do `07`) para as tabelas do `02` §6, com validação do checklist; exportação no mesmo formato (RF-23).
 - Tela mínima de configurações (fontes, idioma de saída, duração, posição).
 - Ícone na bandeja e atalhos globais.
 
-**DoD:** 30 min de uso em chamada real sem roubar foco; histórico exporta em CSV.
+**DoD:** 30 min de uso em chamada real sem roubar foco; histórico exporta em CSV; pacote seed importado via JSON/CSV sem erros.
 
 ## Fase 3 — RAG e desambiguação (2–3 semanas)
 
-- Embeddings locais e índice vetorial das acepções.
+- Embeddings locais e índice vetorial das acepções, calculados por versão do pacote e registrados em `embedding_model` no manifesto (07); reinstalar recalcula se o modelo de embedding mudar (`02` §7).
 - `SenseResolver` em cascata (acepção única → domínio → vetor → LLM).
 - Caminho de termo fora do glossário com LLM local, cache e aprovação pelo usuário.
 - Provedor Groq opcional (STT e LLM) com aviso de privacidade e tratamento de limites.

@@ -1,6 +1,8 @@
-# Sopro
+# Sopro (nome provisório)
 
 **Um companheiro discreto que explica termos técnicos em inglês no momento exato em que eles são falados.**
+
+> Pacote de documentação para guiar a implementação (por você ou por um assistente de código). **Nenhum código ainda**: apenas visão, requisitos, especificações, estado da arte, roadmap, prompts, referências e glossário.
 
 Você está vendo uma aula, palestra ou call técnica em inglês e ouve *"fairness"* ou *"backlog"* passar rápido. Pesquisar quebra a atenção. Legenda automática não explica o termo nem escolhe o sentido certo para a área.
 
@@ -17,7 +19,20 @@ O Sopro resolve assim: escuta o áudio do seu PC (ou do microfone), detecta o te
 
 ## Status
 
-Projeto em fase de **planejamento e especificação**. Esta repositório contém a documentação completa que orienta a implementação.
+Projeto em fase de **planejamento e especificação** — este repositório contém a documentação completa que orienta a implementação. Nenhum código foi escrito ainda.
+
+## Decisões já tomadas
+
+| Tema | Decisão |
+|---|---|
+| Plataforma do protótipo | Windows (arquitetura deve permitir Linux, macOS e, no futuro, mobile) |
+| Idioma do áudio | Inglês |
+| Idioma de saída | Escolhido pelo usuário (padrão: português do Brasil) |
+| Transcrição | Híbrida: **local por padrão** (Whisper), Groq **opcional** |
+| Área inicial | Tecnologia (com arquitetura de "pacotes de domínio" para outras áreas) |
+| Custo | Somente free tier / open source |
+| Dados | Tudo local (SQLite); áudio não é gravado por padrão |
+| Nome | Provisório. Candidatos: **Sopro**, Tip Fellow, Jargonaut, TermoPop, Glossa Live (verificar INPI, GitHub e domínio) |
 
 ## Documentação
 
@@ -29,6 +44,7 @@ Projeto em fase de **planejamento e especificação**. Esta repositório contém
 | [04-roadmap.md](04-roadmap.md) | Fases de implementação, métricas, riscos e marcos |
 | [05-prompts.md](05-prompts.md) | Prompts para desenvolvimento (por fase) e para o runtime do app |
 | [06-referencias.md](06-referencias.md) | Links, bibliotecas, limites de free tier e notas legais |
+| [07-glossario-seed-modelo.md](07-glossario-seed-modelo.md) | Formato do glossário (JSON/CSV), manifesto do pacote e entradas de exemplo |
 
 ## Como funciona (resumo)
 
@@ -54,11 +70,24 @@ O LLM **não** processa toda frase: o caminho rápido é busca em glossário loc
 
 Detalhes e definições de pronto em [04-roadmap.md](04-roadmap.md).
 
+## Como usar
+
+1. Leia `01` e `02` para alinhar escopo e arquitetura.
+2. Use `05-prompts.md` começando pelo **Prompt-mestre**, depois um prompt por fase do `04-roadmap.md`.
+3. Valide as metas de `01` com o benchmark descrito em `04`.
+4. Mantenha `06` atualizado: limites de free tier e versões de bibliotecas mudam.
+
 ## Privacidade e legal
 
 - Processamento local por padrão; áudio fica em memória e é descartado.
 - Provedor em nuvem só com opt-in, aviso e indicador permanente.
 - Gravar/transcrever reuniões pode exigir consentimento dos participantes (LGPD — Lei 13.709/2018). O app exibe aviso na primeira execução.
+
+## Convenções
+
+- **RF-xx**: requisito funcional. **RNF-xx**: requisito não funcional. **RN-xx**: regra de negócio.
+- Itens marcados **(verificar)** dependem de confirmação em fonte oficial antes de uso.
+- Metas numéricas são **hipóteses iniciais** a calibrar no protótipo.
 
 ## Licença
 
