@@ -1,0 +1,19 @@
+# Stoplist do domínio tech-en-pt (docs/07 §4).
+# Palavras comuns que só devem disparar pop-up com contexto de domínio confirmado.
+# Formato: uma palavra por linha; linhas em branco e iniciadas por # são ignoradas.
+model
+layer
+kernel
+pipeline
+token
+class
+object
+function
+array
+stack
+queue
+cloud
+bug
+patch
+memory
+driver

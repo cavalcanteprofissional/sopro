@@ -1,0 +1,11 @@
+{
+  "slug": "tech-en-pt",
+  "name": "Tecnologia e IA (EN→PT)",
+  "version": "0.1.0",
+  "source_lang": "en",
+  "output_langs": ["pt-BR"],
+  "license": "definir",
+  "authors": ["definir"],
+  "created_at": "2026-10-07",
+  "embedding_model": null
+}

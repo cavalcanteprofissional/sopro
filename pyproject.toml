@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sopro"
+version = "0.1.0"
+description = "Companheiro discreto que explica termos técnicos em inglês no momento em que são falados."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "A definir" }
+authors = [{ name = "Mantenedores do Sopro" }]
+keywords = ["glossary", "speech-to-text", "whisper", "accessibility", "pt-BR"]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Intended Audience :: Education",
+    "Natural Language :: Portuguese (Brazilian)",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Education",
+    "Topic :: Multimedia :: Sound/Audio :: Speech",
+]
+dependencies = []
+
+[project.optional-dependencies]
+# Dependências por fase serão adicionadas aqui conforme o roadmap avança.
+# Fase 1 (áudio/STT): faster-whisper, silero-vad, PyAudioWPatch, numpy, soundfile
+# Fase 2 (UI/dados): PySide6, sqlite-vec
+# Fase 3 (RAG/LLM): sentence-transformers, sqlite-vec
+dev = ["pytest>=8.0"]
+
+[project.scripts]
+sopro-validate-glossary = "sopro.core.glossary.validate:main"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
