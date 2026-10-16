@@ -25,7 +25,7 @@ mova-os para o [CHANGELOG](CHANGELOG.md) no momento da entrega.
 - [x] Catálogo de modelos com verificação de integridade (sha256) e cache local
 - [ ] Preencher o catálogo real (url/sha256/tamanho/licença) e marcar `verified=true`
 - [ ] Escolher o motor (faster-whisper vs whisper.cpp) por benchmark
-- [ ] `matcher`: n-gramas de 1–4 tokens, aliases, stoplist com regra de contexto, cooldown
+- [x] `matcher`: n-gramas de 1–4 tokens, aliases, stoplist com regra de contexto, cooldown
 - [ ] Modo benchmark: processa arquivo de áudio e compara com a anotação (recall/precisão)
 
 ## Fase 2 — Overlay e persistência

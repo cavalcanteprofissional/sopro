@@ -19,7 +19,13 @@ adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
   lote de termos, stoplist e README do pacote.
 - Validador de pacote de domínio com o checklist de `docs/07` §6 e console script
   `sopro-validate-glossary`.
-- Testes automatizados (pytest) para o validador e para o pacote seed.
+- Núcleo de texto (`core/text`): normalização (minúsculas, hífens/espaços, remoção de
+  pontuação) e tokenização com deslocamentos.
+- `matcher` (`core/matcher`): casamento por n-gramas de 1–4 tokens com maior primeiro,
+  aliases, flexão de plural por regra, regra de contexto para a stoplist e política de
+  exibição (cooldown por termo e orçamento por minuto).
+- Testes automatizados (pytest) para o validador, o pacote seed, o núcleo de texto e o
+  matcher.
 - Template do conjunto de teste anotado (`fixtures/testset-template.csv`).
 - Especificação de distribuição e offline (`docs/08-distribuicao-e-offline.md`).
 - Documentação padrão de projeto: `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, `SECURITY.md`,
@@ -29,8 +35,6 @@ adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 - Decisões registradas em `docs/02 §13`, `docs/01` (RNF-08) e README: modelos **on-demand**
   com verificação de integridade, **motor de STT por benchmark** e **Windows** como alvo do
   protótipo.
-
-### Changed
 - Documentação de produto/engenharia (01–07) movida para [`docs/`](docs/); README
   reorganizado como porta de entrada do projeto (único README do repositório).
 
