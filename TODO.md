@@ -27,7 +27,8 @@ mova-os para o [CHANGELOG](CHANGELOG.md) no momento da entrega.
 - [ ] Escolher o motor (faster-whisper vs whisper.cpp) por benchmark
 - [x] `matcher`: n-gramas de 1–4 tokens, aliases, stoplist com regra de contexto, cooldown
 - [x] Métricas de benchmark (recall/precisão/F1 por termo) e leitor do CSV anotado
-- [ ] Modo benchmark: ligar captura/STT/matcher e processar arquivo de áudio ponta a ponta
+- [x] Modo benchmark: processar WAV ponta a ponta (VAD + STT injetável + matcher + métricas),
+  com leitor de WAV e console script `sopro-benchmark`
 
 ## Fase 2 — Overlay e persistência
 

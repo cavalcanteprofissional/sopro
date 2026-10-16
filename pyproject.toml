@@ -32,6 +32,7 @@ dev = ["pytest>=8.0"]
 
 [project.scripts]
 sopro-validate-glossary = "sopro.core.glossary.validate:main"
+sopro-benchmark = "sopro.app.benchmark_cli:main"
 
 [tool.setuptools]
 package-dir = { "" = "src" }

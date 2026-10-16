@@ -29,6 +29,9 @@ adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
   exibição (cooldown por termo e orçamento por minuto).
 - Modo benchmark (métricas) em `app/benchmark.py`: leitor do conjunto anotado (CSV),
   recall/precisão/F1 no agregado e por termo, e resumo de latências (p50/p95).
+- Leitor de WAV para PCM 16-bit mono 16 kHz (`app/wav.py`, só biblioteca padrão) e
+  orquestração offline do benchmark (`app/benchmark_cli.py`) com motor de STT injetável
+  (`--provider modulo:fabrica`); console script `sopro-benchmark`.
 - Testes automatizados (pytest) para o validador, o pacote seed, o núcleo de texto, o
   matcher, o segmentador de fala e as métricas de benchmark.
 - Template do conjunto de teste anotado (`fixtures/testset-template.csv`).
