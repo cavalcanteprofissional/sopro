@@ -70,7 +70,7 @@ Um companheiro discreto que, **no momento em que o termo é falado**, mostra um 
 | RNF-05 | Uso de CPU durante uma call (máquina de referência a definir) | média ≤ 30% |
 | RNF-06 | Uso de RAM | ≤ 2 GB com modelos carregados |
 | RNF-07 | Funcionar 100% offline no modo local (após baixar modelos) | Obrigatório |
-| RNF-08 | Instalador simples; modelos baixados no primeiro uso | Obrigatório |
+| RNF-08 | Instalador simples; modelos baixados no primeiro uso, com verificação de integridade | Obrigatório |
 | RNF-09 | Áudio **não** é gravado em disco por padrão | Obrigatório |
 | RNF-10 | Falha de rede/provedor não derruba o app (degradação graciosa) | Obrigatório |
 | RNF-11 | Código separado em núcleo (independente de SO) e camadas de plataforma | Obrigatório |

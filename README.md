@@ -2,7 +2,7 @@
 
 **Um companheiro discreto que explica termos técnicos em inglês no momento exato em que eles são falados.**
 
-> Pacote de documentação para guiar a implementação (por você ou por um assistente de código). **Nenhum código ainda**: apenas visão, requisitos, especificações, estado da arte, roadmap, prompts, referências e glossário.
+> Status: **em planejamento e especificação**. A documentação está completa e a implementação começou pela Fase 0 (glossário seed e validação). Núcleo de código ainda incipiente.
 
 Você está vendo uma aula, palestra ou call técnica em inglês e ouve *"fairness"* ou *"backlog"* passar rápido. Pesquisar quebra a atenção. Legenda automática não explica o termo nem escolhe o sentido certo para a área.
 
@@ -16,35 +16,6 @@ O Sopro resolve assim: escuta o áudio do seu PC (ou do microfone), detecta o te
 - **Privacidade** — áudio não é gravado em disco; sem telemetria; dados não saem do computador.
 - **Só free tier** — Whisper local, SQLite, ferramentas gratuitas.
 - **Escalável** — glossários por domínio: tecnologia hoje, direito/saúde/finanças depois.
-
-## Status
-
-Projeto em fase de **planejamento e especificação** — este repositório contém a documentação completa que orienta a implementação. Nenhum código foi escrito ainda.
-
-## Decisões já tomadas
-
-| Tema | Decisão |
-|---|---|
-| Plataforma do protótipo | Windows (arquitetura deve permitir Linux, macOS e, no futuro, mobile) |
-| Idioma do áudio | Inglês |
-| Idioma de saída | Escolhido pelo usuário (padrão: português do Brasil) |
-| Transcrição | Híbrida: **local por padrão** (Whisper), Groq **opcional** |
-| Área inicial | Tecnologia (com arquitetura de "pacotes de domínio" para outras áreas) |
-| Custo | Somente free tier / open source |
-| Dados | Tudo local (SQLite); áudio não é gravado por padrão |
-| Nome | Provisório. Candidatos: **Sopro**, Tip Fellow, Jargonaut, TermoPop, Glossa Live (verificar INPI, GitHub e domínio) |
-
-## Documentação
-
-| Arquivo | O que tem |
-|---|---|
-| [01-visao-e-requisitos.md](01-visao-e-requisitos.md) | O problema, a visão, requisitos (RF/RNF/RN) e critérios de aceite |
-| [02-arquitetura-e-especificacoes.md](02-arquitetura-e-especificacoes.md) | Pipeline, módulos, contratos, modelo de dados e especificação do pop-up |
-| [03-estado-da-arte.md](03-estado-da-arte.md) | Pesquisa de soluções existentes e a lacuna que o Sopro preenche |
-| [04-roadmap.md](04-roadmap.md) | Fases de implementação, métricas, riscos e marcos |
-| [05-prompts.md](05-prompts.md) | Prompts para desenvolvimento (por fase) e para o runtime do app |
-| [06-referencias.md](06-referencias.md) | Links, bibliotecas, limites de free tier e notas legais |
-| [07-glossario-seed-modelo.md](07-glossario-seed-modelo.md) | Formato do glossário (JSON/CSV), manifesto do pacote e entradas de exemplo |
 
 ## Como funciona (resumo)
 
@@ -60,6 +31,42 @@ Projeto em fase de **planejamento e especificação** — este repositório cont
 
 O LLM **não** processa toda frase: o caminho rápido é busca em glossário local. RAG/LLM só entra para resolver ambiguidade ou termos fora do glossário — isso mantém latência, CPU e custo baixos.
 
+## Início rápido (desenvolvimento)
+
+Requisitos: Python 3.11+.
+
+```bash
+# criar e ativar ambiente virtual
+python -m venv .venv
+. .venv/Scripts/activate        # Windows (Git Bash)
+# source .venv/bin/activate     # Linux/macOS
+
+# instalar em modo editável com dependências de desenvolvimento
+python -m pip install -e ".[dev]"
+
+# rodar os testes
+pytest -q
+
+# validar o pacote de domínio seed (checklist do docs/07 §6)
+sopro-validate-glossary data/domains/tech-en-pt
+```
+
+## Estrutura do repositório
+
+```
+docs/                         Documentação de produto e engenharia (01–07)
+data/domains/                 Pacotes de domínio (glossários)
+  └─ tech-en-pt/              Pacote seed: Tecnologia e IA (EN→PT)
+src/sopro/
+  ├─ core/                    Núcleo portável (text, glossary, matcher, rag, llm, repo, config)
+  ├─ platform/                Camadas dependentes de SO/UI (audio, popup)
+  └─ app/                     Orquestração, ciclo de vida, bandeja, atalhos
+tests/                        Testes automatizados (pytest)
+fixtures/                     Dados de apoio (ex.: template do conjunto de teste)
+```
+
+**Regra de arquitetura:** `core` não depende de SO nem de UI; `platform` isola isso. Isso viabiliza portar para Linux, macOS e mobile sem reescrever o núcleo.
+
 ## Roadmap em 5 fases
 
 1. **Validação** — glossário seed e conjunto de teste anotado
@@ -68,27 +75,50 @@ O LLM **não** processa toda frase: o caminho rápido é busca em glossário loc
 4. **RAG e desambiguação** — acepção contextual + provedor Groq opcional
 5. **Empacotamento** — instalador Windows e primeira execução
 
-Detalhes e definições de pronto em [04-roadmap.md](04-roadmap.md).
+Detalhes e definições de pronto em [docs/04-roadmap.md](docs/04-roadmap.md).
 
-## Como usar
+## Documentação
 
-1. Leia `01` e `02` para alinhar escopo e arquitetura.
-2. Use `05-prompts.md` começando pelo **Prompt-mestre**, depois um prompt por fase do `04-roadmap.md`.
-3. Valide as metas de `01` com o benchmark descrito em `04`.
-4. Mantenha `06` atualizado: limites de free tier e versões de bibliotecas mudam.
+Toda a documentação de produto e engenharia está em [`docs/`](docs/). Leia na ordem:
 
-## Privacidade e legal
+| Arquivo | O que tem |
+|---|---|
+| [01-visao-e-requisitos.md](docs/01-visao-e-requisitos.md) | O problema, a visão, requisitos (RF/RNF/RN), critérios de aceite e notas legais |
+| [02-arquitetura-e-especificacoes.md](docs/02-arquitetura-e-especificacoes.md) | Pipeline, módulos, contratos, modelo de dados e especificação do pop-up |
+| [03-estado-da-arte.md](docs/03-estado-da-arte.md) | Pesquisa de soluções existentes e a lacuna que o Sopro preenche |
+| [04-roadmap.md](docs/04-roadmap.md) | Fases de implementação, métricas, riscos e marcos |
+| [05-prompts.md](docs/05-prompts.md) | Prompts de desenvolvimento (por fase) e de runtime do app |
+| [06-referencias.md](docs/06-referencias.md) | Links, bibliotecas, limites de free tier e notas legais |
+| [07-glossario-seed-modelo.md](docs/07-glossario-seed-modelo.md) | Formato do pacote de domínio (JSON/CSV), manifesto e entradas de exemplo |
+| [08-distribuicao-e-offline.md](docs/08-distribuicao-e-offline.md) | Modelos sob demanda, verificação de integridade, cache local e o que roda sem internet |
 
-- Processamento local por padrão; áudio fica em memória e é descartado.
-- Provedor em nuvem só com opt-in, aviso e indicador permanente.
-- Gravar/transcrever reuniões pode exigir consentimento dos participantes (LGPD — Lei 13.709/2018). O app exibe aviso na primeira execução.
+Convenções de leitura: **RF-xx** requisito funcional, **RNF-xx** requisito não funcional,
+**RN-xx** regra de negócio; itens **(verificar)** dependem de confirmação em fonte oficial;
+metas numéricas são **hipóteses iniciais** a calibrar no protótipo.
 
-## Convenções
+## Decisões já tomadas
 
-- **RF-xx**: requisito funcional. **RNF-xx**: requisito não funcional. **RN-xx**: regra de negócio.
-- Itens marcados **(verificar)** dependem de confirmação em fonte oficial antes de uso.
-- Metas numéricas são **hipóteses iniciais** a calibrar no protótipo.
+| Tema | Decisão |
+|---|---|
+| Plataforma do protótipo | Windows (arquitetura deve permitir Linux, macOS e, no futuro, mobile) |
+| Idioma do áudio | Inglês |
+| Idioma de saída | Escolhido pelo usuário (padrão: português do Brasil) |
+| Transcrição | Híbrida: **local por padrão** (Whisper), Groq **opcional** |
+| Área inicial | Tecnologia (com arquitetura de "pacotes de domínio" para outras áreas) |
+| Custo | Somente free tier / open source |
+| Dados | Tudo local (SQLite); áudio não é gravado por padrão |
+| Distribuição de modelos | **On-demand**: instalador enxuto; download na 1ª execução com verificação de integridade (sha256) |
+| Motor de STT local | Decidido por **benchmark** (faster-whisper vs whisper.cpp), isolado pela interface `STTProvider` |
+| Nome | Provisório. Candidatos: **Sopro**, Tip Fellow, Jargonaut, TermoPop, Glossa Live (verificar INPI, GitHub e domínio) |
+
+## Contribuindo
+
+Veja [CONTRIBUTING.md](CONTRIBUTING.md) e o [Código de Conduta](CODE_OF_CONDUCT.md). O trabalho segue as regras do **Prompt-mestre** em [docs/05-prompts.md](docs/05-prompts.md).
+
+## Segurança e privacidade
+
+Processamento local por padrão; áudio em memória e descartado. Provedor em nuvem só com opt-in, aviso e indicador permanente. Gravar/transcrever reuniões pode exigir consentimento dos participantes (LGPD — Lei 13.709/2018). Veja [SECURITY.md](SECURITY.md).
 
 ## Licença
 
-A definir — pendente de revisão das licenças dos glossários e fontes (ver [06-referencias.md](06-referencias.md)).
+A definir — pendente de revisão das licenças dos glossários e fontes (ver [docs/06-referencias.md](docs/06-referencias.md)). Ver [LICENSE](LICENSE).

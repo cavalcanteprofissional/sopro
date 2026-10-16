@@ -74,6 +74,7 @@ Princípio central: **o LLM não participa de toda frase.** O caminho rápido é
 ## 5. Transcrição em tempo real (especificação)
 
 - Modelos de partida: Whisper **somente inglês** (`small.en` ou variante destilada), quantizado para CPU. Calibrar no benchmark.
+- **Engine e modelo** (faster-whisper vs whisper.cpp; `small.en` vs distilado) são escolhidos por **benchmark** na Fase 0/1. Os modelos são obtidos **sob demanda** na primeira execução, com verificação de integridade (ver `08-distribuicao-e-offline.md`).
 - Segmentação por VAD, com limite máximo de segmento (ex.: 8–12 s) e pequena sobreposição (ex.: 0,3–0,5 s) para não cortar palavras.
 - Dica de vocabulário: lista dos termos de maior prioridade do domínio, truncada ao tamanho permitido pelo modelo. Ver regra no `05-prompts.md`.
 - Provedor Groq: respeitar os limites do plano gratuito (ver `06-referencias.md`), enviar segmentos de **no mínimo ~10 s** devido à cobrança mínima por requisição, aceitando latência maior; reduzir requisições com VAD.
@@ -163,7 +164,17 @@ Instalar um pacote = inserir nas tabelas acima e recalcular vetores se o modelo 
 - Log local com níveis; métricas de sessão: latência por etapa, taxa de pop-ups, falsos positivos marcados pelo usuário (botão "irrelevante").
 - Modo "benchmark" que processa um arquivo de áudio e compara com anotações (ver `04-roadmap.md`).
 
-## 13. Decisões em aberto
+## 13. Decisões
+
+### 13.1 Fechadas
+
+| Tema | Decisão | Onde |
+|---|---|---|
+| Distribuição dos modelos | **On-demand**: instalador enxuto; download na primeira execução com verificação de integridade (sha256) e cache local | `08-distribuicao-e-offline.md` |
+| Motor de STT local | Decidido por **benchmark** (faster-whisper vs whisper.cpp); interface `STTProvider` isola a escolha | `02 §3.1`, `04` Fase 0/1 |
+| Sistema do protótipo | Windows; Linux e macOS na Fase 5 | `01`, `04` Fase 5 |
+
+### 13.2 Em aberto
 
 1. Modelo de embedding exato (tamanho vs. qualidade em inglês técnico + português).
 2. LLM local mínimo viável e se vale incluí-lo no instalador ou baixar sob demanda.
