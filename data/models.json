@@ -1,0 +1,58 @@
+{
+  "registry_version": 1,
+  "models": [
+    {
+      "id": "whisper-small-en",
+      "kind": "stt",
+      "engine": "faster-whisper",
+      "name": "Whisper small.en",
+      "languages": ["en"],
+      "output_langs": ["pt-BR"],
+      "license": "MIT",
+      "size_bytes": 0,
+      "verified": false,
+      "files": [
+        {
+          "path": "model.bin",
+          "url": "",
+          "sha256": "",
+          "size_bytes": 0
+        }
+      ],
+      "notes": "Placeholder. Preencher url/sha256/tamanho e marcar verified=true (docs/08 §3)."
+    },
+    {
+      "id": "whisper-small-en-ct2",
+      "kind": "stt",
+      "engine": "whisper.cpp",
+      "name": "Whisper small.en (GGML)",
+      "languages": ["en"],
+      "output_langs": ["pt-BR"],
+      "license": "MIT",
+      "size_bytes": 0,
+      "verified": false,
+      "files": [
+        {
+          "path": "ggml-small.en.bin",
+          "url": "",
+          "sha256": "",
+          "size_bytes": 0
+        }
+      ],
+      "notes": "Candidato alternativo para o benchmark de motor (docs/08 §6)."
+    },
+    {
+      "id": "multilingual-e5-small",
+      "kind": "embedding",
+      "engine": "sentence-transformers",
+      "name": "intfloat/multilingual-e5-small",
+      "languages": ["en", "pt"],
+      "output_langs": ["pt-BR"],
+      "license": "MIT",
+      "size_bytes": 0,
+      "verified": false,
+      "files": [],
+      "notes": "Placeholder para RAG. Confirmar licença, tamanho e hash (docs/06 §3)."
+    }
+  ]
+}
