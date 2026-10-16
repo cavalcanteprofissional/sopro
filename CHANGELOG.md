@@ -26,6 +26,9 @@ adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
   verificado. Dependência opcional no extra `stt`.
 - Catálogo com o primeiro modelo STT verificado (`whisper-tiny-en`, CTranslate2, MIT) com
   url, sha256 e tamanho; download e verificação validados ponta a ponta.
+- Dica de vocabulário por segmento (`AudioSegment.vocabulary_hint`) usada na decodificação,
+  com termo de maior prioridade do domínio; decodificação gulosa (`temperature=0`) para
+  reprodutibilidade do benchmark.
 - Pacote de domínio seed `tech-en-pt` v0.1.0 (Tecnologia e IA, EN→PT): manifesto, primeiro
   lote de termos, stoplist e README do pacote.
 - Validador de pacote de domínio com o checklist de `docs/07` §6 e console script
@@ -44,6 +47,9 @@ adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
   matcher, o segmentador de fala e as métricas de benchmark.
 - Template do conjunto de teste anotado (`fixtures/testset-template.csv`).
 - Especificação de distribuição e offline (`docs/08-distribuicao-e-offline.md`).
+- Especificação de empacotamento, release e compatibilidade de Windows
+  (`docs/09-empacotamento-e-release.md`): PyInstaller *onedir*, Inno Setup, CI de release,
+  assinatura de código e seção de download do README.
 - Documentação padrão de projeto: `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, `SECURITY.md`,
   `CHANGELOG.md`, `TODO.md`, `LICENSE` e `.editorconfig`.
 

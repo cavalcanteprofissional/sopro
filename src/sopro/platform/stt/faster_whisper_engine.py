@@ -23,6 +23,7 @@ _INT16_SCALE = 32768.0
 DEFAULT_DEVICE = "cpu"
 DEFAULT_COMPUTE_TYPE = "int8"
 DEFAULT_BEAM_SIZE = 1
+DEFAULT_TEMPERATURE = 0.0
 
 
 def _load_model(model_path: str | Path, device: str, compute_type: str):
@@ -54,9 +55,14 @@ def build_provider(
     compute_type: str = DEFAULT_COMPUTE_TYPE,
     language: str = "en",
     beam_size: int = DEFAULT_BEAM_SIZE,
+    temperature: float = DEFAULT_TEMPERATURE,
     vocabulary_hint: Sequence[str] = (),
 ) -> LocalWhisperProvider:
-    """Cria um ``LocalWhisperProvider`` carregando o modelo sob demanda."""
+    """Cria um ``LocalWhisperProvider`` carregando o modelo sob demanda.
+
+    A dica de vocabulário embutida no ``AudioSegment`` (docs/02 §3.1) tem
+    precedência sobre a dica padrão do provider.
+    """
     state: dict[str, object] = {"model": None}
 
     def get_model():
@@ -69,11 +75,13 @@ def build_provider(
 
     def transcribe(segment: AudioSegment) -> Transcript:
         model = get_model()
+        hints = segment.vocabulary_hint or vocabulary_hint
         segments, _info = model.transcribe(
             _to_audio(segment.pcm),
             language=language,
             beam_size=beam_size,
-            initial_prompt=_prompt(vocabulary_hint),
+            temperature=temperature,
+            initial_prompt=_prompt(hints),
             vad_filter=False,
         )
         text = " ".join(chunk.text.strip() for chunk in segments).strip()

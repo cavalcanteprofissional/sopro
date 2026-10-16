@@ -14,7 +14,7 @@ from sopro.core.stt import ModelRegistry, ModelSpec, STTProvider, ensure_model
 from sopro.platform.stt.faster_whisper_engine import build_provider
 
 CATALOG_ENV_VAR = "SOPRO_CATALOG"
-DEFAULT_MODEL_ID = "whisper-small-en"
+DEFAULT_MODEL_ID = "whisper-tiny-en"
 
 
 def default_catalog_path() -> Path:

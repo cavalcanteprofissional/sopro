@@ -82,6 +82,24 @@ def test_no_vocabulary_hint_sends_none_prompt(fake_engine):
     assert kwargs["initial_prompt"] is None
 
 
+def test_segment_vocabulary_hint_overrides_provider(fake_engine):
+    provider = engine.build_provider("caminho", vocabulary_hint=("padrao",))
+
+    provider.transcribe(_segment(b"\x00\x00" * 160, vocabulary_hint=("token", "bias")))
+
+    _audio, kwargs = fake_engine.calls[0]
+    assert kwargs["initial_prompt"] == "token, bias"
+
+
+def test_transcribe_uses_greedy_temperature(fake_engine):
+    provider = engine.build_provider("caminho")
+
+    provider.transcribe(_segment(b"\x00\x00" * 160))
+
+    _audio, kwargs = fake_engine.calls[0]
+    assert kwargs["temperature"] == 0.0
+
+
 def test_close_forces_reload(fake_engine, monkeypatch):
     calls = []
     monkeypatch.setattr(
@@ -112,7 +130,7 @@ def test_load_model_missing_dependency_raises(monkeypatch):
         engine._load_model("x", "cpu", "int8")
 
 
-def _segment(pcm: bytes):
+def _segment(pcm: bytes, vocabulary_hint=()):
     from sopro.core.stt import AudioSegment
 
-    return AudioSegment(pcm=pcm)
+    return AudioSegment(pcm=pcm, vocabulary_hint=vocabulary_hint)
