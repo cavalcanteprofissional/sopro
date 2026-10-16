@@ -10,6 +10,14 @@ adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 ### Added
 - Estrutura inicial do repositório de código em Python (núcleo portável em `src/sopro/core`,
   camadas de plataforma em `src/sopro/platform` e orquestração em `src/sopro/app`).
+- Contratos de captura de áudio independentes de SO (`core/audio`): `AudioSource`,
+  `AudioFrame`, `DeviceInfo`, `CaptureConfig` e utilidades de PCM (downmix, reamostragem,
+  RMS/pico).
+- Captura no Windows via WASAPI com PyAudioWPatch (`platform/audio`): loopback do sistema e
+  microfone simultâneos, convertidos a PCM 16-bit mono 16 kHz por *callback*, etiquetados
+  por fonte. Dependência opcional no extra `audio`.
+- Sonda `sopro-capture-probe` (docs/05 A2): mede o nível RMS/pico por fonte mantendo o áudio
+  apenas em memória, sem gravar em disco.
 - Contrato `STTProvider` (`core/stt/provider.py`), adapter `LocalWhisperProvider` com engine
   injetável e catálogo de modelos com verificação de integridade sha256 e cache local
   (`core/stt/registry.py`).

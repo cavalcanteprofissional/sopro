@@ -9,9 +9,12 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 
-SAMPLE_RATE_HZ = 16_000
-SOURCE_SYSTEM = "system"
-SOURCE_MIC = "mic"
+from sopro.core.audio.contracts import (
+    SAMPLE_RATE_HZ,
+    SOURCE_MIC,
+    SOURCE_SYSTEM,
+)
+
 SOURCE_LANGUAGES = ("en",)
 
 

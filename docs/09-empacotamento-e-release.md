@@ -73,8 +73,8 @@ Checagens por alvo: abre sem Python instalado; baixa+verifica o modelo; transcre
 ### 3.2 O que embutir e o que **não** embutir
 
 **Embutir:** código `src/sopro`, `data/models.json` (catálogo), `data/domains/**` (glossários
-seed), DLLs de `ctranslate2`, `numpy`, `onnxruntime`, `tokenizers`, `av`, e o interpretador
-Python.
+seed), DLLs de `ctranslate2`, `numpy`, `onnxruntime`, `tokenizers`, `av`, a DLL do
+`pyaudiowpatch` (PortAudio com loopback WASAPI) e o interpretador Python.
 
 **Não embutir:** os **modelos** (§1). O download é on-demand com sha256 (`08` §3–§4).
 

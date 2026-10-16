@@ -19,7 +19,8 @@ mova-os para o [CHANGELOG](CHANGELOG.md) no momento da entrega.
 
 ## Fase 1 — Pipeline em linha de comando
 
-- [ ] Captura de loopback e microfone no Windows com etiquetas de fonte (`system`/`mic`)
+- [x] Captura de loopback e microfone no Windows com etiquetas de fonte (`system`/`mic`)
+  (`platform/audio` com PyAudioWPatch, contrato `AudioSource` e sonda `sopro-capture-probe`)
 - [x] VAD + segmentação (máx. 8–12 s, sobreposição 0,3–0,5 s)
 - [x] Contrato `STTProvider` + adapter local com engine injetável
 - [x] Catálogo de modelos com verificação de integridade (sha256) e cache local
@@ -68,6 +69,7 @@ mova-os para o [CHANGELOG](CHANGELOG.md) no momento da entrega.
 - [x] Distribuição dos modelos: on-demand com verificação de integridade (docs/08)
 - [x] Motor de STT local: decidido por benchmark (faster-whisper vs whisper.cpp)
 - [x] Sistema do protótipo: Windows (Linux/macOS na Fase 5)
+- [x] Captura de áudio no Windows: PyAudioWPatch (loopback WASAPI + microfone), atrás de `AudioSource` (docs/05 A2)
 
 ### Em aberto
 - [ ] Modelo de embedding exato (tamanho vs. qualidade em inglês técnico + português)

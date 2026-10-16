@@ -47,6 +47,12 @@ python -m pip install -e ".[dev]"
 # (opcional) motor de STT local — dependência pesada, baixa ~75–460 MB de modelos
 python -m pip install -e ".[stt]"
 
+# (opcional) captura de áudio no Windows (loopback WASAPI + microfone)
+python -m pip install -e ".[audio]"
+
+# sonda de captura: mede o nível por fonte sem gravar em disco (10 s)
+sopro-capture-probe --seconds 10
+
 # rodar os testes
 pytest -q
 

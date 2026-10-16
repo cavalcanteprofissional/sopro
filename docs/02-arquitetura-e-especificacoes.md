@@ -173,6 +173,7 @@ Instalar um pacote = inserir nas tabelas acima e recalcular vetores se o modelo 
 | Distribuição dos modelos | **On-demand**: instalador enxuto; download na primeira execução com verificação de integridade (sha256) e cache local | `08-distribuicao-e-offline.md` |
 | Motor de STT local | Decidido por **benchmark** (faster-whisper vs whisper.cpp); interface `STTProvider` isola a escolha | `02 §3.1`, `04` Fase 0/1 |
 | Sistema do protótipo | Windows; Linux e macOS na Fase 5 | `01`, `04` Fase 5 |
+| Captura de áudio (Windows) | **PyAudioWPatch** (loopback WASAPI + microfone), atrás da interface `AudioSource`; extra `audio` | `02 §11`, `05` A2 |
 
 ### 13.2 Em aberto
 

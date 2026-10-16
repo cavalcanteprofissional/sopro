@@ -11,6 +11,8 @@ import sys
 import wave
 from pathlib import Path
 
+from sopro.core.audio.pcm import to_mono_target
+
 TARGET_RATE_HZ = 16_000
 _SUPPORTED_WIDTHS = (1, 2, 4)
 
@@ -40,33 +42,6 @@ def _decode(raw: bytes, sampwidth: int) -> array.array:
     return samples
 
 
-def _downmix(samples: array.array, channels: int) -> array.array:
-    if channels == 1:
-        return samples
-    frames = len(samples) // channels
-    mono = array.array("h", bytes(2 * frames))
-    for frame in range(frames):
-        base = frame * channels
-        mono[frame] = int(sum(samples[base : base + channels]) / channels)
-    return mono
-
-
-def _resample(samples: array.array, source_rate: int, target_rate: int) -> array.array:
-    if source_rate == target_rate or not samples:
-        return samples
-    ratio = target_rate / source_rate
-    out_len = int(round(len(samples) * ratio))
-    out = array.array("h", bytes(2 * out_len))
-    last = len(samples) - 1
-    for index in range(out_len):
-        position = index / ratio
-        low = int(position)
-        high = min(low + 1, last)
-        fraction = position - low
-        out[index] = int(samples[low] * (1 - fraction) + samples[high] * fraction)
-    return out
-
-
 def read_wav_pcm16_mono(path: str | Path, target_rate: int = TARGET_RATE_HZ) -> bytes:
     """Lê um WAV e devolve PCM 16-bit mono little-endian na taxa alvo."""
     file_path = Path(path)
@@ -86,8 +61,7 @@ def read_wav_pcm16_mono(path: str | Path, target_rate: int = TARGET_RATE_HZ) -> 
     if sampwidth not in _SUPPORTED_WIDTHS:
         raise WavError(f"largura de amostra não suportada: {sampwidth}")
 
-    samples = _downmix(_decode(raw, sampwidth), channels)
-    samples = _resample(samples, rate, target_rate)
+    samples = _decode(raw, sampwidth)
     if sys.byteorder == "big":
         samples.byteswap()
-    return samples.tobytes()
+    return to_mono_target(samples.tobytes(), channels, rate, target_rate)
