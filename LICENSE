@@ -1,0 +1,32 @@
+Licença — A DEFINIR
+
+O Sopro é distribuído sob uma licença ainda a ser definida pelos mantenedores do projeto.
+O texto definitivo depende da revisão das licenças dos glossários e fontes de terceiros
+utilizados (ver docs/06-referencias.md) e do modelo de distribuição do aplicativo.
+
+Enquanto a licença não for definida formalmente:
+
+- O código-fonte é disponibilizado apenas para fins de desenvolvimento e avaliação.
+- Nenhuma garantia é oferecida, expressa ou implícita.
+- A redistribuição e o uso comercial dependem de autorização dos mantenedores.
+
+Candidatos em avaliação: MIT (permissiva) ou Apache-2.0 (permissiva com concessão de
+patentes). A decisão será registrada aqui, no README e no CHANGELOG.
+
+Contato: mantenedores do projeto Sopro.
+
+--------------------------------------------------------------------------------
+License — TO BE DEFINED
+
+Sopro is distributed under a license to be defined by the project maintainers. The final
+text depends on a review of third-party glossary/source licenses (see
+docs/06-referencias.md) and the application's distribution model.
+
+Until the license is formally defined:
+
+- The source code is provided for development and evaluation purposes only.
+- No warranty is provided, express or implied.
+- Redistribution and commercial use require authorization from the maintainers.
+
+Candidates under evaluation: MIT (permissive) or Apache-2.0 (permissive with patent grant).
+The decision will be recorded here, in the README and in the CHANGELOG.
