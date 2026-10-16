@@ -24,6 +24,8 @@ adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 - Binding `faster-whisper` na camada de plataforma (`platform/stt`), carregando o modelo
   sob demanda, e fábrica de provider que resolve o modelo no catálogo com download
   verificado. Dependência opcional no extra `stt`.
+- Catálogo com o primeiro modelo STT verificado (`whisper-tiny-en`, CTranslate2, MIT) com
+  url, sha256 e tamanho; download e verificação validados ponta a ponta.
 - Pacote de domínio seed `tech-en-pt` v0.1.0 (Tecnologia e IA, EN→PT): manifesto, primeiro
   lote de termos, stoplist e README do pacote.
 - Validador de pacote de domínio com o checklist de `docs/07` §6 e console script

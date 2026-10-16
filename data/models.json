@@ -5,7 +5,7 @@
       "id": "whisper-small-en",
       "kind": "stt",
       "engine": "faster-whisper",
-      "name": "Whisper small.en",
+      "name": "Whisper small.en (CTranslate2)",
       "languages": ["en"],
       "output_langs": ["pt-BR"],
       "license": "MIT",
@@ -19,10 +19,48 @@
           "size_bytes": 0
         }
       ],
-      "notes": "Placeholder. Preencher url/sha256/tamanho e marcar verified=true (docs/08 §3)."
+      "notes": "Candidato principal (docs/08 §6). Preencher url/sha256/tamanho e marcar verified=true (prompt A9)."
     },
     {
-      "id": "whisper-small-en-ct2",
+      "id": "whisper-tiny-en",
+      "kind": "stt",
+      "engine": "faster-whisper",
+      "name": "Whisper tiny.en (CTranslate2)",
+      "languages": ["en"],
+      "output_langs": ["pt-BR"],
+      "license": "MIT",
+      "size_bytes": 78090594,
+      "verified": true,
+      "files": [
+        {
+          "path": "config.json",
+          "url": "https://huggingface.co/Systran/faster-whisper-tiny.en/resolve/main/config.json",
+          "sha256": "14b1b421a90349bc551b881461426b561a874049cb9e4c4864f2ca384f6a7cc5",
+          "size_bytes": 2317
+        },
+        {
+          "path": "model.bin",
+          "url": "https://huggingface.co/Systran/faster-whisper-tiny.en/resolve/main/model.bin",
+          "sha256": "1a5afae06a4db91c975c9a9d78be5cc110ee4ea022ad57d55492e4550e936b2a",
+          "size_bytes": 75537502
+        },
+        {
+          "path": "tokenizer.json",
+          "url": "https://huggingface.co/Systran/faster-whisper-tiny.en/resolve/main/tokenizer.json",
+          "sha256": "929c5252409436dce1b38a75d1abbcb5e132d170d8e324e4e04ed915fa2d22df",
+          "size_bytes": 2128466
+        },
+        {
+          "path": "vocabulary.txt",
+          "url": "https://huggingface.co/Systran/faster-whisper-tiny.en/resolve/main/vocabulary.txt",
+          "sha256": "ff77588746d3a2595d32ab5b69ffd7b95ce2441ac57533cb66fc3eb575a115cf",
+          "size_bytes": 422309
+        }
+      ],
+      "notes": "Verificado contra Systran/faster-whisper-tiny.en (2026-10). Modelo leve para desenvolvimento e benchmark rápido."
+    },
+    {
+      "id": "whisper-small-en-ggml",
       "kind": "stt",
       "engine": "whisper.cpp",
       "name": "Whisper small.en (GGML)",
@@ -39,7 +77,7 @@
           "size_bytes": 0
         }
       ],
-      "notes": "Candidato alternativo para o benchmark de motor (docs/08 §6)."
+      "notes": "Candidato alternativo para o benchmark de motor (docs/08 §6). Preencher e verificar (prompt A9)."
     },
     {
       "id": "multilingual-e5-small",
