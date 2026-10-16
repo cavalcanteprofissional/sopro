@@ -24,6 +24,7 @@ mova-os para o [CHANGELOG](CHANGELOG.md) no momento da entrega.
 - [x] Contrato `STTProvider` + adapter local com engine injetável
 - [x] Catálogo de modelos com verificação de integridade (sha256) e cache local
 - [x] Download sob demanda com verificação sha256 e cache local (`core/stt/download`)
+- [x] Binding `faster-whisper` (extra `stt`) por trás de `STTProvider` + fábrica do catálogo
 - [ ] Preencher o catálogo real (url/sha256/tamanho/licença) e marcar `verified=true`
 - [ ] Escolher o motor (faster-whisper vs whisper.cpp) por benchmark
 - [x] `matcher`: n-gramas de 1–4 tokens, aliases, stoplist com regra de contexto, cooldown

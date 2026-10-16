@@ -25,9 +25,10 @@ dependencies = []
 
 [project.optional-dependencies]
 # Dependências por fase serão adicionadas aqui conforme o roadmap avança.
-# Fase 1 (áudio/STT): faster-whisper, silero-vad, PyAudioWPatch, numpy, soundfile
+# Fase 1 (áudio/STT): silero-vad, PyAudioWPatch, soundfile
 # Fase 2 (UI/dados): PySide6, sqlite-vec
 # Fase 3 (RAG/LLM): sentence-transformers, sqlite-vec
+stt = ["faster-whisper>=1.0"]
 dev = ["pytest>=8.0"]
 
 [project.scripts]

@@ -21,6 +21,9 @@ adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 - Download sob demanda com verificação de integridade (`core/stt/download.py`): busca em
   streaming para `.tmp`, confere sha256 (e tamanho) e promove ao cache; reutiliza o local
   via `ensure_model`.
+- Binding `faster-whisper` na camada de plataforma (`platform/stt`), carregando o modelo
+  sob demanda, e fábrica de provider que resolve o modelo no catálogo com download
+  verificado. Dependência opcional no extra `stt`.
 - Pacote de domínio seed `tech-en-pt` v0.1.0 (Tecnologia e IA, EN→PT): manifesto, primeiro
   lote de termos, stoplist e README do pacote.
 - Validador de pacote de domínio com o checklist de `docs/07` §6 e console script
