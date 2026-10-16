@@ -18,6 +18,9 @@ adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
   silêncio mínimo, descarte por fala mínima, folga nas bordas e divisão de trechos longos
   com sobreposição; sem dependências externas.
 - Catálogo inicial `data/models.json` (placeholders a verificar).
+- Download sob demanda com verificação de integridade (`core/stt/download.py`): busca em
+  streaming para `.tmp`, confere sha256 (e tamanho) e promove ao cache; reutiliza o local
+  via `ensure_model`.
 - Pacote de domínio seed `tech-en-pt` v0.1.0 (Tecnologia e IA, EN→PT): manifesto, primeiro
   lote de termos, stoplist e README do pacote.
 - Validador de pacote de domínio com o checklist de `docs/07` §6 e console script
