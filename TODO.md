@@ -26,7 +26,8 @@ mova-os para o [CHANGELOG](CHANGELOG.md) no momento da entrega.
 - [ ] Preencher o catálogo real (url/sha256/tamanho/licença) e marcar `verified=true`
 - [ ] Escolher o motor (faster-whisper vs whisper.cpp) por benchmark
 - [x] `matcher`: n-gramas de 1–4 tokens, aliases, stoplist com regra de contexto, cooldown
-- [ ] Modo benchmark: processa arquivo de áudio e compara com a anotação (recall/precisão)
+- [x] Métricas de benchmark (recall/precisão/F1 por termo) e leitor do CSV anotado
+- [ ] Modo benchmark: ligar captura/STT/matcher e processar arquivo de áudio ponta a ponta
 
 ## Fase 2 — Overlay e persistência
 

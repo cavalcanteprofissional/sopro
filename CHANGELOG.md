@@ -27,8 +27,10 @@ adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 - `matcher` (`core/matcher`): casamento por n-gramas de 1–4 tokens com maior primeiro,
   aliases, flexão de plural por regra, regra de contexto para a stoplist e política de
   exibição (cooldown por termo e orçamento por minuto).
+- Modo benchmark (métricas) em `app/benchmark.py`: leitor do conjunto anotado (CSV),
+  recall/precisão/F1 no agregado e por termo, e resumo de latências (p50/p95).
 - Testes automatizados (pytest) para o validador, o pacote seed, o núcleo de texto, o
-  matcher e o segmentador de fala.
+  matcher, o segmentador de fala e as métricas de benchmark.
 - Template do conjunto de teste anotado (`fixtures/testset-template.csv`).
 - Especificação de distribuição e offline (`docs/08-distribuicao-e-offline.md`).
 - Documentação padrão de projeto: `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, `SECURITY.md`,
