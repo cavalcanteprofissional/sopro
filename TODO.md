@@ -49,6 +49,7 @@ mova-os para o [CHANGELOG](CHANGELOG.md) no momento da entrega.
 
 ## Fase 4 — Empacotamento
 
+- [x] Especificação de empacotamento, release e compatibilidade (`docs/09`)
 - [ ] Instalador Windows; download de modelos no primeiro uso
 - [ ] Primeira execução: consentimento (LGPD), domínio, idioma e fontes de áudio
 - [ ] Tratamento de erros amigável; logs sem conteúdo de fala

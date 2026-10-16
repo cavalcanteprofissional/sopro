@@ -44,17 +44,23 @@ python -m venv .venv
 # instalar em modo editável com dependências de desenvolvimento
 python -m pip install -e ".[dev]"
 
+# (opcional) motor de STT local — dependência pesada, baixa ~75–460 MB de modelos
+python -m pip install -e ".[stt]"
+
 # rodar os testes
 pytest -q
 
 # validar o pacote de domínio seed (checklist do docs/07 §6)
 sopro-validate-glossary data/domains/tech-en-pt
+
+# benchmark offline (requer o extra 'stt'); o modelo é baixado e verificado no 1º uso
+sopro-benchmark aula.wav anotacao.csv --provider sopro.platform.stt.factory:faster_whisper
 ```
 
 ## Estrutura do repositório
 
 ```
-docs/                         Documentação de produto e engenharia (01–07)
+docs/                         Documentação de produto e engenharia (01–09)
 data/domains/                 Pacotes de domínio (glossários)
   └─ tech-en-pt/              Pacote seed: Tecnologia e IA (EN→PT)
 src/sopro/
@@ -77,6 +83,20 @@ fixtures/                     Dados de apoio (ex.: template do conjunto de teste
 
 Detalhes e definições de pronto em [docs/04-roadmap.md](docs/04-roadmap.md).
 
+## Distribuição e downloads
+
+Ainda **não há release publicada**. Quando a Fase 4 chegar, cada versão será publicada em
+**[Releases](../../releases)** com:
+
+- `Sopro-Setup-x.y.z.exe` — instalador Windows (per-user, sem administrador);
+- `Sopro-x.y.z-portable.zip` — versão portátil;
+- `SHA256SUMS.txt` — hashes para verificação.
+
+Requisitos do executável: **Windows 10 (build 1809+) ou Windows 11, 64-bit**, CPU com AVX2
+recomendada. Os modelos são baixados na primeira execução (instalador enxuto). O guia
+completo de empacotamento, assinatura e CI está em
+[docs/09-empacotamento-e-release.md](docs/09-empacotamento-e-release.md).
+
 ## Documentação
 
 Toda a documentação de produto e engenharia está em [`docs/`](docs/). Leia na ordem:
@@ -91,6 +111,7 @@ Toda a documentação de produto e engenharia está em [`docs/`](docs/). Leia na
 | [06-referencias.md](docs/06-referencias.md) | Links, bibliotecas, limites de free tier e notas legais |
 | [07-glossario-seed-modelo.md](docs/07-glossario-seed-modelo.md) | Formato do pacote de domínio (JSON/CSV), manifesto e entradas de exemplo |
 | [08-distribuicao-e-offline.md](docs/08-distribuicao-e-offline.md) | Modelos sob demanda, verificação de integridade, cache local e o que roda sem internet |
+| [09-empacotamento-e-release.md](docs/09-empacotamento-e-release.md) | Executável standalone, instalador, CI de release e compatibilidade de Windows |
 
 Convenções de leitura: **RF-xx** requisito funcional, **RNF-xx** requisito não funcional,
 **RN-xx** regra de negócio; itens **(verificar)** dependem de confirmação em fonte oficial;
