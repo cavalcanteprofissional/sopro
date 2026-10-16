@@ -1,9 +1,10 @@
 """Detecção de fala (VAD) e segmentação.
 
-Este pacote define o contrato de segmentação usado pelo pipeline (docs/02 §5).
-O algoritmo concreto entra na Fase 1.
+Este pacote define o contrato de segmentação usado pelo pipeline (docs/02 §5) e
+uma implementação por energia (RMS) livre de dependências (``segment``).
 """
 
+from sopro.core.vad.energy import segment
 from sopro.core.vad.segmenter import SpeechSegment, VadConfig
 
-__all__ = ["SpeechSegment", "VadConfig"]
+__all__ = ["SpeechSegment", "VadConfig", "segment"]

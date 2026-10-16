@@ -20,7 +20,7 @@ mova-os para o [CHANGELOG](CHANGELOG.md) no momento da entrega.
 ## Fase 1 — Pipeline em linha de comando
 
 - [ ] Captura de loopback e microfone no Windows com etiquetas de fonte (`system`/`mic`)
-- [ ] VAD + segmentação (máx. 8–12 s, sobreposição 0,3–0,5 s)
+- [x] VAD + segmentação (máx. 8–12 s, sobreposição 0,3–0,5 s)
 - [x] Contrato `STTProvider` + adapter local com engine injetável
 - [x] Catálogo de modelos com verificação de integridade (sha256) e cache local
 - [ ] Preencher o catálogo real (url/sha256/tamanho/licença) e marcar `verified=true`

@@ -14,6 +14,9 @@ adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
   injetável e catálogo de modelos com verificação de integridade sha256 e cache local
   (`core/stt/registry.py`).
 - Contrato de VAD/segmentação (`core/vad`): `VadConfig` e `SpeechSegment`.
+- Segmentador de fala por energia (`core/vad/energy.py`): RMS por quadro, fusão por
+  silêncio mínimo, descarte por fala mínima, folga nas bordas e divisão de trechos longos
+  com sobreposição; sem dependências externas.
 - Catálogo inicial `data/models.json` (placeholders a verificar).
 - Pacote de domínio seed `tech-en-pt` v0.1.0 (Tecnologia e IA, EN→PT): manifesto, primeiro
   lote de termos, stoplist e README do pacote.
@@ -24,8 +27,8 @@ adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 - `matcher` (`core/matcher`): casamento por n-gramas de 1–4 tokens com maior primeiro,
   aliases, flexão de plural por regra, regra de contexto para a stoplist e política de
   exibição (cooldown por termo e orçamento por minuto).
-- Testes automatizados (pytest) para o validador, o pacote seed, o núcleo de texto e o
-  matcher.
+- Testes automatizados (pytest) para o validador, o pacote seed, o núcleo de texto, o
+  matcher e o segmentador de fala.
 - Template do conjunto de teste anotado (`fixtures/testset-template.csv`).
 - Especificação de distribuição e offline (`docs/08-distribuicao-e-offline.md`).
 - Documentação padrão de projeto: `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, `SECURITY.md`,
