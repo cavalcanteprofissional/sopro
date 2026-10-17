@@ -15,6 +15,7 @@ from sopro.core.repo.importer import (
 from sopro.core.repo.models import (
     DetectionRecord,
     DomainRecord,
+    GeneratedEntryRecord,
     HistoryEntry,
     SenseInput,
     SenseRecord,
@@ -28,6 +29,7 @@ __all__ = [
     "Database",
     "DetectionRecord",
     "DomainRecord",
+    "GeneratedEntryRecord",
     "HistoryEntry",
     "Repository",
     "SenseInput",

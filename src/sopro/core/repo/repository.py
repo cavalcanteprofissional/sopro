@@ -17,6 +17,7 @@ from sopro.core.repo.export import history_to_csv, history_to_markdown
 from sopro.core.repo.models import (
     DetectionRecord,
     DomainRecord,
+    GeneratedEntryRecord,
     HistoryEntry,
     SenseInput,
     SenseRecord,
@@ -398,6 +399,64 @@ class Repository:
         with self._db.transaction() as conn:
             conn.execute("DELETE FROM setting WHERE key = ?", (key,))
 
+    # -- entradas geradas (fila de aprovação) -------------------------------
+    def add_generated_entry(
+        self,
+        term: str,
+        definition: str,
+        model: str = "",
+        *,
+        translation: str = "",
+        confidence: float = 0.0,
+        approved: bool = False,
+    ) -> int:
+        """Grava uma entrada gerada por LLM (separada de term/sense até aprovação)."""
+        with self._db.transaction() as connection:
+            cursor = connection.execute(
+                "INSERT INTO generated_entry(term, translation, definition, model, "
+                "created_at, confidence, approved) VALUES(?, ?, ?, ?, ?, ?, ?)",
+                (
+                    term,
+                    translation,
+                    definition,
+                    model,
+                    _now(),
+                    float(confidence),
+                    int(approved),
+                ),
+            )
+            return int(cursor.lastrowid or 0)
+
+    def get_generated_entry(
+        self, term: str, model: str | None = None
+    ) -> GeneratedEntryRecord | None:
+        query = "SELECT * FROM generated_entry WHERE term = ?"
+        params: list[object] = [term]
+        if model is not None:
+            query += " AND model = ?"
+            params.append(model)
+        query += " ORDER BY id DESC LIMIT 1"
+        row = self._db.connection.execute(query, params).fetchone()
+        return _generated_entry(row) if row else None
+
+    def list_generated_entries(
+        self, approved: bool | None = None
+    ) -> list[GeneratedEntryRecord]:
+        query = "SELECT * FROM generated_entry"
+        params: list[object] = []
+        if approved is not None:
+            query += " WHERE approved = ?"
+            params.append(int(approved))
+        query += " ORDER BY created_at DESC, id DESC"
+        rows = self._db.connection.execute(query, params).fetchall()
+        return [_generated_entry(row) for row in rows]
+
+    def approve_generated_entry(self, entry_id: int) -> None:
+        with self._db.transaction() as connection:
+            connection.execute(
+                "UPDATE generated_entry SET approved = 1 WHERE id = ?", (entry_id,)
+            )
+
     # -- histórico e exportação ---------------------------------------------
     def history(
         self,
@@ -495,4 +554,17 @@ def _detection(row) -> DetectionRecord:
         method=row["method"],
         context_snippet=row["context_snippet"],
         learned=bool(row["learned"]),
+    )
+
+
+def _generated_entry(row) -> GeneratedEntryRecord:
+    return GeneratedEntryRecord(
+        id=row["id"],
+        term=row["term"],
+        translation=row["translation"],
+        definition=row["definition"],
+        model=row["model"],
+        created_at=row["created_at"],
+        confidence=float(row["confidence"]),
+        approved=bool(row["approved"]),
     )

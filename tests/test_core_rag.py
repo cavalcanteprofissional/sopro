@@ -156,7 +156,7 @@ def test_resolve_falls_back_to_llm_below_threshold():
     calls = {"n": 0}
 
     class Chooser:
-        def choose(self, context, candidates):
+        def choose(self, term, context, candidates):
             calls["n"] += 1
             return 1
 
@@ -172,6 +172,40 @@ def test_resolve_falls_back_to_llm_below_threshold():
     assert resolution.method == "llm"
     assert resolution.sense.ordinal == 2
     assert calls["n"] == 1
+
+
+def test_resolve_keeps_vector_when_llm_undecided():
+    class Chooser:
+        def choose(self, term, context, candidates):
+            return None
+
+    resolver = SenseResolver(llm=Chooser(), threshold=1.1)
+    term = _term(
+        _sense(1, "general", "alpha beta"),
+        _sense(2, "general", "gamma delta"),
+    )
+
+    resolution = resolver.resolve(term, "completely unrelated")
+
+    assert resolution is not None
+    assert resolution.method == "vector"
+
+
+def test_resolve_survives_llm_exception():
+    class Chooser:
+        def choose(self, term, context, candidates):
+            raise RuntimeError("boom")
+
+    resolver = SenseResolver(llm=Chooser(), threshold=1.1)
+    term = _term(
+        _sense(1, "general", "alpha beta"),
+        _sense(2, "general", "gamma delta"),
+    )
+
+    resolution = resolver.resolve(term, "completely unrelated")
+
+    assert resolution is not None
+    assert resolution.method == "vector"
 
 
 # -- persistência (sense_vec) ------------------------------------------------

@@ -117,10 +117,17 @@ CREATE TABLE sense_vec (
 );
 """
 
+SCHEMA_V4 = """
+ALTER TABLE generated_entry ADD COLUMN translation TEXT NOT NULL DEFAULT '';
+ALTER TABLE generated_entry ADD COLUMN confidence  REAL NOT NULL DEFAULT 0;
+CREATE INDEX idx_generated_entry_term ON generated_entry(term);
+"""
+
 MIGRATIONS: tuple[tuple[int, str], ...] = (
     (1, SCHEMA_V1),
     (2, SCHEMA_V2),
     (3, SCHEMA_V3),
+    (4, SCHEMA_V4),
 )
 
 LATEST_VERSION = MIGRATIONS[-1][0]

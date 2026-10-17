@@ -84,6 +84,27 @@ def _matcher_config(settings: Settings):
     )
 
 
+def _build_chooser(settings, package):
+    """Monta o passo LLM da cascata quando configurado; ``None`` se desligado/indisponível."""
+    if settings.llm_provider == "off":
+        return None
+    from sopro.core.llm import LLMSenseChooser
+    from sopro.platform.llm import create_provider
+
+    try:
+        provider = create_provider(settings)
+    except Exception as exc:  # noqa: BLE001 - LLM é opcional; degrada para vetorial
+        print(f"LLM indisponível ({exc}); seguindo sem desambiguação por LLM", file=sys.stderr)
+        return None
+    if provider is None:
+        return None
+    return LLMSenseChooser(
+        provider,
+        domain=package.manifest.name or package.domain_tag,
+        output_lang=settings.output_lang,
+    )
+
+
 def _build_resolver(repo, package, domain_id, settings):
     """Vetoriza as acepções (cache no banco) e monta o resolvedor (docs/02 §3.4)."""
     from sopro.core.rag import SenseResolver, embed_domain, load_vectors
@@ -94,6 +115,7 @@ def _build_resolver(repo, package, domain_id, settings):
     return SenseResolver(
         embedder=embedder,
         domain_tag=package.domain_tag,
+        llm=_build_chooser(settings, package),
         threshold=settings.resolution_threshold,
         vectors=vectors,
     )

@@ -74,6 +74,20 @@ class DetectionRecord:
 
 
 @dataclass(frozen=True)
+class GeneratedEntryRecord:
+    """Entrada gerada por LLM, pendente de aprovação (docs/02 §6)."""
+
+    id: int
+    term: str
+    translation: str = ""
+    definition: str = ""
+    model: str = ""
+    created_at: str = ""
+    confidence: float = 0.0
+    approved: bool = False
+
+
+@dataclass(frozen=True)
 class HistoryEntry:
     """Linha do histórico (detecção + termo/acepção) para exibição/exportação."""
 

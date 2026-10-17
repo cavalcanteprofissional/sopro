@@ -36,6 +36,8 @@ class Settings:
     stt_provider: str = "local"
     stt_model: str = "whisper-tiny-en"
     llm_provider: str = "off"
+    llm_model: str = ""
+    llm_base_url: str = "http://localhost:11434/v1"
     popup_duration_s: float = 7.0
     popup_max: int = 3
     popup_position: str = "bottom-right"
@@ -65,6 +67,10 @@ class Settings:
             raise ConfigError(f"stt_provider inválido: {self.stt_provider!r}")
         if self.llm_provider not in LLM_PROVIDERS:
             raise ConfigError(f"llm_provider inválido: {self.llm_provider!r}")
+        if self.llm_provider != "off" and not self.llm_base_url.startswith(
+            ("http://", "https://")
+        ):
+            raise ConfigError(f"llm_base_url inválida: {self.llm_base_url!r}")
         if self.popup_position not in POPUP_POSITIONS:
             raise ConfigError(f"popup_position inválida: {self.popup_position!r}")
         if self.theme not in THEMES:

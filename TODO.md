@@ -56,8 +56,11 @@ mova-os para o [CHANGELOG](CHANGELOG.md) no momento da entrega.
 - [x] `SenseResolver` em cascata (acepção única → domínio → vetor → LLM), janela de contexto
   e limiar configurável; integrado ao serviço de detecção
 - [x] Conjunto de casos ambíguos e medição de acurácia (`core/rag/evaluate`)
-- [ ] Caminho de termo fora do glossário com LLM local, cache e aprovação
-- [ ] Provedor Groq opcional (STT e LLM) com aviso de privacidade e tratamento de limites
+- [x] Camada de LLM: prompt B1 com JSON validado, `LLMSenseChooser` (passo `llm` da cascata)
+  e geração fora do glossário com cache e fila de aprovação (`core/llm`, `generated_entry`,
+  migração v4); provedores local (OpenAI-compatível) e Groq (LLM) com backoff em limite
+- [ ] Detecção de candidatos fora do glossário no pipeline (raridade + limite de taxa próprio)
+- [ ] Provedor Groq de STT (segmentos ≥ ~10 s) com aviso de privacidade e fallback ao local
 
 ## Fase 4 — Empacotamento
 

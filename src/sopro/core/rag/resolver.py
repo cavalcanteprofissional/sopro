@@ -30,9 +30,15 @@ class Resolution:
 
 
 class SenseChooser(Protocol):
-    """Contrato do passo opcional de LLM (escolhe entre candidatas)."""
+    """Contrato do passo opcional de LLM (escolhe entre candidatas).
 
-    def choose(self, context: str, candidates: Sequence[Sense]) -> int: ...
+    Devolve o índice da acepção escolhida ou ``None`` se não conseguir decidir
+    (o resolvedor mantém então a melhor acepção vetorial).
+    """
+
+    def choose(
+        self, term: Term, context: str, candidates: Sequence[Sense]
+    ) -> int | None: ...
 
 
 def sense_text(sense: Sense) -> str:
@@ -104,8 +110,8 @@ class SenseResolver:
                 best, best_score = sense, score
 
         if self._llm is not None and best_score < self._threshold:
-            index = self._llm.choose(context, candidates)
-            if 0 <= index < len(candidates):
+            index = self._choose(term, context, candidates)
+            if index is not None:
                 return Resolution(candidates[index], best_score, "llm")
 
         if best is not None:
@@ -113,3 +119,15 @@ class SenseResolver:
         return Resolution(
             min(candidates, key=lambda s: s.ordinal), VECTOR_FALLBACK_SCORE, "vector"
         )
+
+    def _choose(
+        self, term: Term, context: str, candidates: Sequence[Sense]
+    ) -> int | None:
+        """Chama o LLM de forma tolerante a falhas; devolve índice válido ou None."""
+        try:
+            index = self._llm.choose(term, context, candidates)  # type: ignore[union-attr]
+        except Exception:  # noqa: BLE001 - LLM é exceção opcional; nunca derruba o pipeline
+            return None
+        if index is None or not 0 <= index < len(candidates):
+            return None
+        return index
