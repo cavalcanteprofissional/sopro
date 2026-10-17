@@ -3,6 +3,25 @@
 Backlog de trabalho derivado do [roadmap](docs/04-roadmap.md). Marque itens concluídos e
 mova-os para o [CHANGELOG](CHANGELOG.md) no momento da entrega.
 
+## Retomada — onde paramos (próxima sessão)
+
+Última sessão entregou e publicou (`origin/main` em `f723c42`, commits `cc671f2`..`f723c42`)
+a **Fase 3 — RAG e desambiguação**: embeddings locais + índice vetorial, `SenseResolver`
+em cascata, camada LLM (JSON validado), termos fora do glossário com limite de taxa próprio,
+provedores Groq opcionais (STT/LLM) e aviso/indicador de privacidade. 359 testes passando;
+pacote seed valida com 0 erros.
+
+**Tarefa inicial da próxima sessão — revisar o que já foi executado antes de avançar:**
+
+1. `git log --oneline cc671f2..f723c42` e ler os diffs das migrações v3 (`sense_vec`) e v4
+   (`generated_entry`).
+2. Rodar `pytest -q`, `sopro-validate-glossary data/domains/tech-en-pt` e
+   `SOPRO_SMOKE_MS=1500 python -m sopro --demo`.
+3. Conferir este `TODO` (Fase 3), `docs/02` §§3.4, 4.6, 6, 9 e o prompt `docs/05` A7/A8.
+
+**Depois:** iniciar a **Fase 4 — Empacotamento** (itens abaixo). Decisões ainda em aberto que
+afetam a Fase 4: modelo de embedding definitivo, LLM local mínimo viável e framework de UI.
+
 ## Fase 0 — Validação
 
 - [x] Estrutura inicial do projeto em Python

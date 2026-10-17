@@ -112,6 +112,20 @@ fixtures/                     Dados de apoio (ex.: template do conjunto de teste
 
 Detalhes e definições de pronto em [docs/04-roadmap.md](docs/04-roadmap.md).
 
+## Próximos passos (retomada)
+
+Estado atual em `origin/main`: **Fases 0–3 concluídas** — pipeline completo (captura → VAD →
+matcher → pop-up → histórico), RAG/desambiguação, termos fora do glossário via LLM e provedor
+Groq opcional com aviso de privacidade. 359 testes passando.
+
+Próxima sessão começa **revisando o que já foi executado** (rodar `pytest -q`, o validador do
+glossário e `SOPRO_SMOKE_MS=1500 python -m sopro --demo`; conferir as migrações v3/v4) e então
+segue para a **Fase 4 — Empacotamento**: instalador Windows, primeira execução com
+consentimento (LGPD), logs sem conteúdo de fala e tela de gestão de glossários.
+
+O checklist detalhado e onde paramos estão em [TODO.md](TODO.md) → "Retomada" e no
+[CHANGELOG](CHANGELOG.md) → "Notas de retomada".
+
 ## Distribuição e downloads
 
 Ainda **não há release publicada**. Quando a Fase 4 chegar, cada versão será publicada em

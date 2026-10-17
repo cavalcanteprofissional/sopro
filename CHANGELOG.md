@@ -143,6 +143,15 @@ adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 - Documentação de produto/engenharia (01–07) movida para [`docs/`](docs/); README
   reorganizado como porta de entrada do projeto (único README do repositório).
 
+### Notas de retomada
+- Estado: **Fase 3 concluída e publicada** (`origin/main` em `f723c42`). Ainda **sem release
+  marcada** — tudo acima segue em `Unreleased`.
+- Próxima sessão, tarefa inicial: revisar o que já foi executado (rodar `pytest -q`, o
+  validador do glossário e `SOPRO_SMOKE_MS=1500 python -m sopro --demo`; conferir as
+  migrações v3/v4) antes de iniciar a **Fase 4 — Empacotamento** (instalador, primeira
+  execução/consentimento, logs sem fala e gestão de glossários).
+- Detalhes e checklist em [TODO.md](TODO.md) → seção "Retomada".
+
 ## [0.0.0] - 2026-10-07
 
 ### Added
