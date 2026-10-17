@@ -19,15 +19,15 @@ from sopro.app.detection import DetectionService
 from sopro.app.home import db_path, ensure_home, resolve_home
 from sopro.app.realtime import RealtimePipeline
 from sopro.core.config import ConfigError, Settings, load_settings, save_settings
+from sopro.core.paths import data_path
 from sopro.core.repo import Database, Repository, build_domain_package, import_package
 
-DEFAULT_DOMAINS_DIRNAME = "data/domains"
 DEMO_TICK_MS = 40
 DEMO_FRAMES_PER_TICK = 6
 
 
 def _domains_root() -> Path:
-    return Path(__file__).resolve().parents[3] / DEFAULT_DOMAINS_DIRNAME
+    return data_path("domains")
 
 
 def build_parser() -> argparse.ArgumentParser:

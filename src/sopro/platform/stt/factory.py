@@ -10,6 +10,7 @@ from __future__ import annotations
 import os
 from pathlib import Path
 
+from sopro.core.paths import data_path
 from sopro.core.stt import ModelRegistry, ModelSpec, STTProvider, ensure_model
 from sopro.platform.stt.faster_whisper_engine import build_provider
 
@@ -22,7 +23,7 @@ def default_catalog_path() -> Path:
     override = os.environ.get(CATALOG_ENV_VAR)
     if override:
         return Path(override)
-    return Path(__file__).resolve().parents[4] / "data" / "models.json"
+    return data_path("models.json")
 
 
 def _resolve_spec(model_id: str, home: str | Path | None) -> tuple[ModelSpec, Path]:

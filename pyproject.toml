@@ -33,6 +33,8 @@ stt = ["faster-whisper>=1.0"]
 audio = ["PyAudioWPatch>=0.2.12"]
 # Overlay, bandeja e configurações (docs/06 §5); LGPL, ~150 MB.
 ui = ["PySide6>=6.6"]
+# Empacotamento em executável standalone (docs/09).
+packaging = ["pyinstaller>=6.0"]
 dev = ["pytest>=8.0"]
 
 [project.scripts]

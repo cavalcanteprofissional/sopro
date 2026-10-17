@@ -2,7 +2,10 @@
 
 **Um companheiro discreto que explica termos técnicos em inglês no momento exato em que eles são falados.**
 
-> Status: **em planejamento e especificação**. A documentação está completa e a implementação começou pela Fase 0 (glossário seed e validação). Núcleo de código ainda incipiente.
+> Status: **protótipo funcional**. Captura → VAD → transcrição → matcher → pop-up +
+> histórico (SQLite) já rodam de ponta a ponta; overlay, bandeja e tela de configurações
+> estão prontos e há um executável portátil. RAG/desambiguação (Fase 3) e instalador
+> (Fase 4) em andamento.
 
 Você está vendo uma aula, palestra ou call técnica em inglês e ouve *"fairness"* ou *"backlog"* passar rápido. Pesquisar quebra a atenção. Legenda automática não explica o termo nem escolhe o sentido certo para a área.
 
@@ -49,6 +52,16 @@ python -m pip install -e ".[stt]"
 
 # (opcional) captura de áudio no Windows (loopback WASAPI + microfone)
 python -m pip install -e ".[audio]"
+
+# (opcional) overlay, bandeja e tela de configurações (PySide6)
+python -m pip install -e ".[ui]"
+
+# rodar o app (precisa de 'ui' e, para áudio real, de 'audio' + 'stt')
+python -m sopro
+
+# modo demonstração: pipeline + UI sem microfone e sem baixar modelos
+# (pop-ups fictícios; os dados vão para uma pasta isolada com --home/SOPRO_HOME)
+python -m sopro --demo
 
 # sonda de captura: mede o nível por fonte sem gravar em disco (10 s)
 sopro-capture-probe --seconds 10
@@ -102,6 +115,25 @@ Requisitos do executável: **Windows 10 (build 1809+) ou Windows 11, 64-bit**, C
 recomendada. Os modelos são baixados na primeira execução (instalador enxuto). O guia
 completo de empacotamento, assinatura e CI está em
 [docs/09-empacotamento-e-release.md](docs/09-empacotamento-e-release.md).
+
+### Build local do executável portátil
+
+Gera um `.exe` **standalone** (não exige Python instalado) e um zip portátil:
+
+```powershell
+# instala o ferramental de empacotamento no ambiente (uma vez)
+python -m pip install -e ".[packaging]"
+
+# build + zip + SHA256SUMS.txt em dist/ (roda os testes antes; use -SkipTests para pular)
+powershell -ExecutionPolicy Bypass -File scripts/build-windows.ps1
+```
+
+Saída em `dist/`: `Sopro/` (pasta *onedir* com `Sopro.exe`), `Sopro-<versão>-portable.zip` e
+`SHA256SUMS.txt`. Para rodar a versão portátil, basta extrair o zip e executar
+`Sopro/Sopro.exe` (`--demo` funciona sem áudio nem modelos). Para gerar o instalador com o
+Inno Setup, compile `installer.iss` com `iscc /DVersion=<versão> installer.iss`. O workflow
+`.github/workflows/release.yml` automatiza build, instalador e publicação em uma tag `v*`.
+
 
 ## Documentação
 

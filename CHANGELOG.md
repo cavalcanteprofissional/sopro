@@ -57,6 +57,15 @@ adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
   falsos (docs/05 A3) e `--home`/`SOPRO_HOME` isolam a pasta de dados (docs/08 §5).
 - Resolução da pasta de dados (`app/home`) e pacote de demonstração (`app/demo`): provedor
   e fonte de áudio sintética que acionam o VAD e casam com o glossário.
+- Empacotamento em executável standalone (`sopro.spec`, docs/09): PyInstaller *onedir* com
+  dados (catálogo + domínios) e dependências nativas embutidas, excluindo os modelos; script
+  `scripts/build-windows.ps1` (build + zip portátil + `SHA256SUMS.txt`), `installer.iss`
+  (Inno Setup per-user) e workflow de release em `.github/workflows/release.yml` (tag `v*`).
+  Novo extra `packaging`.
+- Resolução de recursos no modo dev e no modo congelado (`core/paths`): `is_frozen`,
+  `resource_root`, `data_path`; o catálogo de modelos e os pacotes de domínio passam a ser
+  localizados por ela. No executável do Windows a pasta de dados vira `%LOCALAPPDATA%\Sopro`
+  (docs/09 §5).
 - Contrato `STTProvider` (`core/stt/provider.py`), adapter `LocalWhisperProvider` com engine
   injetável e catálogo de modelos com verificação de integridade sha256 e cache local
   (`core/stt/registry.py`).

@@ -1,7 +1,8 @@
-"""Resolução da pasta de dados do aplicativo (docs/08 §5, docs/05 A6).
+"""Resolução da pasta de dados do aplicativo (docs/08 §5, docs/09 §5, docs/05 A6).
 
-Por padrão ``~/.sopro``; ``SOPRO_HOME`` permite isolar dados (testes, modo demo,
-execução portátil). Guarda o banco (`sopro.db`), o cache de modelos e os logs.
+No desenvolvimento o padrão é ``~/.sopro``; no executável congelado no Windows usa-se
+``%LOCALAPPDATA%\\Sopro``. ``SOPRO_HOME`` isola os dados (testes, modo demo, execução
+portátil). Guarda o banco (`sopro.db`), o cache de modelos e os logs.
 """
 
 from __future__ import annotations
@@ -10,8 +11,12 @@ import os
 from collections.abc import Mapping
 from pathlib import Path
 
+from sopro.core.paths import is_frozen
+
 HOME_ENV_VAR = "SOPRO_HOME"
 DEFAULT_DIRNAME = ".sopro"
+APP_DIRNAME = "Sopro"
+LOCALAPPDATA_ENV_VAR = "LOCALAPPDATA"
 DB_FILENAME = "sopro.db"
 SUBDIRS = ("models", "logs")
 
@@ -24,8 +29,13 @@ def resolve_home(
     override = environ.get(HOME_ENV_VAR)
     if override:
         return Path(override).expanduser()
-    base_dir = Path(base).expanduser() if base is not None else Path.home()
-    return base_dir / DEFAULT_DIRNAME
+    if base is not None:
+        return Path(base).expanduser() / DEFAULT_DIRNAME
+    if is_frozen() and os.name == "nt":
+        local = environ.get(LOCALAPPDATA_ENV_VAR)
+        if local:
+            return Path(local) / APP_DIRNAME
+    return Path.home() / DEFAULT_DIRNAME
 
 
 def ensure_home(home: str | Path) -> Path:

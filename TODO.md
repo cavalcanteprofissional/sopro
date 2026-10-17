@@ -59,7 +59,12 @@ mova-os para o [CHANGELOG](CHANGELOG.md) no momento da entrega.
 ## Fase 4 — Empacotamento
 
 - [x] Especificação de empacotamento, release e compatibilidade (`docs/09`)
-- [ ] Instalador Windows; download de modelos no primeiro uso
+- [x] Executável standalone (PyInstaller onedir): `sopro.spec`, `scripts/build-windows.ps1`,
+  zip portátil e `SHA256SUMS.txt` (build local validado com `--demo` em pasta arbitrária)
+- [x] Download de modelos no primeiro uso (via fábrica do catálogo, com verificação sha256)
+- [x] Instalador Inno Setup (`installer.iss`, per-user) e workflow de release em tag `v*`
+  (`.github/workflows/release.yml`)
+- [ ] Compilar e testar o instalador com Inno Setup (instalar, abrir, desinstalar)
 - [ ] Primeira execução: consentimento (LGPD), domínio, idioma e fontes de áudio
 - [ ] Tratamento de erros amigável; logs sem conteúdo de fala
 - [ ] Tela de gerenciamento de glossários
@@ -83,7 +88,7 @@ em ambiente isolado, e testar sem hardware/modelos.
 - [x] Isolamento de dados via `--home` / `SOPRO_HOME` temporário (`app/home`, não toca no histórico/config reais)
 - [ ] Documentar: seção no `README` ("Rodar localmente"), `docs/10-dev-workflow.md` e
   `CONTRIBUTING.md`; e o **portável sem instalador** (`docs/09`)
-- [ ] Distinguir os dois "sem instalar": (a) dev a partir do fonte; (b) portável `.zip` (Fase 4)
+- [x] Distinguir os dois "sem instalar": (a) dev a partir do fonte; (b) portável `.zip` (Fase 4)
 
 ## Decisões (docs/02 §13)
 
