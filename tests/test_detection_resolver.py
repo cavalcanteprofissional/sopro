@@ -1,7 +1,10 @@
 """Integração entre o serviço de detecção e o resolvedor de acepções (Fase 3)."""
 
+import json
+
 from sopro.app.detection import DetectionService
 from sopro.core.glossary.package import load_package
+from sopro.core.llm import GeneratedEntryService, RateLimiter
 from sopro.core.matcher import MatcherConfig
 from sopro.core.rag import SenseResolver, default_embedder
 from sopro.core.repo import Database, Repository, import_package
@@ -130,3 +133,61 @@ def test_context_window_disabled_uses_current_only():
     service.process(_speech(2000))
 
     assert resolver.contexts == ["first transformer", "second transformer"]
+
+
+class _JsonLLM:
+    name = "fake"
+
+    def complete(self, system, user):
+        return json.dumps(
+            {
+                "term": "candidate",
+                "in_glossary": False,
+                "chosen_sense_id": None,
+                "translation": "termo novo",
+                "definition": "definição gerada",
+                "confidence": 0.7,
+                "generated": True,
+            }
+        )
+
+
+def _generated_service(package):
+    repo = Repository(Database(":memory:"))
+    return GeneratedEntryService(_JsonLLM(), repo, domain=package.domain_tag)
+
+
+def test_out_of_glossary_candidate_generates_detection():
+    package = load_package(SEED_PATH)
+    provider = QueueProvider("zorbulated frobnicator")
+    service = _service(
+        provider,
+        package,
+        generated=_generated_service(package),
+        candidate_limiter=RateLimiter(5),
+        matcher_config=MatcherConfig(cooldown_s=0.0, max_popups_per_minute=100),
+    )
+
+    detections = service.process(_speech(1000))
+
+    assert len(detections) == 1
+    assert detections[0].term == "zorbulated frobnicator"
+    assert detections[0].resolve_method == "llm"
+    assert detections[0].translation == "termo novo"
+
+
+def test_candidate_limiter_caps_generated_detections():
+    package = load_package(SEED_PATH)
+    provider = QueueProvider("zorbulated xor the frobnicator")
+    service = _service(
+        provider,
+        package,
+        generated=_generated_service(package),
+        candidate_limiter=RateLimiter(1),
+        matcher_config=MatcherConfig(cooldown_s=0.0, max_popups_per_minute=100),
+    )
+
+    detections = service.process(_speech(1000))
+
+    assert len(detections) == 1
+    assert detections[0].resolve_method == "llm"

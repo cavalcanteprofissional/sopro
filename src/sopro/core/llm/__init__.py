@@ -10,6 +10,12 @@ O LLM **não** participa de toda frase. Este pacote expõe:
 
 from __future__ import annotations
 
+from sopro.core.llm.candidates import (
+    COMMON_WORDS,
+    Candidate,
+    RateLimiter,
+    extract_candidates,
+)
 from sopro.core.llm.chooser import LLMSenseChooser
 from sopro.core.llm.generate import GeneratedEntryService
 from sopro.core.llm.prompts import SYSTEM_PROMPT, build_user_prompt
@@ -22,14 +28,18 @@ from sopro.core.llm.schema import (
 )
 
 __all__ = [
+    "COMMON_WORDS",
+    "Candidate",
     "EntryResult",
     "GeneratedEntryService",
     "LLMError",
     "LLMProvider",
     "LLMSchemaError",
     "LLMSenseChooser",
+    "RateLimiter",
     "SYSTEM_PROMPT",
     "build_user_prompt",
+    "extract_candidates",
     "extract_json",
     "parse_entry_json",
 ]

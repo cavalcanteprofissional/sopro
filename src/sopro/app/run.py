@@ -84,20 +84,24 @@ def _matcher_config(settings: Settings):
     )
 
 
-def _build_chooser(settings, package):
-    """Monta o passo LLM da cascata quando configurado; ``None`` se desligado/indisponível."""
+def _build_llm_provider(settings):
+    """Monta o provedor de LLM quando configurado; ``None`` se desligado/indisponível."""
     if settings.llm_provider == "off":
         return None
-    from sopro.core.llm import LLMSenseChooser
     from sopro.platform.llm import create_provider
 
     try:
-        provider = create_provider(settings)
-    except Exception as exc:  # noqa: BLE001 - LLM é opcional; degrada para vetorial
-        print(f"LLM indisponível ({exc}); seguindo sem desambiguação por LLM", file=sys.stderr)
+        return create_provider(settings)
+    except Exception as exc:  # noqa: BLE001 - LLM é opcional; degrada sem ele
+        print(f"LLM indisponível ({exc}); seguindo sem LLM", file=sys.stderr)
         return None
+
+
+def _build_chooser(settings, package, provider):
     if provider is None:
         return None
+    from sopro.core.llm import LLMSenseChooser
+
     return LLMSenseChooser(
         provider,
         domain=package.manifest.name or package.domain_tag,
@@ -105,7 +109,22 @@ def _build_chooser(settings, package):
     )
 
 
-def _build_resolver(repo, package, domain_id, settings):
+def _build_generated(settings, package, repo, provider):
+    """Serviço de termos fora do glossário + limite de taxa (None se desligado)."""
+    if provider is None or not settings.llm_candidates:
+        return None, None
+    from sopro.core.llm import GeneratedEntryService, RateLimiter
+
+    service = GeneratedEntryService(
+        provider,
+        repo,
+        domain=package.manifest.name or package.domain_tag,
+        output_lang=settings.output_lang,
+    )
+    return service, RateLimiter(settings.llm_candidates_per_minute)
+
+
+def _build_resolver(repo, package, domain_id, settings, provider):
     """Vetoriza as acepções (cache no banco) e monta o resolvedor (docs/02 §3.4)."""
     from sopro.core.rag import SenseResolver, embed_domain, load_vectors
 
@@ -115,13 +134,15 @@ def _build_resolver(repo, package, domain_id, settings):
     return SenseResolver(
         embedder=embedder,
         domain_tag=package.domain_tag,
-        llm=_build_chooser(settings, package),
+        llm=_build_chooser(settings, package, provider),
         threshold=settings.resolution_threshold,
         vectors=vectors,
     )
 
 
 def _build_service(settings, package, domain_id, repo, session_id, provider):
+    llm = _build_llm_provider(settings)
+    generated, limiter = _build_generated(settings, package, repo, llm)
     return DetectionService(
         provider,
         package,
@@ -129,7 +150,9 @@ def _build_service(settings, package, domain_id, repo, session_id, provider):
         repo=repo,
         domain_id=domain_id,
         session_id=session_id,
-        resolver=_build_resolver(repo, package, domain_id, settings),
+        resolver=_build_resolver(repo, package, domain_id, settings, llm),
+        generated=generated,
+        candidate_limiter=limiter,
         context_window_s=settings.resolution_window_s,
         save_context=settings.save_context,
         language="en",

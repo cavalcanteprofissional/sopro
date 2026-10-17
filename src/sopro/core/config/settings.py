@@ -50,6 +50,8 @@ class Settings:
     shortcut: str = DEFAULT_SHORTCUT
     resolution_threshold: float = 0.30
     resolution_window_s: float = 20.0
+    llm_candidates: bool = False
+    llm_candidates_per_minute: int = 2
 
     def __post_init__(self) -> None:
         self.validate()
@@ -88,6 +90,8 @@ class Settings:
             raise ConfigError("resolution_threshold deve estar em [0, 1]")
         if not 0 < self.resolution_window_s <= 300:
             raise ConfigError("resolution_window_s deve estar em (0, 300]")
+        if not 0 <= self.llm_candidates_per_minute <= 60:
+            raise ConfigError("llm_candidates_per_minute deve estar em [0, 60]")
         if self.shortcut:
             try:
                 parse_hotkey(self.shortcut)

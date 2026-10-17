@@ -15,6 +15,7 @@ from typing import Callable
 
 from sopro.core.audio.contracts import SAMPLE_RATE_HZ, SOURCE_SYSTEM
 from sopro.core.glossary.package import DomainPackage, Sense, Term
+from sopro.core.llm import GeneratedEntryService, RateLimiter, extract_candidates
 from sopro.core.matcher import Matcher, MatcherConfig
 from sopro.core.rag import Resolution, SenseResolver
 from sopro.core.repo import Repository
@@ -65,6 +66,9 @@ class DetectionService:
         session_id: int | None = None,
         popup: PopupQueue | None = None,
         resolver: SenseResolver | None = None,
+        generated: GeneratedEntryService | None = None,
+        candidate_limiter: RateLimiter | None = None,
+        candidate_limit: int = 3,
         context_window_s: float = 0.0,
         save_context: bool = False,
         language: str = "en",
@@ -80,6 +84,13 @@ class DetectionService:
         self._session_id = session_id
         self._popup = popup
         self._resolver = resolver
+        self._generated = generated
+        self._candidate_limiter = candidate_limiter
+        self._candidate_limit = candidate_limit
+        self._known = frozenset(
+            [t.canonical_en.lower() for t in package.terms]
+            + [alias.lower() for t in package.terms for alias in t.aliases]
+        )
         self._context_window_s = context_window_s
         self._context: list[tuple[int, str]] = []
         self._save_context = save_context
@@ -113,6 +124,45 @@ class DetectionService:
         for match in self._matcher.match(transcript.text):
             detection = self._build(match, speech, source, context)
             detection_id = self._persist(detection, transcript.text)
+            if detection_id is not None:
+                detection = replace(detection, detection_id=detection_id)
+            self._enqueue(detection)
+            detections.append(detection)
+        detections.extend(self._generated_detections(transcript.text, speech, source))
+        return detections
+
+    def _generated_detections(
+        self, text: str, speech: SpeechSegment, source: str
+    ) -> list[Detection]:
+        """Termos fora do glossário via LLM, com limite de taxa próprio (docs/02 §4.6)."""
+        if self._generated is None or self._candidate_limiter is None or not text:
+            return []
+        candidates = extract_candidates(
+            text,
+            self._known,
+            stoplist=self._package.stoplist,
+            limit=self._candidate_limit,
+        )
+        detections: list[Detection] = []
+        for candidate in candidates:
+            if not self._candidate_limiter.allow():
+                break
+            result = self._generated.explain(candidate.surface, context=text)
+            if result is None:
+                continue
+            detection = Detection(
+                term=candidate.surface,
+                surface=candidate.surface,
+                source=source,
+                start_ms=speech.start_ms,
+                end_ms=speech.end_ms,
+                ambiguous=False,
+                sense_count=0,
+                translation=result.translation,
+                definition=result.definition,
+                resolve_method="llm",
+            )
+            detection_id = self._persist(detection, text)
             if detection_id is not None:
                 detection = replace(detection, detection_id=detection_id)
             self._enqueue(detection)

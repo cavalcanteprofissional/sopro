@@ -227,3 +227,67 @@ def test_groq_provider_retries_on_rate_limit():
 def test_groq_provider_requires_key():
     with pytest.raises(LLMError):
         GroqLLMProvider(api_key="")
+
+
+# -- candidatos fora do glossário -------------------------------------------
+
+
+def test_extract_candidates_skips_common_and_known():
+    from sopro.core.llm import extract_candidates
+
+    candidates = extract_candidates(
+        "the qubit entanglement is real", known={"entanglement"}
+    )
+
+    surfaces = [c.surface for c in candidates]
+    assert "qubit" in surfaces
+    assert "entanglement" not in surfaces  # já no glossário
+    assert "the" not in [s.lower() for s in surfaces]  # palavra comum
+
+
+def test_extract_candidates_prefers_longest_left_match():
+    from sopro.core.llm import extract_candidates
+
+    candidates = extract_candidates("quantum tunneling effect observed")
+
+    assert candidates[0].surface == "quantum tunneling effect"
+    assert candidates[0].score > 0
+
+
+def test_extract_candidates_respects_stoplist():
+    from sopro.core.llm import extract_candidates
+
+    candidates = extract_candidates("gizmodo reported", stoplist={"gizmodo"})
+
+    assert all(c.surface.lower() != "gizmodo" for c in candidates)
+
+
+def test_extract_candidates_are_non_overlapping_and_limited():
+    from sopro.core.llm import extract_candidates
+
+    candidates = extract_candidates(
+        "alpha1 beta2 gamma3 delta4 epsilon5", limit=2, min_length=4
+    )
+
+    assert len(candidates) == 2
+    assert candidates[0].end_idx <= candidates[1].start_idx
+
+
+def test_rate_limiter_window():
+    from sopro.core.llm import RateLimiter
+
+    now = {"t": 0.0}
+    limiter = RateLimiter(2, clock=lambda: now["t"])
+
+    assert limiter.allow() is True
+    assert limiter.allow() is True
+    assert limiter.allow() is False  # estourou o limite
+
+    now["t"] = 61.0  # janela expira
+    assert limiter.allow() is True
+
+
+def test_rate_limiter_zero_blocks_all():
+    from sopro.core.llm import RateLimiter
+
+    assert RateLimiter(0).allow() is False
