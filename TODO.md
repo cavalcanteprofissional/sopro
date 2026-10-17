@@ -59,10 +59,12 @@ mova-os para o [CHANGELOG](CHANGELOG.md) no momento da entrega.
 - [x] Camada de LLM: prompt B1 com JSON validado, `LLMSenseChooser` (passo `llm` da cascata)
   e geração fora do glossário com cache e fila de aprovação (`core/llm`, `generated_entry`,
   migração v4); provedores local (OpenAI-compatível) e Groq (LLM) com backoff em limite
-- [ ] Detecção de candidatos fora do glossário no pipeline (raridade + limite de taxa próprio)
+- [x] Detecção de candidatos fora do glossário no pipeline (maior casamento + limite de taxa próprio,
+  `core/llm/candidates`, `extract_candidates`, `RateLimiter`)
 - [x] Provedor Groq de STT (agrupamento ≥ ~10 s, backoff em limite, fallback ao local) e
   fábrica de STT por preferência (`platform/stt/groq_stt`, `factory.create_provider`)
-- [ ] Aviso de privacidade + confirmação antes de ativar o Groq (STT/LLM) e indicador na bandeja
+- [x] Aviso de privacidade + confirmação antes de ativar o Groq (STT/LLM) e indicador na bandeja
+  (`settings_window` com `remote_consent`; `tray.set_remote`; `config.cloud_providers`)
 
 ## Fase 4 — Empacotamento
 

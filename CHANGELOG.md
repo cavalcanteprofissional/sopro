@@ -116,6 +116,25 @@ adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
   assinatura de código e seção de download do README.
 - Documentação padrão de projeto: `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, `SECURITY.md`,
   `CHANGELOG.md`, `TODO.md`, `LICENSE` e `.editorconfig`.
+- RAG e desambiguação de acepções (`core/rag`): embeddings locais offline por padrão
+  (`HashingEmbedder`, com `SentenceTransformerEmbedder` opcional no extra `rag`), índice
+  vetorial persistido em `sense_vec` (migração v3), `SenseResolver` em cascata
+  (acepção única → `domain_tag` → vetor → LLM) com limiar configurável, janela de contexto
+  e conjunto de casos ambíguos com medição de acurácia; integrado ao `DetectionService` e
+  ao histórico (`detection.method`).
+- Camada de LLM (`core/llm`): `LLMProvider`, prompt B1 em JSON validado, `LLMSenseChooser`
+  como passo `llm` da cascata e geração de termos fora do glossário com cache e fila de
+  aprovação (`generated_entry`, migração v4 com `translation`/`confidence`); provedores
+  local (OpenAI-compatível) e Groq (`platform/llm`) com backoff em limite.
+- Detecção de termos fora do glossário no pipeline (`core/llm/candidates`): extração por
+  maior casamento com stoplist de palavras comuns, `RateLimiter` com limite de taxa próprio,
+  e enfileiramento de detecções geradas (`resolve_method="llm"`) no `DetectionService`.
+- Provedor Groq de STT (`platform/stt/groq_stt`) com agrupamento de segmentos (≥ ~10 s),
+  backoff em limite, *timeout* e fallback automático ao provedor local; fábrica de STT por
+  preferência (`platform/stt/factory`).
+- Aviso de privacidade e confirmação explícita antes de ativar provedores em nuvem, com
+  consentimento persistido (`remote_consent`) e indicador permanente de "Nuvem ativa" na
+  bandeja (`config.cloud_providers`, `tray.set_remote`).
 
 ### Changed
 - Decisões registradas em `docs/02 §13`, `docs/01` (RNF-08) e README: modelos **on-demand**

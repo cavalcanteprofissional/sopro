@@ -69,7 +69,7 @@ Princípio central: **o LLM não participa de toda frase.** O caminho rápido é
 3. Casar contra: forma canônica + aliases + flexões comuns (plural, -ing, -ed) por regras simples ou tabela de aliases.
 4. Aplicar **lista de exclusão** para palavras muito comuns, a menos que o contexto confirme o domínio (ex.: "model", "token", "layer" exigem palavras de apoio na janela de contexto ou etiqueta de domínio forte).
 5. Aplicar **cooldown** por termo e **orçamento de pop-ups por minuto**.
-6. Candidato desconhecido: substantivos/sintagmas raros (frequência baixa em lista geral do inglês) em contexto técnico podem ir ao caminho LLM, com limite de taxa próprio.
+6. Candidato desconhecido: sintagmas (maior casamento) que não estão no glossário nem na lista de palavras comuns vão ao caminho LLM, com **limite de taxa próprio** (`llm_candidates_per_minute`).
 
 ## 5. Transcrição em tempo real (especificação)
 
@@ -94,10 +94,10 @@ Arquivo único por usuário, em pasta de dados do aplicativo.
 | `sense` | `id`, `term_id`, `ordinal`, `domain_tag`, `translation_pt`, `definition_pt`, `register` (ex.: arcaico), `example_en` |
 | `term_i18n` | `sense_id`, `lang`, `translation`, `definition` (para outros idiomas de saída) |
 | `term_fts` | índice FTS5 sobre termos e aliases |
-| `sense_vec` | embedding por acepção (tabela virtual de vetores) |
+| `sense_vec` | embedding por acepção (`BLOB` float32) |
 | `session` | `id`, `started_at`, `ended_at`, `title`, `audio_sources` |
 | `detection` | `id`, `session_id`, `term_id`, `sense_id`, `at`, `source`, `method`, `context_snippet?`, `learned` |
-| `generated_entry` | `id`, `term`, `definition`, `model`, `created_at`, `approved` |
+| `generated_entry` | `id`, `term`, `definition`, `translation`, `confidence`, `model`, `created_at`, `approved` |
 | `setting` | `key`, `value` |
 
 Observações:
@@ -136,9 +136,14 @@ Instalar um pacote = inserir nas tabelas acima e recalcular vetores se o modelo 
 
 - Fontes de áudio e dispositivos; ganho/limiar do VAD.
 - Provedor de STT (local/Groq), modelo, chave Groq (armazenada localmente, de preferência no cofre de credenciais do SO).
-- Provedor de LLM (local/Groq/desligado), modelo.
+- Provedor de LLM (local/Groq/desligado), modelo e URL base (servidor OpenAI-compatível).
 - Domínios ativos, idioma de saída, cooldown, orçamento por minuto, duração, posição, tema.
-- Privacidade: salvar contexto (sim/não), salvar transcrição (padrão não), limpar histórico.
+- Desambiguação: limiar do resolvedor (`resolution_threshold`) e janela de contexto
+  (`resolution_window_s`).
+- Termos fora do glossário: ativar candidatos (`llm_candidates`) e limite de taxa próprio
+  (`llm_candidates_per_minute`).
+- Privacidade: salvar contexto (sim/não), salvar transcrição (padrão não), limpar histórico;
+  consentimento de nuvem persistido (`remote_consent`), revogável.
 - Atalhos globais.
 
 ## 10. Privacidade e segurança

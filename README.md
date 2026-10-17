@@ -3,9 +3,10 @@
 **Um companheiro discreto que explica termos técnicos em inglês no momento exato em que eles são falados.**
 
 > Status: **protótipo funcional**. Captura → VAD → transcrição → matcher → pop-up +
-> histórico (SQLite) já rodam de ponta a ponta; overlay, bandeja e tela de configurações
-> estão prontos e há um executável portátil. RAG/desambiguação (Fase 3) e instalador
-> (Fase 4) em andamento.
+> histórico (SQLite) rodam de ponta a ponta; overlay, bandeja e tela de configurações
+> estão prontos. RAG/desambiguação (Fase 3) está implementado — acepção contextual,
+> termos fora do glossário via LLM e provedor Groq opcional com aviso de privacidade.
+> Falta empacotar e distribuir (Fase 4).
 
 Você está vendo uma aula, palestra ou call técnica em inglês e ouve *"fairness"* ou *"backlog"* passar rápido. Pesquisar quebra a atenção. Legenda automática não explica o termo nem escolhe o sentido certo para a área.
 
@@ -56,6 +57,10 @@ python -m pip install -e ".[audio]"
 # (opcional) overlay, bandeja e tela de configurações (PySide6)
 python -m pip install -e ".[ui]"
 
+# (opcional) embeddings reais para desambiguação contextual — sem ele usa o
+# embedder offline por padrão (hashing)
+python -m pip install -e ".[rag]"
+
 # rodar o app (precisa de 'ui' e, para áudio real, de 'audio' + 'stt')
 python -m sopro
 
@@ -89,7 +94,7 @@ data/domains/                 Pacotes de domínio (glossários)
   └─ tech-en-pt/              Pacote seed: Tecnologia e IA (EN→PT)
 src/sopro/
   ├─ core/                    Núcleo portável (text, glossary, matcher, rag, llm, repo, config)
-  ├─ platform/                Camadas dependentes de SO/UI (audio, popup)
+  ├─ platform/                Camadas dependentes de SO/UI (audio, stt, llm, popup)
   └─ app/                     Orquestração, ciclo de vida, bandeja, atalhos
 tests/                        Testes automatizados (pytest)
 fixtures/                     Dados de apoio (ex.: template do conjunto de teste)
