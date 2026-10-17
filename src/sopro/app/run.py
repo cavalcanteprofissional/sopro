@@ -18,7 +18,13 @@ from pathlib import Path
 from sopro.app.detection import DetectionService
 from sopro.app.home import db_path, ensure_home, resolve_home
 from sopro.app.realtime import RealtimePipeline
-from sopro.core.config import ConfigError, Settings, load_settings, save_settings
+from sopro.core.config import (
+    ConfigError,
+    Settings,
+    cloud_providers,
+    load_settings,
+    save_settings,
+)
 from sopro.core.hotkeys import HotkeyError, parse_hotkey
 from sopro.core.paths import data_path
 from sopro.core.rag import default_embedder
@@ -322,6 +328,7 @@ def _run(args, home, repo, settings, domains_root) -> int:
                 print(f"configuração inválida: {exc}", file=sys.stderr)
                 return
             save_settings(repo, new_settings)
+            tray.set_remote(bool(cloud_providers(new_settings)))
 
     def on_quit() -> None:
         state["running"] = False
@@ -338,6 +345,7 @@ def _run(args, home, repo, settings, domains_root) -> int:
     tray.settings_requested.connect(on_settings)
     tray.quit_requested.connect(on_quit)
     tray.set_state(TrayState.LISTENING)
+    tray.set_remote(bool(cloud_providers(settings)))
     tray.show()
 
     hotkey = _start_hotkey(settings, on_toggle)

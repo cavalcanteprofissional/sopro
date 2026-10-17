@@ -20,6 +20,7 @@ from sopro.core.config.settings import (
     THEMES,
     ConfigError,
     Settings,
+    cloud_providers,
     load_settings,
     save_settings,
 )
@@ -38,6 +39,7 @@ __all__ = [
     "SecretStore",
     "Settings",
     "THEMES",
+    "cloud_providers",
     "load_settings",
     "save_settings",
 ]

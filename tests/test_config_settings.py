@@ -5,6 +5,7 @@ import pytest
 from sopro.core.config import (
     ConfigError,
     Settings,
+    cloud_providers,
     load_settings,
     save_settings,
 )
@@ -21,6 +22,15 @@ def test_defaults_are_valid():
     assert settings.output_lang == "pt-BR"
     assert settings.audio_sources == ("system",)
     assert settings.save_context is False
+    assert settings.remote_consent is False
+
+
+def test_cloud_providers_lists_groq_only():
+    assert cloud_providers(Settings(stt_provider="local", llm_provider="off")) == ()
+
+    names = cloud_providers(Settings(stt_provider="groq", llm_provider="groq"))
+
+    assert names == ("groq (voz)", "groq (LLM)")
 
 
 @pytest.mark.parametrize(

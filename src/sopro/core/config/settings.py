@@ -52,6 +52,7 @@ class Settings:
     resolution_window_s: float = 20.0
     llm_candidates: bool = False
     llm_candidates_per_minute: int = 2
+    remote_consent: bool = False
 
     def __post_init__(self) -> None:
         self.validate()
@@ -114,6 +115,16 @@ class Settings:
             return cls(**kwargs)
         except TypeError as exc:
             raise ConfigError(f"configuração inválida: {exc}") from exc
+
+
+def cloud_providers(settings: Settings) -> tuple[str, ...]:
+    """Provedores em nuvem em uso (groq): enviam áudio/texto para fora (docs/05 A8)."""
+    names: list[str] = []
+    if settings.stt_provider == "groq":
+        names.append("groq (voz)")
+    if settings.llm_provider == "groq":
+        names.append("groq (LLM)")
+    return tuple(names)
 
 
 def load_settings(repo, key: str = SETTINGS_KEY) -> Settings:

@@ -44,6 +44,21 @@ def test_menu_has_expected_entries(qt_app):
     assert "Sair" in texts
 
 
+def test_set_remote_toggles_indicator_and_tooltip(qt_app):
+    tray = TrayIcon()
+
+    assert tray.is_remote is False
+    tray.set_remote(True)
+    assert tray.is_remote is True
+    assert "Nuvem ativa (Groq)" in tray.tray.toolTip()
+    visible = [a for a in tray.tray.contextMenu().actions() if a.isVisible()]
+    assert any("Nuvem ativa (Groq)" in a.text() for a in visible)
+
+    tray.set_remote(False)
+    assert tray.is_remote is False
+    assert "Nuvem" not in tray.tray.toolTip()
+
+
 def test_menu_actions_emit_signals(qt_app):
     tray = TrayIcon()
     seen = []
