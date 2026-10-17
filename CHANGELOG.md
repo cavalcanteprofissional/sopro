@@ -21,6 +21,9 @@ adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 - Persistência local em SQLite (`core/repo`): esquema de docs/02 §6 com migrações versionadas,
   índice FTS5 de termos/aliases, repositório de domínios/termos/sessões/detecções/configurações
   e exportação do histórico em CSV e Markdown (contexto oculto por padrão).
+- Configurações validadas (`core/config.settings`) persistidas na tabela `setting`, com
+  carga/gravação via `Repository`; cofre de segredos (`core/config.secrets`) com backend do SO
+  opcional via `keyring` e alternativa em memória.
 - Contrato `STTProvider` (`core/stt/provider.py`), adapter `LocalWhisperProvider` com engine
   injetável e catálogo de modelos com verificação de integridade sha256 e cache local
   (`core/stt/registry.py`).
