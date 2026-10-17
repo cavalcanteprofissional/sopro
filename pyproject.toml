@@ -26,13 +26,15 @@ dependencies = []
 [project.optional-dependencies]
 # Dependências por fase serão adicionadas aqui conforme o roadmap avança.
 # Fase 1 (áudio/STT): silero-vad, soundfile (PyAudioWPatch já em [audio])
-# Fase 2 (UI/dados): PySide6, sqlite-vec
-# Fase 3 (RAG/LLM): sentence-transformers, sqlite-vec
+# Fase 2 (UI/dados): PySide6
+# Fase 3 (RAG/LLM): sentence-transformers (embeddings opcionais; o padrão é offline)
 stt = ["faster-whisper>=1.0"]
 # Captura de áudio no Windows (loopback WASAPI + microfone); MIT, ~1 MB.
 audio = ["PyAudioWPatch>=0.2.12"]
 # Overlay, bandeja e configurações (docs/06 §5); LGPL, ~150 MB.
 ui = ["PySide6>=6.6"]
+# Embeddings reais para desambiguação (opcional); o hashing embutido não exige nada.
+rag = ["sentence-transformers>=2.5"]
 # Empacotamento em executável standalone (docs/09).
 packaging = ["pyinstaller>=6.0"]
 dev = ["pytest>=8.0"]

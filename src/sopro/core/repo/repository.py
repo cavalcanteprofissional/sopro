@@ -7,6 +7,7 @@ escritas são idempotentes o quanto possível para permitir reimportação de pa
 
 from __future__ import annotations
 
+import struct
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Sequence
@@ -231,6 +232,64 @@ class Repository:
             stoplisted=bool(row["stoplisted"]),
             aliases=tuple(alias["alias"] for alias in aliases),
         )
+
+    # -- embeddings das acepções (sense_vec) --------------------------------
+
+    def upsert_sense_vector(
+        self, sense_id: int, model: str, dim: int, vector: Sequence[float]
+    ) -> None:
+        """Grava (ou substitui) o embedding de uma acepção."""
+        blob = struct.pack(f"<{len(vector)}f", *[float(value) for value in vector])
+        with self._db.transaction() as connection:
+            connection.execute(
+                "INSERT INTO sense_vec (sense_id, model, dim, vector) "
+                "VALUES (?, ?, ?, ?) "
+                "ON CONFLICT(sense_id) DO UPDATE SET "
+                "model = excluded.model, dim = excluded.dim, vector = excluded.vector",
+                (sense_id, model, dim, blob),
+            )
+
+    def get_sense_vector(
+        self, sense_id: int, model: str | None = None
+    ) -> list[float] | None:
+        query = "SELECT dim, vector FROM sense_vec WHERE sense_id = ?"
+        params: list[object] = [sense_id]
+        if model is not None:
+            query += " AND model = ?"
+            params.append(model)
+        row = self._db.connection.execute(query, params).fetchone()
+        if row is None:
+            return None
+        dim = int(row["dim"])
+        return list(struct.unpack(f"<{dim}f", bytes(row["vector"])))
+
+    def list_sense_vectors(
+        self, model: str | None = None
+    ) -> list[tuple[int, list[float]]]:
+        """Todos os embeddings persistidos como ``(sense_id, vetor)``."""
+        query = "SELECT sense_id, dim, vector FROM sense_vec"
+        params: list[object] = []
+        if model is not None:
+            query += " WHERE model = ?"
+            params.append(model)
+        rows = self._db.connection.execute(query, params).fetchall()
+        return [
+            (
+                int(row["sense_id"]),
+                list(struct.unpack(f"<{int(row['dim'])}f", bytes(row["vector"]))),
+            )
+            for row in rows
+        ]
+
+    def clear_sense_vectors(self, model: str | None = None) -> int:
+        if model is None:
+            cursor = self._db.connection.execute("DELETE FROM sense_vec")
+        else:
+            cursor = self._db.connection.execute(
+                "DELETE FROM sense_vec WHERE model = ?", (model,)
+            )
+        self._db.connection.commit()
+        return int(cursor.rowcount or 0)
 
     # -- sessões -------------------------------------------------------------
     def start_session(

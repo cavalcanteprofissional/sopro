@@ -108,6 +108,19 @@ CREATE TABLE domain_stoplist (
 );
 """
 
-MIGRATIONS: tuple[tuple[int, str], ...] = ((1, SCHEMA_V1), (2, SCHEMA_V2))
+SCHEMA_V3 = """
+CREATE TABLE sense_vec (
+    sense_id INTEGER PRIMARY KEY REFERENCES sense(id) ON DELETE CASCADE,
+    model    TEXT NOT NULL,
+    dim      INTEGER NOT NULL,
+    vector   BLOB NOT NULL
+);
+"""
+
+MIGRATIONS: tuple[tuple[int, str], ...] = (
+    (1, SCHEMA_V1),
+    (2, SCHEMA_V2),
+    (3, SCHEMA_V3),
+)
 
 LATEST_VERSION = MIGRATIONS[-1][0]

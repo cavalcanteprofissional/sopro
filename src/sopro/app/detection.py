@@ -16,6 +16,7 @@ from typing import Callable
 from sopro.core.audio.contracts import SAMPLE_RATE_HZ, SOURCE_SYSTEM
 from sopro.core.glossary.package import DomainPackage, Sense, Term
 from sopro.core.matcher import Matcher, MatcherConfig
+from sopro.core.rag import Resolution, SenseResolver
 from sopro.core.repo import Repository
 from sopro.core.stt.provider import AudioSegment, STTProvider
 from sopro.core.stt.vocabulary import vocabulary_hint
@@ -38,11 +39,12 @@ class Detection:
     translation: str = ""
     definition: str = ""
     register: str | None = None
+    resolve_method: str = ""
     detection_id: int | None = None
 
 
 def _primary_sense(term: Term) -> Sense | None:
-    """Acepção primária: menor ordinal (desambiguação contextual vem na Fase 3)."""
+    """Acepção primária: menor ordinal, usada quando não há resolvedor."""
     if not term.senses:
         return None
     return min(term.senses, key=lambda sense: sense.ordinal)
@@ -62,6 +64,8 @@ class DetectionService:
         domain_id: int | None = None,
         session_id: int | None = None,
         popup: PopupQueue | None = None,
+        resolver: SenseResolver | None = None,
+        context_window_s: float = 0.0,
         save_context: bool = False,
         language: str = "en",
         vocab_limit: int | None = None,
@@ -75,6 +79,9 @@ class DetectionService:
         self._domain_id = domain_id
         self._session_id = session_id
         self._popup = popup
+        self._resolver = resolver
+        self._context_window_s = context_window_s
+        self._context: list[tuple[int, str]] = []
         self._save_context = save_context
         self._language = language
         self._hint = (
@@ -102,8 +109,9 @@ class DetectionService:
             )
         )
         detections: list[Detection] = []
+        context = self._context_text(speech.end_ms, transcript.text)
         for match in self._matcher.match(transcript.text):
-            detection = self._build(match, speech, source)
+            detection = self._build(match, speech, source, context)
             detection_id = self._persist(detection, transcript.text)
             if detection_id is not None:
                 detection = replace(detection, detection_id=detection_id)
@@ -123,9 +131,30 @@ class DetectionService:
             detections.extend(self.process(speech, source=source))
         return detections
 
-    def _build(self, match, speech: SpeechSegment, source: str) -> Detection:
+    def _context_text(self, end_ms: int, current: str) -> str:
+        """Janela deslizante: últimos N segundos de texto transcrito (docs/05 A7)."""
+        if self._context_window_s <= 0:
+            return current
+        self._context.append((end_ms, current))
+        cutoff = end_ms - int(self._context_window_s * 1000)
+        self._context = [
+            (seen_ms, text) for seen_ms, text in self._context if seen_ms >= cutoff
+        ]
+        return " ".join(text for _seen_ms, text in self._context)
+
+    def _sense_for(self, term: Term, text: str) -> tuple[Sense | None, str]:
+        """Escolhe a acepção: resolvedor contextual (Fase 3) ou primária."""
+        if self._resolver is not None:
+            resolution: Resolution | None = self._resolver.resolve(term, text)
+            if resolution is not None:
+                return resolution.sense, resolution.method
+        return _primary_sense(term), ""
+
+    def _build(
+        self, match, speech: SpeechSegment, source: str, text: str
+    ) -> Detection:
         term = self._terms.get(match.term)
-        sense = _primary_sense(term) if term else None
+        sense, method = self._sense_for(term, text) if term else (None, "")
         return Detection(
             term=match.term,
             surface=match.surface,
@@ -138,6 +167,7 @@ class DetectionService:
             translation=sense.translation_pt if sense else "",
             definition=sense.definition_pt if sense else "",
             register=sense.register if sense else None,
+            resolve_method=method,
         )
 
     def _persist(self, detection: Detection, text: str) -> int | None:
@@ -158,7 +188,7 @@ class DetectionService:
             term_id=term_id,
             sense_id=sense_id,
             source=detection.source,
-            method="matcher",
+            method=detection.resolve_method or "matcher",
             context_snippet=text if self._save_context else None,
         )
 

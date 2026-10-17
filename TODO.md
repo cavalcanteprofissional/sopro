@@ -52,8 +52,10 @@ mova-os para o [CHANGELOG](CHANGELOG.md) no momento da entrega.
 
 ## Fase 3 — RAG e desambiguação
 
-- [ ] Embeddings locais e índice vetorial das acepções
-- [ ] `SenseResolver` em cascata (acepção única → domínio → vetor → LLM)
+- [x] Embeddings locais e índice vetorial das acepções (`core/rag`, tabela `sense_vec`, migração v3)
+- [x] `SenseResolver` em cascata (acepção única → domínio → vetor → LLM), janela de contexto
+  e limiar configurável; integrado ao serviço de detecção
+- [x] Conjunto de casos ambíguos e medição de acurácia (`core/rag/evaluate`)
 - [ ] Caminho de termo fora do glossário com LLM local, cache e aprovação
 - [ ] Provedor Groq opcional (STT e LLM) com aviso de privacidade e tratamento de limites
 

@@ -45,6 +45,8 @@ class Settings:
     save_context: bool = False
     save_transcript: bool = False
     shortcut: str = DEFAULT_SHORTCUT
+    resolution_threshold: float = 0.30
+    resolution_window_s: float = 20.0
 
     def __post_init__(self) -> None:
         self.validate()
@@ -75,6 +77,10 @@ class Settings:
             raise ConfigError("cooldown_s deve estar em [0, 3600]")
         if not 0 <= self.budget_per_minute <= 120:
             raise ConfigError("budget_per_minute deve estar em [0, 120]")
+        if not 0 <= self.resolution_threshold <= 1:
+            raise ConfigError("resolution_threshold deve estar em [0, 1]")
+        if not 0 < self.resolution_window_s <= 300:
+            raise ConfigError("resolution_window_s deve estar em (0, 300]")
         if self.shortcut:
             try:
                 parse_hotkey(self.shortcut)

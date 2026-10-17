@@ -21,6 +21,7 @@ from sopro.app.realtime import RealtimePipeline
 from sopro.core.config import ConfigError, Settings, load_settings, save_settings
 from sopro.core.hotkeys import HotkeyError, parse_hotkey
 from sopro.core.paths import data_path
+from sopro.core.rag import default_embedder
 from sopro.core.repo import Database, Repository, build_domain_package, import_package
 from sopro.platform.hotkey import create_listener
 
@@ -83,6 +84,21 @@ def _matcher_config(settings: Settings):
     )
 
 
+def _build_resolver(repo, package, domain_id, settings):
+    """Vetoriza as acepções (cache no banco) e monta o resolvedor (docs/02 §3.4)."""
+    from sopro.core.rag import SenseResolver, embed_domain, load_vectors
+
+    embedder = default_embedder()
+    embed_domain(repo, package, domain_id, embedder)
+    vectors = load_vectors(repo, package, domain_id, model=embedder.name)
+    return SenseResolver(
+        embedder=embedder,
+        domain_tag=package.domain_tag,
+        threshold=settings.resolution_threshold,
+        vectors=vectors,
+    )
+
+
 def _build_service(settings, package, domain_id, repo, session_id, provider):
     return DetectionService(
         provider,
@@ -91,6 +107,8 @@ def _build_service(settings, package, domain_id, repo, session_id, provider):
         repo=repo,
         domain_id=domain_id,
         session_id=session_id,
+        resolver=_build_resolver(repo, package, domain_id, settings),
+        context_window_s=settings.resolution_window_s,
         save_context=settings.save_context,
         language="en",
     )
