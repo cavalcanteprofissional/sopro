@@ -47,7 +47,8 @@ mova-os para o [CHANGELOG](CHANGELOG.md) no momento da entrega.
 - [x] Importador/exportador de pacotes de domínio (JSON)
 - [x] Tela mínima de configurações (`platform/popup.settings_window`)
 - [x] Ícone na bandeja com estado e menu (`platform/popup.tray`)
-- [ ] Atalhos globais de teclado (pausar/fechar)
+- [x] Atalhos globais de teclado (pausar/fechar) — `core/hotkeys` + `platform/hotkey`
+  (Windows `RegisterHotKey`), com degradação graciosa e atalho editável nas configurações
 
 ## Fase 3 — RAG e desambiguação
 
@@ -82,11 +83,12 @@ Objetivo: rodar o app localmente **sem build e sem instalador** (equivalente a `
 em ambiente isolado, e testar sem hardware/modelos.
 
 - [x] Entrypoint do app (`python -m sopro` + script `sopro` em `[project.scripts]`)
-- [ ] Suporte a **uv** (`uv run sopro`, `uv sync`; opcional `uv.lock`)
-- [ ] Task runner com alvos `dev`, `test`, `demo`, `bench`
+- [x] Suporte a **uv** (`uv run sopro`, `uv sync`; `uv.lock` opcional e não mantido)
+- [x] Task runner com alvos `dev`, `test`, `demo`, `bench`, `validate`, `build`, `install`
+  (`scripts/tasks.py`, sem exigir `make`/`just`/`uv`)
 - [x] Modo **demo/mock**: `DemoAudioSource` e `DemoProvider` (`app/demo`) ligados via `--demo` no `app/run`, para rodar o pipeline + UI sem microfone e sem baixar modelos
 - [x] Isolamento de dados via `--home` / `SOPRO_HOME` temporário (`app/home`, não toca no histórico/config reais)
-- [ ] Documentar: seção no `README` ("Rodar localmente"), `docs/10-dev-workflow.md` e
+- [x] Documentar: seção no `README` ("Rodar localmente"), `docs/10-dev-workflow.md` e
   `CONTRIBUTING.md`; e o **portável sem instalador** (`docs/09`)
 - [x] Distinguir os dois "sem instalar": (a) dev a partir do fonte; (b) portável `.zip` (Fase 4)
 

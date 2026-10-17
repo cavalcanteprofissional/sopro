@@ -66,6 +66,14 @@ adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
   `resource_root`, `data_path`; o catálogo de modelos e os pacotes de domínio passam a ser
   localizados por ela. No executável do Windows a pasta de dados vira `%LOCALAPPDATA%\Sopro`
   (docs/09 §5).
+- Atalhos globais de teclado (`core/hotkeys` + `platform/hotkey`): parser e contrato de
+  combinação (`Ctrl+Shift+Space`) e registro no Windows via `RegisterHotKey` com thread de
+  mensagens, injetável para testes; acionam pausar/continuar e são editáveis nas
+  configurações (campo validado, degradação graciosa quando indisponível).
+- Task runner `scripts/tasks.py` (sem exigir `make`/`just`/`uv`) com alvos `dev`, `demo`,
+  `test`, `bench`, `validate`, `build` e `install`; documentação do fluxo local em
+  `docs/10-dev-workflow.md`, com apoio em `CONTRIBUTING.md` e no README (inclui o
+  suporte opcional a `uv` e a distinção entre dev do fonte e portátil).
 - Contrato `STTProvider` (`core/stt/provider.py`), adapter `LocalWhisperProvider` com engine
   injetável e catálogo de modelos com verificação de integridade sha256 e cache local
   (`core/stt/registry.py`).

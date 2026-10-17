@@ -76,6 +76,11 @@ sopro-validate-glossary data/domains/tech-en-pt
 sopro-benchmark aula.wav anotacao.csv --provider sopro.platform.stt.factory:faster_whisper
 ```
 
+Esses comandos também estão disponíveis pelo task runner `python scripts/tasks.py
+<dev|demo|test|bench|validate|build|install>`, que funciona sem `make`/`just`/`uv`. Veja
+[docs/10-dev-workflow.md](docs/10-dev-workflow.md) para o fluxo completo (incluindo o
+empacotamento portátil).
+
 ## Estrutura do repositório
 
 ```
@@ -126,6 +131,8 @@ python -m pip install -e ".[packaging]"
 
 # build + zip + SHA256SUMS.txt em dist/ (roda os testes antes; use -SkipTests para pular)
 powershell -ExecutionPolicy Bypass -File scripts/build-windows.ps1
+# ou, via task runner:
+python scripts/tasks.py build
 ```
 
 Saída em `dist/`: `Sopro/` (pasta *onedir* com `Sopro.exe`), `Sopro-<versão>-portable.zip` e
@@ -150,6 +157,7 @@ Toda a documentação de produto e engenharia está em [`docs/`](docs/). Leia na
 | [07-glossario-seed-modelo.md](docs/07-glossario-seed-modelo.md) | Formato do pacote de domínio (JSON/CSV), manifesto e entradas de exemplo |
 | [08-distribuicao-e-offline.md](docs/08-distribuicao-e-offline.md) | Modelos sob demanda, verificação de integridade, cache local e o que roda sem internet |
 | [09-empacotamento-e-release.md](docs/09-empacotamento-e-release.md) | Executável standalone, instalador, CI de release e compatibilidade de Windows |
+| [10-dev-workflow.md](docs/10-dev-workflow.md) | Executar a partir do fonte, task runner, modo demo e build portátil |
 
 Convenções de leitura: **RF-xx** requisito funcional, **RNF-xx** requisito não funcional,
 **RN-xx** regra de negócio; itens **(verificar)** dependem de confirmação em fonte oficial;

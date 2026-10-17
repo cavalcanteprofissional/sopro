@@ -122,6 +122,10 @@ class SettingsDialog(QDialog):
         self._theme.setCurrentText(settings.theme)
         form.addRow("Tema", self._theme)
 
+        self._shortcut = QLineEdit(settings.shortcut)
+        self._shortcut.setPlaceholderText("Ctrl+Shift+Space (vazio = sem atalho)")
+        form.addRow("Atalho global", self._shortcut)
+
         self._save_context = QCheckBox("Salvar trecho de contexto (privacidade)")
         self._save_context.setChecked(settings.save_context)
         form.addRow("", self._save_context)
@@ -166,5 +170,6 @@ class SettingsDialog(QDialog):
             cooldown_s=float(self._cooldown.value()),
             budget_per_minute=int(self._budget.value()),
             theme=self._theme.currentText(),
+            shortcut=self._shortcut.text().strip(),
             save_context=self._save_context.isChecked(),
         )

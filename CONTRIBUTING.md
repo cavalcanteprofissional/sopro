@@ -22,8 +22,12 @@ Requisitos: Python 3.11+.
 python -m venv .venv
 . .venv/Scripts/activate        # Windows (Git Bash)
 # source .venv/bin/activate     # Linux/macOS
-python -m pip install -e ".[dev]"
+python scripts/tasks.py install # instala .[dev,ui,audio,stt]
 ```
+
+Use o task runner `scripts/tasks.py` para as tarefas do dia a dia (`test`, `dev`, `demo`,
+`bench`, `validate`, `build`). Detalhes do fluxo local, modo demo e empacotamento portátil
+em [docs/10-dev-workflow.md](docs/10-dev-workflow.md).
 
 ## Fluxo de trabalho
 

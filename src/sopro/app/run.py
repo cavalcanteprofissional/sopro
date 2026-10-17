@@ -19,8 +19,10 @@ from sopro.app.detection import DetectionService
 from sopro.app.home import db_path, ensure_home, resolve_home
 from sopro.app.realtime import RealtimePipeline
 from sopro.core.config import ConfigError, Settings, load_settings, save_settings
+from sopro.core.hotkeys import HotkeyError, parse_hotkey
 from sopro.core.paths import data_path
 from sopro.core.repo import Database, Repository, build_domain_package, import_package
+from sopro.platform.hotkey import create_listener
 
 DEMO_TICK_MS = 40
 DEMO_FRAMES_PER_TICK = 6
@@ -106,6 +108,32 @@ def _build_audio_source(settings: Settings):
     from sopro.platform.audio import WindowsAudioSource
 
     return WindowsAudioSource()
+
+
+def _start_hotkey(settings: Settings, callback) -> object | None:
+    """Registra o atalho global; devolve o listener ou ``None`` (degradação graciosa)."""
+    from sopro.platform.hotkey.windows import HotkeyUnavailable
+
+    if not settings.shortcut:
+        return None
+    try:
+        hotkey = parse_hotkey(settings.shortcut)
+    except HotkeyError as exc:
+        print(f"atalho ignorado: {exc}", file=sys.stderr)
+        return None
+    listener = create_listener(hotkey)
+    if listener is None:
+        print(
+            f"atalho global não suportado neste SO: {settings.shortcut}",
+            file=sys.stderr,
+        )
+        return None
+    try:
+        listener.start(callback)
+    except HotkeyUnavailable as exc:
+        print(f"atalho ignorado: {exc}", file=sys.stderr)
+        return None
+    return listener
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -226,6 +254,8 @@ def _run(args, home, repo, settings, domains_root) -> int:
     def on_quit() -> None:
         state["running"] = False
         stop.set()
+        if hotkey is not None:
+            hotkey.stop()
         if thread is not None:
             thread.join(timeout=2.0)
         overlay.stop()
@@ -237,6 +267,8 @@ def _run(args, home, repo, settings, domains_root) -> int:
     tray.quit_requested.connect(on_quit)
     tray.set_state(TrayState.LISTENING)
     tray.show()
+
+    hotkey = _start_hotkey(settings, on_toggle)
 
     if args.demo:
         print("Sopro em modo demonstração — pop-ups fictícios a cada poucos segundos.")

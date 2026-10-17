@@ -11,6 +11,7 @@ from dataclasses import dataclass, field, fields
 from typing import Any, Mapping
 
 from sopro.core.audio import SOURCE_LABELS
+from sopro.core.hotkeys import HotkeyError, parse_hotkey
 
 SETTINGS_KEY = "config"
 
@@ -18,6 +19,7 @@ STT_PROVIDERS = ("local", "groq")
 LLM_PROVIDERS = ("off", "local", "groq")
 THEMES = ("light", "dark", "system")
 POPUP_POSITIONS = ("bottom-right", "bottom-left", "top-right", "top-left")
+DEFAULT_SHORTCUT = "Ctrl+Shift+Space"
 
 
 class ConfigError(Exception):
@@ -42,7 +44,7 @@ class Settings:
     theme: str = "system"
     save_context: bool = False
     save_transcript: bool = False
-    shortcut: str = ""
+    shortcut: str = DEFAULT_SHORTCUT
 
     def __post_init__(self) -> None:
         self.validate()
@@ -73,6 +75,11 @@ class Settings:
             raise ConfigError("cooldown_s deve estar em [0, 3600]")
         if not 0 <= self.budget_per_minute <= 120:
             raise ConfigError("budget_per_minute deve estar em [0, 120]")
+        if self.shortcut:
+            try:
+                parse_hotkey(self.shortcut)
+            except HotkeyError as exc:
+                raise ConfigError(f"atalho inválido: {exc}") from exc
 
     def to_dict(self) -> dict[str, Any]:
         return {f.name: getattr(self, f.name) for f in fields(self)}
