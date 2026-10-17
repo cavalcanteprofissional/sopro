@@ -63,6 +63,21 @@ mova-os para o [CHANGELOG](CHANGELOG.md) no momento da entrega.
 - [ ] Avaliar versão mobile (microfone) reutilizando o núcleo
 - [ ] Botão "irrelevante" alimentando a lista de exclusão
 
+## DX — execução local e modo demo (implementar no final, após as fases)
+
+Objetivo: rodar o app localmente **sem build e sem instalador** (equivalente a `npm run dev`),
+em ambiente isolado, e testar sem hardware/modelos.
+
+- [ ] Entrypoint do app (`src/sopro/__main__.py`) + script `sopro` em `[project.scripts]`
+- [ ] Suporte a **uv** (`uv run sopro`, `uv sync`; opcional `uv.lock`)
+- [ ] Task runner com alvos `dev`, `test`, `demo`, `bench`
+- [ ] Modo **demo/mock**: `AudioSource` e `STTProvider` falsos (`--demo` / `SOPRO_DEMO=1`),
+  para rodar o pipeline + UI sem microfone e sem baixar modelos
+- [ ] Isolamento de dados via `SOPRO_HOME` temporário (não tocar no histórico/config reais)
+- [ ] Documentar: seção no `README` ("Rodar localmente"), `docs/10-dev-workflow.md` e
+  `CONTRIBUTING.md`; e o **portável sem instalador** (`docs/09`)
+- [ ] Distinguir os dois "sem instalar": (a) dev a partir do fonte; (b) portável `.zip` (Fase 4)
+
 ## Decisões (docs/02 §13)
 
 ### Fechadas
