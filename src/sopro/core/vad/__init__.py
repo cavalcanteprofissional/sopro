@@ -6,5 +6,6 @@ uma implementação por energia (RMS) livre de dependências (``segment``).
 
 from sopro.core.vad.energy import segment
 from sopro.core.vad.segmenter import SpeechSegment, VadConfig
+from sopro.core.vad.streaming import StreamingSegmenter
 
-__all__ = ["SpeechSegment", "VadConfig", "segment"]
+__all__ = ["SpeechSegment", "StreamingSegmenter", "VadConfig", "segment"]

@@ -39,6 +39,7 @@ mova-os para o [CHANGELOG](CHANGELOG.md) no momento da entrega.
 - [ ] Pop-up sem foco, sempre no topo, com fila e cooldown
 - [x] Fila de cartões de pop-up com limite de simultâneos (política no `Matcher`)
 - [x] Serviço de detecção: transcrição → matcher → histórico (SQLite) → pop-up (`app/detection`)
+- [x] Pipeline em tempo real: VAD incremental por fonte → detecção (`app/realtime`, `core/vad.streaming`)
 - [ ] Overlay concreto do pop-up (janela sem foco/sem borda) com PySide6 (docs/02 §8, docs/05 A5)
 - [x] SQLite com esquema e migrações; histórico por sessão (`core/repo`)
 - [x] Configurações validadas com persistência (`core/config`); segredos via cofre do SO

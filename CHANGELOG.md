@@ -36,6 +36,12 @@ adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
   com `STTProvider` e relógio injetáveis.
 - Dica de vocabulário compartilhada (`core/stt/vocabulary`) entre o benchmark e o serviço
   de detecção.
+- Segmentação incremental (`core/vad.streaming`): `StreamingSegmenter` consome PCM em
+  fluxo e emite trechos de fala (finaliza por silêncio, descarta fala curta, divide
+  trechos longos com sobreposição), reaproveitando o `VadConfig`.
+- Pipeline em tempo real (`app/realtime`): `RealtimePipeline` mantém um segmentador por
+  fonte (sistema/microfone), alimenta o `DetectionService` e expõe `run` sobre uma
+  `AudioSource`, com drenagem dos trechos em andamento.
 - Contrato `STTProvider` (`core/stt/provider.py`), adapter `LocalWhisperProvider` com engine
   injetável e catálogo de modelos com verificação de integridade sha256 e cache local
   (`core/stt/registry.py`).
