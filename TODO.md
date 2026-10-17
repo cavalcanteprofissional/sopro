@@ -36,7 +36,7 @@ mova-os para o [CHANGELOG](CHANGELOG.md) no momento da entrega.
 
 ## Fase 2 — Overlay e persistência
 
-- [ ] Pop-up sem foco, sempre no topo, com fila e cooldown
+- [x] Pop-up sem foco, sempre no topo, com fila e cooldown (overlay + fila; cooldown no `Matcher`)
 - [x] Fila de cartões de pop-up com limite de simultâneos (política no `Matcher`)
 - [x] Serviço de detecção: transcrição → matcher → histórico (SQLite) → pop-up (`app/detection`)
 - [x] Pipeline em tempo real: VAD incremental por fonte → detecção (`app/realtime`, `core/vad.streaming`)
@@ -45,7 +45,9 @@ mova-os para o [CHANGELOG](CHANGELOG.md) no momento da entrega.
 - [x] SQLite com esquema e migrações; histórico por sessão (`core/repo`)
 - [x] Configurações validadas com persistência (`core/config`); segredos via cofre do SO
 - [x] Importador/exportador de pacotes de domínio (JSON)
-- [ ] Tela mínima de configurações; ícone na bandeja e atalhos globais
+- [x] Tela mínima de configurações (`platform/popup.settings_window`)
+- [x] Ícone na bandeja com estado e menu (`platform/popup.tray`)
+- [ ] Atalhos globais de teclado (pausar/fechar)
 
 ## Fase 3 — RAG e desambiguação
 
@@ -74,12 +76,11 @@ mova-os para o [CHANGELOG](CHANGELOG.md) no momento da entrega.
 Objetivo: rodar o app localmente **sem build e sem instalador** (equivalente a `npm run dev`),
 em ambiente isolado, e testar sem hardware/modelos.
 
-- [ ] Entrypoint do app (`src/sopro/__main__.py`) + script `sopro` em `[project.scripts]`
+- [x] Entrypoint do app (`python -m sopro` + script `sopro` em `[project.scripts]`)
 - [ ] Suporte a **uv** (`uv run sopro`, `uv sync`; opcional `uv.lock`)
 - [ ] Task runner com alvos `dev`, `test`, `demo`, `bench`
-- [ ] Modo **demo/mock**: `AudioSource` e `STTProvider` falsos (`--demo` / `SOPRO_DEMO=1`),
-  para rodar o pipeline + UI sem microfone e sem baixar modelos
-- [ ] Isolamento de dados via `SOPRO_HOME` temporário (não tocar no histórico/config reais)
+- [x] Modo **demo/mock**: `DemoAudioSource` e `DemoProvider` (`app/demo`) ligados via `--demo` no `app/run`, para rodar o pipeline + UI sem microfone e sem baixar modelos
+- [x] Isolamento de dados via `--home` / `SOPRO_HOME` temporário (`app/home`, não toca no histórico/config reais)
 - [ ] Documentar: seção no `README` ("Rodar localmente"), `docs/10-dev-workflow.md` e
   `CONTRIBUTING.md`; e o **portável sem instalador** (`docs/09`)
 - [ ] Distinguir os dois "sem instalar": (a) dev a partir do fonte; (b) portável `.zip` (Fase 4)

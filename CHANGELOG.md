@@ -46,6 +46,17 @@ adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
   roubar foco, empilhado a partir do canto configurado, com tema claro/escuro, pausa no
   hover, fechamento por clique e ação "fixar" (docs/02 §8). Dependência opcional no extra
   `ui`.
+- Bandeja/systray em PySide6 (`platform/popup.tray`): ícone com estado (escutando, pausado,
+  erro), menu de alternar/execução/configurações/sair e sinais acopláveis.
+- Tela de configurações (`platform/popup.settings_window`): diálogo com fontes de áudio,
+  domínios ativos, idioma, provedores/modelo STT, pop-up, tema e atalho, devolvendo um
+  `Settings` validado.
+- Ponto de entrada do aplicativo (`app/run`, `python -m sopro` / script `sopro`): abre o
+  banco local, carrega as configurações e o pacote de domínio ativo, e liga captura +
+  pipeline em tempo real + overlay + bandeja; `--demo` roda o pipeline com áudio/transcrição
+  falsos (docs/05 A3) e `--home`/`SOPRO_HOME` isolam a pasta de dados (docs/08 §5).
+- Resolução da pasta de dados (`app/home`) e pacote de demonstração (`app/demo`): provedor
+  e fonte de áudio sintética que acionam o VAD e casam com o glossário.
 - Contrato `STTProvider` (`core/stt/provider.py`), adapter `LocalWhisperProvider` com engine
   injetável e catálogo de modelos com verificação de integridade sha256 e cache local
   (`core/stt/registry.py`).

@@ -36,6 +36,7 @@ ui = ["PySide6>=6.6"]
 dev = ["pytest>=8.0"]
 
 [project.scripts]
+sopro = "sopro.app.run:main"
 sopro-validate-glossary = "sopro.core.glossary.validate:main"
 sopro-benchmark = "sopro.app.benchmark_cli:main"
 sopro-capture-probe = "sopro.app.capture_probe:main"
