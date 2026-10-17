@@ -28,6 +28,9 @@ adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
   docs/07 para o SQLite, exporta um domínio de volta para JSON e reconstrói um
   `DomainPackage` a partir do banco (para o matcher rodar offline), incluindo a stoplist
   por domínio (migração v2).
+- Fila de pop-ups (`platform/popup.queue`): cooldown por termo, orçamento de cartões por
+  minuto e limite de cartões simultâneos (novos substituem o mais antigo), com tempo
+  injetável para testes (RF-19/20, docs/02 §8).
 - Contrato `STTProvider` (`core/stt/provider.py`), adapter `LocalWhisperProvider` com engine
   injetável e catálogo de modelos com verificação de integridade sha256 e cache local
   (`core/stt/registry.py`).

@@ -37,6 +37,8 @@ mova-os para o [CHANGELOG](CHANGELOG.md) no momento da entrega.
 ## Fase 2 — Overlay e persistência
 
 - [ ] Pop-up sem foco, sempre no topo, com fila e cooldown
+- [x] Fila de pop-ups: cooldown por termo, orçamento/min e limite de cartões (`platform/popup`)
+- [ ] Overlay concreto do pop-up (janela sem foco/sem borda) com PySide6 (docs/02 §8, docs/05 A5)
 - [x] SQLite com esquema e migrações; histórico por sessão (`core/repo`)
 - [x] Configurações validadas com persistência (`core/config`); segredos via cofre do SO
 - [x] Importador/exportador de pacotes de domínio (JSON)
