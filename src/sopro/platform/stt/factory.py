@@ -16,6 +16,7 @@ from sopro.platform.stt.faster_whisper_engine import build_provider
 
 CATALOG_ENV_VAR = "SOPRO_CATALOG"
 DEFAULT_MODEL_ID = "whisper-tiny-en"
+DEFAULT_GROQ_STT_MODEL = "whisper-large-v3"
 
 
 def default_catalog_path() -> Path:
@@ -52,3 +53,20 @@ def faster_whisper(
         language=language,
         vocabulary_hint=vocabulary_hint,
     )
+
+
+def create_provider(settings, home: str | Path | None = None, secret_store=None) -> STTProvider:
+    """Seleciona o provedor por ``settings.stt_provider`` (local ou Groq).
+
+    O Groq exige chave no cofre (``core.config.secrets``); sem ela, erro claro —
+    o chamador deve cair para o local (RNF-10).
+    """
+    from sopro.core.config import GROQ_API_KEY
+
+    if settings.stt_provider == "groq":
+        from sopro.platform.stt.groq_stt import GroqSTTProvider
+
+        api_key = secret_store.get(GROQ_API_KEY) if secret_store else None
+        model = settings.groq_stt_model or DEFAULT_GROQ_STT_MODEL
+        return GroqSTTProvider(api_key=api_key or "", model=model)
+    return faster_whisper(model_id=settings.stt_model, home=home, language="en")

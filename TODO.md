@@ -60,7 +60,9 @@ mova-os para o [CHANGELOG](CHANGELOG.md) no momento da entrega.
   e geração fora do glossário com cache e fila de aprovação (`core/llm`, `generated_entry`,
   migração v4); provedores local (OpenAI-compatível) e Groq (LLM) com backoff em limite
 - [ ] Detecção de candidatos fora do glossário no pipeline (raridade + limite de taxa próprio)
-- [ ] Provedor Groq de STT (segmentos ≥ ~10 s) com aviso de privacidade e fallback ao local
+- [x] Provedor Groq de STT (agrupamento ≥ ~10 s, backoff em limite, fallback ao local) e
+  fábrica de STT por preferência (`platform/stt/groq_stt`, `factory.create_provider`)
+- [ ] Aviso de privacidade + confirmação antes de ativar o Groq (STT/LLM) e indicador na bandeja
 
 ## Fase 4 — Empacotamento
 

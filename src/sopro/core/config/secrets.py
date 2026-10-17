@@ -10,6 +10,7 @@ from __future__ import annotations
 from typing import Protocol
 
 DEFAULT_SERVICE = "sopro"
+GROQ_API_KEY = "groq_api_key"
 
 
 class SecretError(Exception):

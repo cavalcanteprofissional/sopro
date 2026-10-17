@@ -8,11 +8,11 @@ em log; a chave vem do cofre do SO (``core.config.secrets``).
 
 from __future__ import annotations
 
-from sopro.core.config import Settings
+from sopro.core.config import GROQ_API_KEY, Settings
 from sopro.core.llm.provider import LLMError, LLMProvider
 from sopro.platform.llm.local import LocalLLMProvider
 
-GROQ_SECRET_KEY = "groq_api_key"
+GROQ_SECRET_KEY = GROQ_API_KEY
 
 
 def create_provider(settings: Settings, secret_store=None) -> LLMProvider | None:

@@ -6,6 +6,7 @@ com chaves de API no cofre do SO (quando disponível).
 
 from sopro.core.config.secrets import (
     DEFAULT_SERVICE,
+    GROQ_API_KEY,
     InMemorySecretStore,
     KeyringSecretStore,
     SecretError,
@@ -26,6 +27,7 @@ from sopro.core.config.settings import (
 __all__ = [
     "ConfigError",
     "DEFAULT_SERVICE",
+    "GROQ_API_KEY",
     "InMemorySecretStore",
     "KeyringSecretStore",
     "LLM_PROVIDERS",

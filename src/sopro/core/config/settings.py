@@ -35,6 +35,7 @@ class Settings:
     output_lang: str = "pt-BR"
     stt_provider: str = "local"
     stt_model: str = "whisper-tiny-en"
+    groq_stt_model: str = "whisper-large-v3-turbo"
     llm_provider: str = "off"
     llm_model: str = ""
     llm_base_url: str = "http://localhost:11434/v1"

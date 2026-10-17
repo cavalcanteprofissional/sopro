@@ -136,12 +136,21 @@ def _build_service(settings, package, domain_id, repo, session_id, provider):
     )
 
 
-def _build_provider(settings: Settings, home: Path):
-    from sopro.platform.stt.factory import faster_whisper
+def _build_provider(settings: Settings, home: Path, secret_store=None):
+    from sopro.core.stt import STTError
+    from sopro.platform.stt.factory import create_provider, faster_whisper
 
-    return faster_whisper(
-        model_id=settings.stt_model, home=home / "models", language="en"
-    )
+    if settings.stt_provider != "groq":
+        return faster_whisper(
+            model_id=settings.stt_model, home=home / "models", language="en"
+        )
+    try:
+        return create_provider(settings, home=home / "models", secret_store=secret_store)
+    except STTError as exc:
+        print(f"Groq indisponível ({exc}); usando transcrição local", file=sys.stderr)
+        return faster_whisper(
+            model_id="whisper-tiny-en", home=home / "models", language="en"
+        )
 
 
 def _build_audio_source(settings: Settings):
