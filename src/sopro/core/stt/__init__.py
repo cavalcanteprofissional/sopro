@@ -22,9 +22,11 @@ from sopro.core.stt.provider import (
     Transcript,
 )
 from sopro.core.stt.registry import ModelRegistry, ModelSpec
+from sopro.core.stt.vocabulary import DEFAULT_VOCAB_LIMIT, vocabulary_hint
 
 __all__ = [
     "AudioSegment",
+    "DEFAULT_VOCAB_LIMIT",
     "DownloadError",
     "LocalWhisperProvider",
     "ModelRegistry",
@@ -39,4 +41,5 @@ __all__ = [
     "download_file",
     "download_model",
     "ensure_model",
+    "vocabulary_hint",
 ]

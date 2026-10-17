@@ -28,16 +28,10 @@ from sopro.app.wav import WavError, read_wav_pcm16_mono
 from sopro.core.glossary.package import PackageError, load_package
 from sopro.core.matcher import Matcher
 from sopro.core.stt.provider import SOURCE_SYSTEM, AudioSegment, STTProvider
+from sopro.core.stt.vocabulary import vocabulary_hint
 from sopro.core.vad import VadConfig, segment
 
 DEFAULT_PACKAGE = Path("data/domains/tech-en-pt")
-DEFAULT_VOCAB_LIMIT = 50
-
-
-def _vocabulary_hint(package, limit: int = DEFAULT_VOCAB_LIMIT) -> tuple[str, ...]:
-    """Termos de maior prioridade para dica de vocabulário (docs/02 §5)."""
-    ordered = sorted(package.terms, key=lambda term: term.priority)
-    return tuple(term.canonical_en for term in ordered[:limit])
 
 
 @dataclass(frozen=True)
@@ -65,7 +59,7 @@ def run_benchmark(
     pcm = read_wav_pcm16_mono(audio_path)
     package = load_package(package_path)
     matcher = Matcher(package)
-    hint = _vocabulary_hint(package)
+    hint = vocabulary_hint(package)
 
     provider.warmup()
     try:

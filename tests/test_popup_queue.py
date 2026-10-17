@@ -1,4 +1,8 @@
-"""Testes da fila de pop-ups (sopro.platform.popup.queue)."""
+"""Testes da fila de pop-ups visíveis (sopro.platform.popup.queue).
+
+A política de exibição (cooldown/orçamento) é testada em ``test_matcher``; aqui
+testamos apenas o gerenciamento dos cartões simultâneos.
+"""
 
 import pytest
 
@@ -14,13 +18,9 @@ def _item(key: str) -> PopupItem:
     return PopupItem(key=key)
 
 
-def test_invalid_config_raises():
+def test_invalid_max_visible_raises():
     with pytest.raises(PopupError):
         PopupQueue(max_visible=0)
-    with pytest.raises(PopupError):
-        PopupQueue(cooldown_s=-1)
-    with pytest.raises(PopupError):
-        PopupQueue(budget_per_minute=-1)
 
 
 def test_offer_shows_and_tracks_active():
@@ -34,18 +34,6 @@ def test_offer_shows_and_tracks_active():
     assert queue.is_active("a")
 
 
-def test_cooldown_blocks_same_term():
-    queue = PopupQueue(cooldown_s=30.0)
-    queue.offer(_item("a"), now=0.0)
-    queue.close("a")
-
-    blocked = queue.offer(_item("a"), now=10.0)
-    allowed = queue.offer(_item("a"), now=31.0)
-
-    assert blocked.decision is PopupDecision.DROPPED_COOLDOWN
-    assert allowed.decision is PopupDecision.SHOWN
-
-
 def test_duplicate_active_is_dropped():
     queue = PopupQueue()
     queue.offer(_item("a"), now=0.0)
@@ -56,24 +44,8 @@ def test_duplicate_active_is_dropped():
     assert queue.active_count() == 1
 
 
-def test_budget_per_minute_blocks_extra():
-    queue = PopupQueue(budget_per_minute=2, cooldown_s=0.0, max_visible=10)
-
-    assert queue.offer(_item("a"), now=0.0).decision is PopupDecision.SHOWN
-    assert queue.offer(_item("b"), now=1.0).decision is PopupDecision.SHOWN
-    assert queue.offer(_item("c"), now=2.0).decision is PopupDecision.DROPPED_BUDGET
-
-
-def test_budget_window_slides():
-    queue = PopupQueue(budget_per_minute=1, cooldown_s=0.0)
-
-    assert queue.offer(_item("a"), now=0.0).decision is PopupDecision.SHOWN
-    assert queue.offer(_item("b"), now=59.0).decision is PopupDecision.DROPPED_BUDGET
-    assert queue.offer(_item("b"), now=61.0).decision is PopupDecision.SHOWN
-
-
 def test_new_item_replaces_oldest_when_full():
-    queue = PopupQueue(max_visible=2, cooldown_s=0.0, budget_per_minute=10)
+    queue = PopupQueue(max_visible=2)
     queue.offer(_item("a"), now=0.0)
     queue.offer(_item("b"), now=1.0)
 
@@ -94,7 +66,7 @@ def test_close_removes_item():
 
 
 def test_expire_removes_items_past_duration():
-    queue = PopupQueue(max_visible=5, cooldown_s=0.0, budget_per_minute=10)
+    queue = PopupQueue(max_visible=5)
     queue.offer(_item("a"), now=0.0)
     queue.offer(_item("b"), now=5.0)
 
@@ -104,7 +76,11 @@ def test_expire_removes_items_past_duration():
     assert [i.key for i in queue.active_items()] == ["b"]
 
 
-def test_zero_budget_never_shows():
-    queue = PopupQueue(budget_per_minute=0)
+def test_expire_keeps_all_when_within_duration():
+    queue = PopupQueue(max_visible=5)
+    queue.offer(_item("a"), now=0.0)
 
-    assert queue.offer(_item("a"), now=0.0).decision is PopupDecision.DROPPED_BUDGET
+    expired = queue.expire(now=3.0, duration_s=7.0)
+
+    assert expired == ()
+    assert queue.active_count() == 1
