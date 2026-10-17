@@ -42,6 +42,10 @@ adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 - Pipeline em tempo real (`app/realtime`): `RealtimePipeline` mantém um segmentador por
   fonte (sistema/microfone), alimenta o `DetectionService` e expõe `run` sobre uma
   `AudioSource`, com drenagem dos trechos em andamento.
+- Overlay de pop-up em PySide6 (`platform/popup`): cartão sem borda, sempre no topo e sem
+  roubar foco, empilhado a partir do canto configurado, com tema claro/escuro, pausa no
+  hover, fechamento por clique e ação "fixar" (docs/02 §8). Dependência opcional no extra
+  `ui`.
 - Contrato `STTProvider` (`core/stt/provider.py`), adapter `LocalWhisperProvider` com engine
   injetável e catálogo de modelos com verificação de integridade sha256 e cache local
   (`core/stt/registry.py`).
