@@ -78,6 +78,25 @@ class Repository:
         ).fetchall()
         return [_domain(row) for row in rows]
 
+    def set_stoplist(self, domain_id: int, words: Sequence[str]) -> None:
+        with self._db.transaction() as conn:
+            conn.execute("DELETE FROM domain_stoplist WHERE domain_id = ?", (domain_id,))
+            for word in words:
+                normalized = word.strip().lower()
+                if normalized:
+                    conn.execute(
+                        "INSERT OR IGNORE INTO domain_stoplist(domain_id, word) "
+                        "VALUES(?, ?)",
+                        (domain_id, normalized),
+                    )
+
+    def get_stoplist(self, domain_id: int) -> tuple[str, ...]:
+        rows = self._db.connection.execute(
+            "SELECT word FROM domain_stoplist WHERE domain_id = ? ORDER BY word",
+            (domain_id,),
+        ).fetchall()
+        return tuple(row["word"] for row in rows)
+
     # -- termos, aliases e acepções -----------------------------------------
     def add_term(
         self,

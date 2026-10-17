@@ -28,6 +28,36 @@ def test_upsert_domain_is_idempotent():
     assert repo.get_domain("tech").version == "0.2.0"
 
 
+def test_set_and_get_stoplist():
+    repo = _repo()
+    domain_id = repo.upsert_domain("tech")
+
+    repo.set_stoplist(domain_id, ["Model", "  layer ", "", "model"])
+
+    assert repo.get_stoplist(domain_id) == ("layer", "model")
+
+
+def test_set_stoplist_replaces_previous():
+    repo = _repo()
+    domain_id = repo.upsert_domain("tech")
+    repo.set_stoplist(domain_id, ["model", "layer"])
+
+    repo.set_stoplist(domain_id, ["token"])
+
+    assert repo.get_stoplist(domain_id) == ("token",)
+
+
+def test_stoplist_cascades_on_domain_delete():
+    repo = _repo()
+    domain_id = repo.upsert_domain("tech")
+    repo.set_stoplist(domain_id, ["model"])
+
+    with repo._db.transaction() as conn:
+        conn.execute("DELETE FROM domain WHERE id = ?", (domain_id,))
+
+    assert repo.get_stoplist(domain_id) == ()
+
+
 def test_add_term_with_aliases_and_senses():
     repo = _repo()
     domain_id = repo.upsert_domain("tech")

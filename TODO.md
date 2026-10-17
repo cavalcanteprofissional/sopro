@@ -39,7 +39,7 @@ mova-os para o [CHANGELOG](CHANGELOG.md) no momento da entrega.
 - [ ] Pop-up sem foco, sempre no topo, com fila e cooldown
 - [x] SQLite com esquema e migrações; histórico por sessão (`core/repo`)
 - [x] Configurações validadas com persistência (`core/config`); segredos via cofre do SO
-- [ ] Importador/exportador de pacotes de domínio (JSON/CSV)
+- [x] Importador/exportador de pacotes de domínio (JSON)
 - [ ] Tela mínima de configurações; ícone na bandeja e atalhos globais
 
 ## Fase 3 — RAG e desambiguação

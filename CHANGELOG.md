@@ -24,6 +24,10 @@ adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 - Configurações validadas (`core/config.settings`) persistidas na tabela `setting`, com
   carga/gravação via `Repository`; cofre de segredos (`core/config.secrets`) com backend do SO
   opcional via `keyring` e alternativa em memória.
+- Importação/exportação de pacotes de domínio (`core/repo.importer`): carrega um pacote de
+  docs/07 para o SQLite, exporta um domínio de volta para JSON e reconstrói um
+  `DomainPackage` a partir do banco (para o matcher rodar offline), incluindo a stoplist
+  por domínio (migração v2).
 - Contrato `STTProvider` (`core/stt/provider.py`), adapter `LocalWhisperProvider` com engine
   injetável e catálogo de modelos com verificação de integridade sha256 e cache local
   (`core/stt/registry.py`).

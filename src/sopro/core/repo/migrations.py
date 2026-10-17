@@ -100,6 +100,14 @@ CREATE TABLE setting (
 );
 """
 
-MIGRATIONS: tuple[tuple[int, str], ...] = ((1, SCHEMA_V1),)
+SCHEMA_V2 = """
+CREATE TABLE domain_stoplist (
+    domain_id INTEGER NOT NULL REFERENCES domain(id) ON DELETE CASCADE,
+    word      TEXT NOT NULL,
+    PRIMARY KEY (domain_id, word)
+);
+"""
+
+MIGRATIONS: tuple[tuple[int, str], ...] = ((1, SCHEMA_V1), (2, SCHEMA_V2))
 
 LATEST_VERSION = MIGRATIONS[-1][0]
