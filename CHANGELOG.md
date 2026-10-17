@@ -18,6 +18,9 @@ adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
   por fonte. Dependência opcional no extra `audio`.
 - Sonda `sopro-capture-probe` (docs/05 A2): mede o nível RMS/pico por fonte mantendo o áudio
   apenas em memória, sem gravar em disco.
+- Persistência local em SQLite (`core/repo`): esquema de docs/02 §6 com migrações versionadas,
+  índice FTS5 de termos/aliases, repositório de domínios/termos/sessões/detecções/configurações
+  e exportação do histórico em CSV e Markdown (contexto oculto por padrão).
 - Contrato `STTProvider` (`core/stt/provider.py`), adapter `LocalWhisperProvider` com engine
   injetável e catálogo de modelos com verificação de integridade sha256 e cache local
   (`core/stt/registry.py`).
