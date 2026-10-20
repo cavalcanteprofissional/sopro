@@ -14,21 +14,31 @@ from typing import Callable
 
 from sopro.app.detection import Detection, DetectionService
 from sopro.core.audio.contracts import SOURCE_SYSTEM, AudioFrame, AudioSource
+from sopro.core.audio.pcm import rms
 from sopro.core.vad import StreamingSegmenter, VadConfig
 
 
 class RealtimePipeline:
-    """Liga quadros de áudio ao serviço de detecção, com VAD incremental por fonte."""
+    """Liga quadros de áudio ao serviço de detecção, com VAD incremental por fonte.
+
+    Opcionalmente reporta atividade para a UI (indicador de estado): ``on_level``
+    recebe ``(nível 0..1, falando?)`` por quadro e ``on_analyzing`` recebe ``True``
+    enquanto um trecho está sendo transcrito/resolvido.
+    """
 
     def __init__(
         self,
         service: DetectionService,
         *,
         vad_config: VadConfig | None = None,
+        on_level: Callable[[float, bool], None] | None = None,
+        on_analyzing: Callable[[bool], None] | None = None,
     ) -> None:
         self._service = service
         self._vad_config = vad_config or VadConfig()
         self._segmenters: dict[str, StreamingSegmenter] = {}
+        self._on_level = on_level
+        self._on_analyzing = on_analyzing
 
     @property
     def service(self) -> DetectionService:
@@ -41,11 +51,26 @@ class RealtimePipeline:
             self._segmenters[source] = segmenter
         return segmenter
 
+    def _report_level(self, pcm: bytes) -> None:
+        if self._on_level is None:
+            return
+        value = rms(pcm)
+        threshold = max(1.0, float(self._vad_config.energy_threshold))
+        level = min(1.0, value / (threshold * 4.0))
+        self._on_level(level, value >= threshold)
+
     def handle_frame(self, frame: AudioFrame) -> list[Detection]:
         """Alimenta um quadro e devolve as detecções dos trechos concluídos."""
+        self._report_level(frame.pcm)
         detections: list[Detection] = []
         for speech in self._segmenter(frame.source).feed(frame.pcm):
-            detections.extend(self._service.process(speech, source=frame.source))
+            if self._on_analyzing is not None:
+                self._on_analyzing(True)
+            try:
+                detections.extend(self._service.process(speech, source=frame.source))
+            finally:
+                if self._on_analyzing is not None:
+                    self._on_analyzing(False)
         return detections
 
     def drain(self) -> list[Detection]:

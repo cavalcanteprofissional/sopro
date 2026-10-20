@@ -147,10 +147,12 @@ sha256: <hash do instalador>
 
 - **Escopo por usuário** (`PrivilegesRequired=lowest`): instala em
   `%LOCALAPPDATA%\Programs\Sopro` — **não** exige administrador.
-- Atalhos no Menu Iniciar (e, opcional, na Área de Trabalho).
-- Desinstalador que **preserva** `%LOCALAPPDATA%\Sopro` (dados/modelos) por padrão.
-- Primeira execução dispara o assistente de consentimento e o **download de modelos**
-  com barra de progresso (`08` §4).
+- Atalhos no Menu Iniciar: **Sopro** e **Sopro (demonstração)** (este executa `Sopro.exe
+  --demo`); a Área de Trabalho é opcional.
+- Desinstalador que **preserva** `%LOCALAPPDATA%\Sopro` (dados/modelos) por padrão e remove
+  os atalhos criados.
+- Primeira execução dispara o assistente de consentimento e o **download de modelos**, com
+  progresso no indicador de estado/bandeja (sem diálogo modal — `08` §4).
 
 Esboço `installer.iss` (referência):
 
@@ -161,6 +163,8 @@ AppVersion={#Version}
 DefaultDirName={localappdata}\Programs\Sopro
 PrivilegesRequired=lowest
 OutputBaseFilename=Sopro-Setup-{#Version}
+OutputDir=dist
+ArchitecturesInstallIn64BitMode=x64compatible
 Compression=lzma2
 SolidCompression=yes
 
@@ -169,6 +173,8 @@ Source: "dist\Sopro\*"; DestDir: "{app}"; Flags: recursesubdirs
 
 [Icons]
 Name: "{userprograms}\Sopro"; Filename: "{app}\Sopro.exe"
+Name: "{userprograms}\Sopro (demonstração)"; Filename: "{app}\Sopro.exe"; \
+  Parameters: "--demo"
 
 [Run]
 Filename: "{app}\Sopro.exe"; Description: "Abrir o Sopro"; Flags: nowait postinstall

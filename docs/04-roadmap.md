@@ -46,12 +46,17 @@ Estimativas em semanas de trabalho parcial; ajuste conforme sua disponibilidade.
 
 ## Fase 4 — Empacotamento e experiência (1–2 semanas)
 
-- Instalador para Windows; modelos baixados no primeiro uso com barra de progresso.
+- Instalador para Windows; modelos baixados no primeiro uso com progresso no indicador e na
+  bandeja (sem diálogo modal), incluindo “Tentar de novo” em falha.
 - Primeira execução: aviso de consentimento, escolha de domínio e idioma.
 - Tratamento de erros amigável; logs sem conteúdo de fala.
 - Tela de gerenciamento de glossários (importar/exportar).
+- Hub com Status, Configurações, Glossários, Termos, Histórico e Demonstração; indicador de
+  estado flutuante e arrastável com pulso em tempo real; edição de termos; histórico com
+  filtros e exportação; segundo atalho global para o histórico; demonstração embutida.
 
-**DoD:** instalação em máquina limpa sem dependências manuais; checklist de aceite do `01` cumprido.
+**DoD:** instalação em máquina limpa sem dependências manuais; checklist de aceite do `01`
+cumprido. *Estado: concluída (inclui a terceira rodada de ajustes A4.0–A4.7).*
 
 ## Fase 5 — Escala e portabilidade (contínua)
 

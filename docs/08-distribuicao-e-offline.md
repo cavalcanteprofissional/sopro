@@ -80,11 +80,14 @@ seus metadados. O núcleo lê o catálogo para saber o que baixar, onde e como v
 
 1. Na primeira execução, a tela inicial pergunta domínio, idioma de saída e fontes de áudio.
 2. O aplicativo cria a pasta de dados/cache (§5) e baixa os modelos marcados como
-   necessários (ex.: o modelo de STT ativo), com barra de progresso.
+   necessários (ex.: o modelo de STT ativo) fora da thread da UI. O progresso aparece no
+   **indicador de estado** (estado `Carregando…` com a fração baixada) e na bandeja, sem
+   diálogo modal bloqueante.
 3. Cada arquivo é baixado para um `.tmp` e **verificado por sha256** antes de ser promovido
    ao caminho final. Arquivo inválido é descartado e o download pode ser repetido.
-4. Se a rede falhar, o app informa, mantém o que já baixou e permite tentar de novo; nada
-   mais é bloqueado (RNF-10).
+4. Se a rede falhar ou o download/warmup do modelo falhar, o app entra no estado `ERROR`
+   (indicador e bandeja), mantém o que já baixou e oferece **"Tentar de novo"** na bandeja; a
+   bandeja continua viva e nada mais é bloqueado (RNF-10).
 5. Depois de baixado, o modelo é reutilizado sem nova verificação de rede (checagem de hash
    é opcional a cada uso).
 
@@ -101,6 +104,9 @@ Layout:
 <SOPRO_HOME>/
   models/<model_id>/        arquivos dos modelos baixados
   sopro.db                  banco SQLite (histórico, cache, configurações)
+  sopro.db-wal / -shm       journal WAL (conexões por thread)
+  sopro.lock                trava de instância única (app principal)
+  sopro-demo.lock           trava separada do modo --demo
   logs/                     logs sem conteúdo de fala
 ```
 
@@ -123,6 +129,16 @@ Layout:
 - Chaves de API (quando houver) ficam no cofre de credenciais do SO, nunca no catálogo nem
   em logs.
 - O catálogo não contém credenciais.
+
+## 7.1 Concorrência local (banco e instâncias)
+
+- O banco em arquivo usa **uma conexão por thread** (`threading.local`), em modo WAL e com
+  `busy_timeout`, permitindo que a thread de áudio grave detecções enquanto a UI lê o
+  histórico. Bancos `:memory:` (testes) compartilham a conexão sob um `RLock`.
+- Uma **trava de instância única** (`QLockFile` em `%LOCALAPPDATA%\Sopro`) impede bandejas
+  duplicadas disputando o mesmo banco. A segunda execução sinaliza a instância existente por
+  um `QLocalServer` (que traz o hub para frente) e encerra sem abrir banco ou carregar modelo.
+- `--demo` usa um canal e uma trava próprios: roda em paralelo ao app real, mas não duplicado.
 
 ## 8. Relação com os requisitos
 

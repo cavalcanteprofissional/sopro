@@ -56,6 +56,22 @@ def test_dialog_invalid_state_raises(qt_app):
         dialog.current_settings()
 
 
+def test_dialog_preserves_unexposed_fields(qt_app):
+    settings = Settings(
+        first_run_done=True,
+        llm_model="llama3",
+        resolution_threshold=0.42,
+        active_domains=("tech-en-pt",),
+    )
+    dialog = SettingsDialog(settings, domain_slugs=("tech-en-pt",))
+
+    result = dialog.current_settings()
+
+    assert result.first_run_done is True
+    assert result.llm_model == "llama3"
+    assert result.resolution_threshold == 0.42
+
+
 def test_privacy_message_lists_cloud_providers():
     text = privacy_message(("groq (voz)", "groq (LLM)"))
 

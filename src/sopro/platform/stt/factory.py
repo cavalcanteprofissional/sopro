@@ -27,10 +27,12 @@ def default_catalog_path() -> Path:
     return data_path("models.json")
 
 
-def _resolve_spec(model_id: str, home: str | Path | None) -> tuple[ModelSpec, Path]:
+def _resolve_spec(
+    model_id: str, home: str | Path | None, progress=None
+) -> tuple[ModelSpec, Path]:
     registry = ModelRegistry.load(default_catalog_path())
     spec = registry.get(model_id)
-    model_path = ensure_model(spec, home=home)
+    model_path = ensure_model(spec, home=home, progress=progress)
     return spec, model_path
 
 
@@ -42,9 +44,10 @@ def faster_whisper(
     device: str = "cpu",
     compute_type: str = "int8",
     vocabulary_hint: tuple[str, ...] = (),
+    progress=None,
 ) -> STTProvider:
     """Provider padrão: faster-whisper com o modelo do catálogo (docs/08 §6)."""
-    _spec, model_path = _resolve_spec(model_id, home)
+    _spec, model_path = _resolve_spec(model_id, home, progress)
     return build_provider(
         model_path,
         model_id=model_id,
@@ -55,7 +58,9 @@ def faster_whisper(
     )
 
 
-def create_provider(settings, home: str | Path | None = None, secret_store=None) -> STTProvider:
+def create_provider(
+    settings, home: str | Path | None = None, secret_store=None, progress=None
+) -> STTProvider:
     """Seleciona o provedor por ``settings.stt_provider`` (local ou Groq).
 
     O Groq exige chave no cofre (``core.config.secrets``); sem ela, erro claro —
@@ -69,4 +74,6 @@ def create_provider(settings, home: str | Path | None = None, secret_store=None)
         api_key = secret_store.get(GROQ_API_KEY) if secret_store else None
         model = settings.groq_stt_model or DEFAULT_GROQ_STT_MODEL
         return GroqSTTProvider(api_key=api_key or "", model=model)
-    return faster_whisper(model_id=settings.stt_model, home=home, language="en")
+    return faster_whisper(
+        model_id=settings.stt_model, home=home, language="en", progress=progress
+    )

@@ -156,6 +156,28 @@ def _read_stoplist(path: Path) -> tuple[str, ...]:
     return tuple(words)
 
 
+def list_package_slugs(root: str | Path) -> tuple[str, ...]:
+    """Slugs dos pacotes de domínio disponíveis em ``root`` (pastas com manifesto).
+
+    Lê o ``manifest.json`` de cada subpasta; se o manifesto não for legível, cai no
+    nome da pasta. Ignora arquivos soltos e pastas sem manifesto.
+    """
+    base = Path(root)
+    if not base.is_dir():
+        return ()
+    slugs: list[str] = []
+    for child in sorted(base.iterdir()):
+        if not child.is_dir() or not (child / MANIFEST_FILENAME).is_file():
+            continue
+        try:
+            data = _read_json(child / MANIFEST_FILENAME)
+        except PackageError:
+            data = None
+        slug = data.get("slug") if isinstance(data, dict) else None
+        slugs.append(str(slug) if slug else child.name)
+    return tuple(slugs)
+
+
 def load_package(path: str | Path) -> DomainPackage:
     """Carrega um pacote de domínio de um diretório."""
     base = Path(path)

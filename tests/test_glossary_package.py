@@ -1,5 +1,6 @@
 """Testes de carga de pacotes de domínio (sopro.core.glossary.package)."""
 
+import json
 from pathlib import Path
 
 import pytest
@@ -9,6 +10,7 @@ from sopro.core.glossary.package import (
     Manifest,
     PackageError,
     Term,
+    list_package_slugs,
     load_package,
 )
 
@@ -91,6 +93,28 @@ def test_domain_senses_filters_by_tag():
     )
     assert [s.ordinal for s in t.domain_senses("tech")] == [1]
     assert [s.ordinal for s in t.domain_senses("general")] == [2]
+
+
+def test_list_package_slugs_reads_manifest(tmp_path):
+    pkg = tmp_path / "custom-dir"
+    pkg.mkdir()
+    (pkg / "manifest.json").write_text(
+        json.dumps({"slug": "law-en-pt"}), encoding="utf-8"
+    )
+    (pkg / "terms.json").write_text("[]", encoding="utf-8")
+
+    assert list_package_slugs(tmp_path) == ("law-en-pt",)
+
+
+def test_list_package_slugs_skips_folders_without_manifest(tmp_path):
+    (tmp_path / "empty").mkdir()
+    (tmp_path / "loose.txt").write_text("x", encoding="utf-8")
+
+    assert list_package_slugs(tmp_path) == ()
+
+
+def test_list_package_slugs_missing_root_returns_empty(tmp_path):
+    assert list_package_slugs(tmp_path / "nao-existe") == ()
 
 
 def test_manifest_domain_tag_from_slug():

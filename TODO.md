@@ -5,22 +5,44 @@ mova-os para o [CHANGELOG](CHANGELOG.md) no momento da entrega.
 
 ## Retomada — onde paramos (próxima sessão)
 
-Última sessão entregou e publicou (`origin/main` em `f723c42`, commits `cc671f2`..`f723c42`)
-a **Fase 3 — RAG e desambiguação**: embeddings locais + índice vetorial, `SenseResolver`
-em cascata, camada LLM (JSON validado), termos fora do glossário com limite de taxa próprio,
-provedores Groq opcionais (STT/LLM) e aviso/indicador de privacidade. 359 testes passando;
-pacote seed valida com 0 erros.
+A **Fase 4 — Empacotamento** foi concluída: instalador Inno Setup compilado e testado
+(instalar/abrir/desinstalar, per-user, preservando `%LOCALAPPDATA%\Sopro`), assistente de
+primeira execução (consentimento LGPD + domínio/idioma/fontes), logs rotativos sem conteúdo
+de fala, erros amigáveis e tela de gerenciamento de glossários (importar/exportar/ativar).
 
-**Tarefa inicial da próxima sessão — revisar o que já foi executado antes de avançar:**
+**Terceira rodada de ajustes (A4.0–A4.7) implementada** — ver a seção **"Ajustes pós-Fase 4
+(terceira rodada)"** abaixo, já marcada.
 
-1. `git log --oneline cc671f2..f723c42` e ler os diffs das migrações v3 (`sense_vec`) e v4
-   (`generated_entry`).
-2. Rodar `pytest -q`, `sopro-validate-glossary data/domains/tech-en-pt` e
-   `SOPRO_SMOKE_MS=1500 python -m sopro --demo`.
-3. Conferir este `TODO` (Fase 3), `docs/02` §§3.4, 4.6, 6, 9 e o prompt `docs/05` A7/A8.
+**Quarta rodada — correções do reteste do mantenedor (implementada):**
 
-**Depois:** iniciar a **Fase 4 — Empacotamento** (itens abaixo). Decisões ainda em aberto que
-afetam a Fase 4: modelo de embedding definitivo, LLM local mínimo viável e framework de UI.
+- Corrigido o **erro de SQLite ao iniciar** (`SQLite objects created in a thread…`): conexão
+  por thread com WAL/`busy_timeout`, fechada ao fim da thread de áudio.
+- **Pop-ups redesenhados** para alta legibilidade (superfície opaca, cartão maior, contraste
+  reforçado) e **som opcional** ao exibir.
+- **Instância única**: segunda execução ativa o hub existente e encerra (`--demo` tem trava
+  separada).
+
+**Estado:** código, testes e documentação prontos — **403 testes passando**, validador sem
+erros, `--demo` smoke OK. Build/instalador (`dist/Sopro-0.1.0-portable.zip` +
+`dist/Sopro-Setup-0.1.0.exe`) do ciclo anterior validado (instalar → abrir → desinstalar,
+dados em `%LOCALAPPDATA%\Sopro` preservados); **falta reempacotar** com estas correções.
+
+> **Falta o novo reteste manual do mantenedor** (pop-ups/som, hub, indicador arrastável,
+> histórico, edição de termos, abertura repetida do app). Se algo falhar, aplicar os ajustes
+> antes de seguir. A Fase 5 (escala e portabilidade) **não** começa até esse reteste.
+
+**Tarefa inicial da próxima sessão — revisar antes de avançar:**
+
+1. Reempacotar (`scripts/build-windows.ps1` + `iscc`) e rodar `pytest -q`,
+   `sopro-validate-glossary data/domains/tech-en-pt` e
+   `SOPRO_SMOKE_MS=1500 python -m sopro --demo` (confira `logs/sopro.log`).
+2. Coletar o resultado do reteste manual; corrigir o que for apontado.
+3. Conferir este `TODO`, o checkpoint de release em `docs/09` §9 e os prompts `docs/05` A9/A10.
+4. Decidir as questões em aberto da seção "Decisões" (embedding, LLM local, UI, licença do
+   glossário) antes de fechar a v0.1.
+
+**Depois:** seguir para a **Fase 5 — Escala e portabilidade** (camadas Linux/macOS, outros
+pacotes de domínio, feedback "irrelevante").
 
 ## Fase 0 — Validação
 
@@ -93,10 +115,125 @@ afetam a Fase 4: modelo de embedding definitivo, LLM local mínimo viável e fra
 - [x] Download de modelos no primeiro uso (via fábrica do catálogo, com verificação sha256)
 - [x] Instalador Inno Setup (`installer.iss`, per-user) e workflow de release em tag `v*`
   (`.github/workflows/release.yml`)
-- [ ] Compilar e testar o instalador com Inno Setup (instalar, abrir, desinstalar)
-- [ ] Primeira execução: consentimento (LGPD), domínio, idioma e fontes de áudio
-- [ ] Tratamento de erros amigável; logs sem conteúdo de fala
-- [ ] Tela de gerenciamento de glossários
+- [x] Compilar e testar o instalador com Inno Setup (instalar, abrir, desinstalar;
+  per-user, sem admin, preservando `%LOCALAPPDATA%\Sopro`); `OutputDir=dist` alinhado ao CI
+- [x] Primeira execução: consentimento (LGPD), domínio, idioma e fontes de áudio
+  (`platform/popup/first_run.py`, `Settings.first_run_done`)
+- [x] Tratamento de erros amigável; logs sem conteúdo de fala (`app/logging_setup.py`,
+  `platform/popup/errors.py`)
+- [x] Tela de gerenciamento de glossários: importar/exportar/ativar
+  (`platform/popup/glossary_window.py`, `Repository.set_domain_active`, menu da bandeja)
+
+## Ajustes pós-Fase 4 (terceira rodada) — IMPLEMENTADO
+
+Escopo e decisões confirmados pelo mantenedor. Implementação feita em módulos
+consolidados (a estrutura original previa arquivos separados; ver notas "desvio").
+Pendente: rebuild do instalador e reteste manual do mantenedor.
+
+### Decisões confirmadas
+
+- [x] **D4.1** Falha na inicialização: manter a bandeja viva em `ERROR` com "Tentar de novo"
+  (não sai com código 2).
+- [x] **D4.2** "Abrir demonstração": **nova instância** `Sopro.exe --demo`.
+- [x] **D4.3** RF-25: **segundo atalho global** dedicado ao histórico.
+- [x] **D4.4** Histórico: filtrar por texto, **aprendido e data**.
+- [x] **D4.5** Hub: **refatorar** os diálogos em páginas reutilizáveis.
+- [x] **D4.6** Indicador: widget flutuante **independente e arrastável**, com opção de ocultar.
+- [x] **D4.7** Pulso **em tempo real** (nível de áudio; simulado no demo embutido).
+- [x] **D4.8** Demo embutido usa os **termos reais do glossário ativo**.
+
+### A4.0 — Corrigir encerramento ao abrir/fechar telas (P0)
+
+- [x] `app/run.py`: `_configure_app` chama `app.setQuitOnLastWindowClosed(False)`; só "Sair"
+  e o smoke chamam `quit()`.
+- [x] Teste: `test_configure_app_disables_quit_on_last_window_closed` (`tests/test_app_run.py`).
+
+### A4.1 — Progresso de download + feedback de inicialização (RNF-08, docs/08 §4, docs/09 §5)
+
+- [x] `platform/stt/factory.py`: `faster_whisper`/`create_provider`/`_resolve_spec` aceitam
+  `progress` e repassam a `ensure_model` (`ProgressFn` em `core/stt/download.py:28`).
+- [x] `app/run.py`: na inicialização real, `_build_provider(..., on_progress=...)` roda no
+  **thread de áudio**; `StatusBridge.progress` atualiza o indicador em `LOADING` (nível =
+  fração baixada); `ready` → `LISTENING`; `failed` → `ERROR` + balão; `retry_requested`
+  reconstrói (`on_retry`).
+- [x] `platform/popup/tray.py`: `TrayState.LOADING` (cor ciano + "Carregando…") e `notify()`.
+- [x] `platform/popup/errors.py`: hint para `ImportError` (dependências do extra `ui`).
+- [*] **Desvio:** não foi criado `model_progress.py`/`ModelProgressDialog`; o progresso é
+  refletido no **indicador/tray** (estado `LOADING` + nível), sem barra modal.
+
+### A4.2 — Janela de histórico/revisão (RF-22) + atalho (RF-25)
+
+- [x] Core: `Repository.history(..., *, query, learned, since, until)` com filtros por
+  texto (LIKE em termo/tradução/contexto), aprendido e período.
+- [x] `platform/popup/pages.py`: `HistoryPage` (tabela Quando/Termo/Tradução/Fonte/
+  Aprendido, busca, filtro aprendido, período com QDateEdit, exportar CSV/Markdown).
+- [x] `platform/popup/tray.py` + `app/run.py`: sinal/ação "Histórico…" → abre o hub na página.
+- [x] RF-25: `Settings.shortcut_history` + segundo `create_listener` (`_start_hotkey_for`),
+  campo "Atalho do histórico" nas Configurações.
+- [*] **Desvio:** página embutida no hub (não `history_window.py`/`HistoryDialog`); a coluna
+  Sessão e o combo de sessões foram omitidos (filtro por período/texto cobriu a RF).
+
+### A4.3 — Glossário: editar/adicionar termos (RF-23)
+
+- [x] Core: `Repository.delete_term(term_id)` (cascata sense_vec/sense/alias/FTS; nulifica
+  referências em `detection` preservando o histórico); `add_term` faz *upsert* por canônico.
+- [x] `platform/popup/pages.py`: `TermsPage` (busca, lista, domínio, canônico, classe,
+  aliases, prioridade, ambíguo, tabela de acepções, Salvar/Novo/Excluir).
+- [x] Aba "Termos" no hub (`HubWindow`).
+- [*] **Desvio:** `TermEditorDialog` não foi criado; a edição vive na página do hub.
+
+### A4.4 — Polimento da bandeja/demo
+
+- [x] Ação "Abrir demonstração" (nova instância) e "Ver exemplo de pop-up" na bandeja.
+- [x] `TrayState.ERROR` ligado a falha de pipeline (`on_failed`) + "Tentar de novo" (`on_retry`).
+- [x] 2º atalho no `installer.iss`: `Sopro (demonstração)` → `Sopro.exe --demo`.
+- [x] "Assistente inicial…" reiniciável via menu (`on_assistant`) e no hub (`StatusPage`).
+- [x] "Abrir Sopro…"/clique abre o hub; fechar o hub mantém o app rodando (A4.0).
+
+### A4.5 — Hub/janela principal (refatorar diálogos em páginas)
+
+- [x] `platform/popup/pages.py`: `StatusPage`, `HistoryPage`, `DemoPage`, `TermsPage`.
+- [x] `platform/popup/settings_window.py`: `SettingsPage` (diálogo virou wrapper fino).
+- [x] `platform/popup/glossary_window.py`: `GlossaryPage` (diálogo virou wrapper fino).
+- [x] `platform/popup/host.py`: `PageHost` mantém compatibilidade dos diálogos (`__getattr__`).
+- [x] `platform/popup/hub.py`: `HubWindow` com navegação lateral (Status/Configurações/
+  Glossários/Termos/Histórico/Demonstração) e botão "Aplicar" por página.
+- [*] **Desvio:** `AboutPage` não foi criada (fora do escopo confirmado).
+
+### A4.6 — Indicador de estado com glow (tempo real)
+
+- [x] `platform/popup/status_indicator.py`: `StatusIndicator` frameless/always-on-top/sem
+  foco/**arrastável** (posição em `settings.indicator_x/y`), `StatusDot` embutível e
+  `paint_status_dot` (testável). Estados `loading/listening/analyzing/paused/error` + pulso.
+- [x] `Settings.indicator_enabled` (opção de ocultar) e checkbox nas Configurações.
+- [x] Nível real: `RealtimePipeline.handle_frame` → `on_level(0..1, speaking)` e
+  `on_analyzing(bool)`; `StatusBridge` marshala para a UI.
+- [x] Refletido na `StatusPage` (dot + Pausar/Retomar).
+
+### A4.7 — Demo embutido no produto
+
+- [x] `platform/popup/demo_player.py`: `build_demo_detections` monta `Detection` reais do
+  **glossário ativo** (termo/classe/tradução/definição) e `DemoPlayer` injeta no overlay.
+- [x] Página "Demonstração" no hub + ação na bandeja "Ver exemplo de pop-up".
+- [x] `--demo`: `cooldown_s=0`/`budget=120` (via `dataclasses.replace`) para não estacar.
+- [*] **Desvio:** módulo chamado `demo_player.py` (não `demo.py`), para não colidir com
+  `app/demo.py` (dados falsos do `--demo`).
+
+### Testes adicionados nesta rodada
+
+- `tests/test_popup_demo_player.py` (5), `tests/test_popup_status_indicator.py` (5),
+  `tests/test_popup_hub.py` (5); extensões em `test_repo_repository.py` (filtros de histórico
+  + `delete_term`) e `test_app_run.py`.
+
+### Pendências desta rodada
+
+- [x] Rebuild PyInstaller (`scripts/build-windows.ps1 -SkipTests`) → `dist/Sopro-0.1.0-portable.zip`
+  (+ `SHA256SUMS.txt`).
+- [x] Recompilar `installer.iss` → `dist/Sopro-Setup-0.1.0.exe`.
+- [x] Reteste instalado/frozen: `--demo` no `Sopro.exe` portátil e no instalado retornaram
+  exit 0 (log sem conteúdo de fala); ciclo instalar → abrir → desinstalar verde, com
+  `%LOCALAPPDATA%\Sopro` preservado e 2º atalho de demonstração criado/removido.
+- [ ] Reteste manual do mantenedor: pop-ups, hub, indicador arrastável, histórico, termos.
 
 ## Fase 5 — Escala e portabilidade
 

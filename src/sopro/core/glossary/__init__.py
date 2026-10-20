@@ -5,7 +5,15 @@ from sopro.core.glossary.package import (
     Manifest,
     Sense,
     Term,
+    list_package_slugs,
     load_package,
 )
 
-__all__ = ["DomainPackage", "Manifest", "Sense", "Term", "load_package"]
+__all__ = [
+    "DomainPackage",
+    "Manifest",
+    "Sense",
+    "Term",
+    "list_package_slugs",
+    "load_package",
+]

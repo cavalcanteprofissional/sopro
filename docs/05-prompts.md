@@ -14,7 +14,7 @@ Substitua `{{variáveis}}`. Cole sempre o **Prompt-mestre** no início de cada s
 
 ```
 Você é um engenheiro de software sênior ajudando a construir um aplicativo desktop
-chamado "{{nome_provisório}}".
+chamado "Sopro".
 
 PRODUTO
 Escuta o áudio de aulas/calls (saída do computador e/ou microfone), transcreve em tempo

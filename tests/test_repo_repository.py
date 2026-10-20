@@ -28,6 +28,17 @@ def test_upsert_domain_is_idempotent():
     assert repo.get_domain("tech").version == "0.2.0"
 
 
+def test_set_domain_active_toggles_flag():
+    repo = _repo()
+    repo.upsert_domain("tech", active=True)
+
+    repo.set_domain_active("tech", False)
+    assert repo.get_domain("tech").active is False
+
+    repo.set_domain_active("tech", True)
+    assert repo.get_domain("tech").active is True
+
+
 def test_set_and_get_stoplist():
     repo = _repo()
     domain_id = repo.upsert_domain("tech")
@@ -158,6 +169,52 @@ def test_history_hides_context_by_default():
 
     assert repo.history()[0].context_snippet is None
     assert repo.history(include_context=True)[0].context_snippet == "trecho secreto"
+
+
+def test_history_filters_by_text_learned_and_period():
+    repo = _repo()
+    session_id = repo.start_session()
+    domain_id = repo.upsert_domain("tech")
+    term_id = repo.add_term(
+        domain_id, "bias", senses=[SenseInput(1, translation_pt="viés")]
+    )
+    sense_id = repo.list_senses(term_id)[0].id
+    repo.add_detection(
+        session_id,
+        term_id=term_id,
+        sense_id=sense_id,
+        at="2026-10-01T10:00:00",
+        source="system",
+        method="glossary",
+    )
+    other = repo.add_detection(
+        session_id, at="2026-10-10T10:00:00", source="system", method="glossary"
+    )
+    repo.set_detection_learned(other, True)
+
+    assert [e.term for e in repo.history(query="viés")] == ["bias"]
+    assert [e.at for e in repo.history(learned=True)] == ["2026-10-10T10:00:00"]
+    assert [e.at for e in repo.history(learned=False)] == ["2026-10-01T10:00:00"]
+    assert [
+        e.at for e in repo.history(since="2026-10-05T00:00:00", until="2026-10-31")
+    ] == ["2026-10-10T10:00:00"]
+
+
+def test_delete_term_removes_term_and_senses_but_keeps_history():
+    repo = _repo()
+    domain_id = repo.upsert_domain("tech")
+    term_id = repo.add_term(
+        domain_id, "bias", senses=[SenseInput(1, translation_pt="viés")]
+    )
+    session_id = repo.start_session()
+    repo.add_detection(session_id, term_id=term_id, source="system")
+
+    repo.delete_term(term_id)
+
+    assert repo.get_term(term_id) is None
+    assert repo.list_senses(term_id) == []
+    assert repo.list_terms() == []
+    assert len(repo.history()) == 1
 
 
 def test_settings_crud():

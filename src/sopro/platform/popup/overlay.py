@@ -11,11 +11,12 @@ a apresentação sem abrir janelas; as classes Qt exigem o extra ``ui``.
 from __future__ import annotations
 
 import time
+import html
 from dataclasses import dataclass
 from typing import Callable
 
 from PySide6.QtCore import QObject, Qt, QTimer, Signal
-from PySide6.QtGui import QCursor
+from PySide6.QtGui import QColor, QCursor, QPainter, QPen
 from PySide6.QtWidgets import (
     QApplication,
     QFrame,
@@ -23,14 +24,20 @@ from PySide6.QtWidgets import (
     QLabel,
     QToolButton,
     QVBoxLayout,
+    QWidget,
 )
 
 from sopro.platform.popup.queue import PopupDecision, PopupItem, PopupQueue
-from sopro.platform.popup.theme import card_stylesheet
+from sopro.platform.popup.sound import play_popup_sound
+from sopro.platform.popup.theme import card_stylesheet, palette
 
-CARD_WIDTH = 360
+CARD_WIDTH = 380
 CARD_MARGIN = 16
 CARD_SPACING = 8
+
+SURFACE_SHADOW = 10
+SURFACE_RADIUS = 14
+CONTENT_MARGIN = SURFACE_SHADOW + 16
 
 POS_LABELS_PT = {
     "noun": "substantivo",
@@ -105,6 +112,52 @@ def _primary_screen_rect() -> tuple[int, int, int, int]:
     return (rect.x(), rect.y(), rect.width(), rect.height())
 
 
+def _rich_definition(text: str) -> str:
+    """Escapa o texto e aplica espaçamento de linha legível no ``QLabel``."""
+    return f'<div style="line-height:145%">{html.escape(text)}</div>'
+
+
+class _CardSurface(QWidget):
+    """Fundo **opaco** do cartão: retângulo arredondado com sombra suave.
+
+    A janela top-level é translúcida apenas para permitir cantos arredondados e
+    sombra. O texto sempre fica sobre esta superfície sólida, nunca sobre o vídeo.
+    """
+
+    clicked = Signal()
+
+    def __init__(self, theme: str) -> None:
+        super().__init__()
+        self.setObjectName("SoproSurface")
+        self._colors = palette(theme)
+
+    def paintEvent(self, event) -> None:  # noqa: N802 (API Qt)
+        painter = QPainter(self)
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing, True)
+        card = self.rect().adjusted(
+            SURFACE_SHADOW, SURFACE_SHADOW, -SURFACE_SHADOW, -SURFACE_SHADOW
+        )
+
+        painter.setPen(Qt.PenStyle.NoPen)
+        shadow = QColor(15, 23, 42)
+        for offset, alpha in ((7, 16), (4, 28), (2, 44)):
+            shadow.setAlpha(alpha)
+            painter.setBrush(shadow)
+            painter.drawRoundedRect(
+                card.adjusted(-offset, -offset + 3, offset, offset + 3),
+                SURFACE_RADIUS + offset,
+                SURFACE_RADIUS + offset,
+            )
+
+        painter.setBrush(QColor(self._colors.surface))
+        painter.setPen(QPen(QColor(self._colors.border), 1))
+        painter.drawRoundedRect(card, SURFACE_RADIUS, SURFACE_RADIUS)
+
+    def mousePressEvent(self, event) -> None:  # noqa: N802 (API Qt)
+        self.clicked.emit()
+        event.accept()
+
+
 class PopupCard(QFrame):
     """Um cartão de pop-up (janela sem foco, sem borda, sempre no topo)."""
 
@@ -130,6 +183,7 @@ class PopupCard(QFrame):
         self.setFixedWidth(CARD_WIDTH)
         self.setStyleSheet(card_stylesheet(theme))
 
+        self._theme = theme
         self._key = detection.term
         self._duration_ms = duration_ms
         self._remaining = duration_ms
@@ -143,47 +197,73 @@ class PopupCard(QFrame):
 
     def _build(self, content: CardContent) -> None:
         outer = QVBoxLayout(self)
-        outer.setContentsMargins(14, 10, 14, 12)
-        outer.setSpacing(4)
+        outer.setContentsMargins(0, 0, 0, 0)
+
+        self.surface = _CardSurface(self._theme)
+        self.surface.setStyleSheet(card_stylesheet(self._theme))
+        self.surface.clicked.connect(self.dismiss)
+        outer.addWidget(self.surface)
+
+        body = QVBoxLayout(self.surface)
+        body.setContentsMargins(
+            CONTENT_MARGIN, CONTENT_MARGIN - 2, CONTENT_MARGIN, CONTENT_MARGIN - 2
+        )
+        body.setSpacing(6)
 
         header = QHBoxLayout()
-        header.setSpacing(6)
+        header.setSpacing(4)
         term = QLabel(content.term)
         term.setObjectName("SoproTerm")
-        header.addWidget(term)
-        header.addStretch(1)
+        term.setWordWrap(True)
+        header.addWidget(term, 1)
+
         self._pin = QToolButton()
         self._pin.setCheckable(True)
-        self._pin.setText("\U0001F4CC")
+        self._pin.setText("Fixar")
         self._pin.setToolTip("Fixar na tela")
         self._pin.setCursor(Qt.CursorShape.PointingHandCursor)
         self._pin.setAutoRaise(True)
         self._pin.clicked.connect(self._on_pin)
         header.addWidget(self._pin)
-        outer.addLayout(header)
+
+        self._close = QToolButton()
+        self._close.setText("\u2715")
+        self._close.setToolTip("Fechar")
+        self._close.setCursor(Qt.CursorShape.PointingHandCursor)
+        self._close.setAutoRaise(True)
+        self._close.clicked.connect(self.dismiss)
+        header.addWidget(self._close)
+        body.addLayout(header)
 
         if content.pos:
             pos = QLabel(content.pos)
             pos.setObjectName("SoproPos")
-            outer.addWidget(pos)
+            body.addWidget(pos)
         if content.translation:
             translation = QLabel(content.translation)
             translation.setObjectName("SoproTranslation")
             translation.setWordWrap(True)
-            outer.addWidget(translation)
+            body.addWidget(translation)
         if content.definition:
-            definition = QLabel(content.definition)
+            divider = QFrame()
+            divider.setObjectName("SoproDivider")
+            divider.setFrameShape(QFrame.Shape.HLine)
+            divider.setFixedHeight(1)
+            body.addWidget(divider)
+            definition = QLabel(_rich_definition(content.definition))
             definition.setObjectName("SoproDefinition")
+            definition.setTextFormat(Qt.TextFormat.RichText)
             definition.setWordWrap(True)
-            outer.addWidget(definition)
+            body.addWidget(definition)
         if content.register:
             register = QLabel(content.register)
             register.setObjectName("SoproRegister")
-            outer.addWidget(register)
+            body.addWidget(register)
         if content.note:
             note = QLabel(content.note)
             note.setObjectName("SoproNote")
-            outer.addWidget(note)
+            note.setWordWrap(True)
+            body.addWidget(note)
 
     # -- ciclo de vida ------------------------------------------------------
     def start(self) -> None:
@@ -232,6 +312,7 @@ class OverlayController(QObject):
         *,
         screen_rect: Callable[[], tuple[int, int, int, int]] | None = None,
         clock: Callable[[], float] | None = None,
+        sound: Callable[[], None] | None = None,
     ) -> None:
         super().__init__()
         self._queue = PopupQueue(max_visible=settings.popup_max)
@@ -241,6 +322,8 @@ class OverlayController(QObject):
         self._position = settings.popup_position
         self._screen_rect = screen_rect or _primary_screen_rect
         self._clock = clock or time.monotonic
+        plays = getattr(settings, "popup_sound", True)
+        self._sound = (sound or play_popup_sound) if plays else None
 
     @property
     def queue(self) -> PopupQueue:
@@ -264,6 +347,8 @@ class OverlayController(QObject):
         self._cards[detection.term] = card
         self._relayout()
         card.start()
+        if self._sound is not None:
+            self._sound()
 
     def stop(self) -> None:
         for key in list(self._cards):

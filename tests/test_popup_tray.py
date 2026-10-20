@@ -41,6 +41,7 @@ def test_menu_has_expected_entries(qt_app):
     assert STATE_LABELS[TrayState.PAUSED] in texts
     assert "Retomar" in texts
     assert "Configurações…" in texts
+    assert "Glossários…" in texts
     assert "Sair" in texts
 
 
@@ -64,6 +65,7 @@ def test_menu_actions_emit_signals(qt_app):
     seen = []
     tray.toggle_requested.connect(lambda: seen.append("toggle"))
     tray.settings_requested.connect(lambda: seen.append("settings"))
+    tray.glossary_requested.connect(lambda: seen.append("glossary"))
     tray.quit_requested.connect(lambda: seen.append("quit"))
 
     for action in tray.tray.contextMenu().actions():
@@ -71,7 +73,9 @@ def test_menu_actions_emit_signals(qt_app):
             action.trigger()
         elif action.text() == "Configurações…":
             action.trigger()
+        elif action.text() == "Glossários…":
+            action.trigger()
         elif action.text() == "Sair":
             action.trigger()
 
-    assert seen == ["toggle", "settings", "quit"]
+    assert seen == ["toggle", "settings", "glossary", "quit"]

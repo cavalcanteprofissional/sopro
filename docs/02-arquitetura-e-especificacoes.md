@@ -130,7 +130,29 @@ Instalar um pacote = inserir nas tabelas acima e recalcular vetores se o modelo 
 - Tempo de exibição padrão 6–8 s; pausa no hover; clique fecha; ação "fixar".
 - Fila: no máximo N cartões simultâneos (padrão 3); novos substituem os mais antigos.
 - Respeitar múltiplos monitores e DPI.
-- Nunca capturar o próprio áudio do app (sem sons).
+- **Alta legibilidade**: superfície 100% opaca (a translucidez da janela fica restrita aos
+  cantos e à sombra), texto com contraste reforçado e tamanhos maiores; nunca deixar texto
+  sobre o vídeo.
+- **Efeito sonoro opcional** (`popup_sound`): bipe curto de duas notas (160 ms), abaixo da
+  fala mínima do VAD, para não ser transcrito como fala.
+
+### Superfícies de interface
+
+- **Indicador de estado** (`platform/popup/status_indicator.py`): bolinha flutuante, sem
+  borda, sempre no topo e **sem foco**, arrastável (posição persistida) e ocultável. Estados:
+  `loading` (download/warmup, pulso pela fração), `listening`, `analyzing` (pulso em tempo
+  real pelo nível de áudio), `paused` e `error`. Nunca rouba foco.
+- **Hub** (`platform/popup/hub.py` + `pages.py`): janela única com navegação entre Status,
+  Configurações, Glossários, Termos, Histórico e Demonstração. Configurações e Glossários são
+  páginas reutilizáveis, também hospedadas nos diálogos antigos (`PageHost`). Fechar qualquer
+  tela **não** encerra o app (ele vive na bandeja).
+- **Histórico** (RF-22): busca por texto, filtro por "aprendido" e por período, além de
+  exportação CSV/Markdown. Segundo atalho global abre o hub direto no histórico (RF-25).
+- **Termos** (RF-23): busca, edição de canônico/classe/aliases/prioridade/ambíguo e tabela de
+  acepções; criar e excluir termos. Excluir preserva as detecções do histórico (apenas
+  desvincula `term_id`/`sense_id`).
+- **Demonstração**: `--demo` usa áudio/transcrição falsos; "Ver exemplo de pop-up" monta
+  detecções **reais do glossário ativo** e as injeta no overlay, sem modelo nem áudio.
 
 ## 9. Configuração (campos)
 
@@ -144,7 +166,9 @@ Instalar um pacote = inserir nas tabelas acima e recalcular vetores se o modelo 
   (`llm_candidates_per_minute`).
 - Privacidade: salvar contexto (sim/não), salvar transcrição (padrão não), limpar histórico;
   consentimento de nuvem persistido (`remote_consent`), revogável.
-- Atalhos globais.
+- Atalhos globais: pausar/retomar e abrir o histórico (`shortcut_history`).
+- Indicador de estado: mostrar/ocultar (`indicator_enabled`) e posição persistida
+  (`indicator_x`/`indicator_y`).
 
 ## 10. Privacidade e segurança
 
@@ -179,6 +203,10 @@ Instalar um pacote = inserir nas tabelas acima e recalcular vetores se o modelo 
 | Motor de STT local | Decidido por **benchmark** (faster-whisper vs whisper.cpp); interface `STTProvider` isola a escolha | `02 §3.1`, `04` Fase 0/1 |
 | Sistema do protótipo | Windows; Linux e macOS na Fase 5 | `01`, `04` Fase 5 |
 | Captura de áudio (Windows) | **PyAudioWPatch** (loopback WASAPI + microfone), atrás da interface `AudioSource`; extra `audio` | `02 §11`, `05` A2 |
+| UI do protótipo | **PySide6** (`platform/popup`), com páginas reutilizáveis (`hub`, `pages`) | `02 §8`, `04` Fase 2/4 |
+| Feedback de inicialização | Sem diálogo modal: indicador/tray em `LOADING` com fração; falha em `ERROR` com "Tentar de novo" | `02 §8`, `08 §4` |
+| Janela principal | **Hub** com Status/Configurações/Glossários/Termos/Histórico/Demonstração; fechar telas não encerra o app | `02 §8` |
+| Demonstração embutida | "Ver exemplo de pop-up" usa **termos reais** do glossário ativo; sem dispositivo/áudio/modelo | `02 §8`, `05` A3 |
 
 ### 13.2 Em aberto
 

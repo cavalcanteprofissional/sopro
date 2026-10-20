@@ -1,18 +1,20 @@
-"""Tela mínima de configurações (docs/02 §9, docs/05 A6).
+"""Tela de configurações (docs/02 §9, docs/05 A6).
 
-Formulário que carrega um ``Settings`` e o devolve validado ao confirmar. Campos de
-domínios e fontes de áudio são oferecidos como escolhas; o restante reflete as
-preferências centrais (idioma, STT/LLM, pop-up, tema, privacidade).
+``SettingsPage`` (widget reutilizável, também embutido no hub) carrega um
+``Settings`` e devolve outro validado em ``current_settings``. ``SettingsDialog`` é
+um diálogo fino que hospeda a página com botões OK/Cancelar. Campos de domínios e
+fontes de áudio são oferecidos como escolhas; o restante reflete as preferências
+centrais (idioma, STT/LLM, pop-up, tema, privacidade).
 """
 
 from __future__ import annotations
 
 from collections.abc import Callable, Sequence
+from dataclasses import replace
 
 from PySide6.QtWidgets import (
     QCheckBox,
     QComboBox,
-    QDialog,
     QDialogButtonBox,
     QDoubleSpinBox,
     QFormLayout,
@@ -35,6 +37,8 @@ from sopro.core.config import (
     cloud_providers,
 )
 
+from sopro.platform.popup.host import PageHost
+
 
 def privacy_message(names: Sequence[str]) -> str:
     """Texto do aviso de privacidade exibido antes de ativar a nuvem (docs/05 A8)."""
@@ -47,8 +51,23 @@ def privacy_message(names: Sequence[str]) -> str:
     )
 
 
-class SettingsDialog(QDialog):
-    """Diálogo de configurações; produz um ``Settings`` validado em ``current_settings``."""
+def _qt_confirm(message: str) -> bool:
+    box = QMessageBox()
+    box.setIcon(QMessageBox.Icon.Warning)
+    box.setWindowTitle("Nuvem ativa")
+    box.setText(message)
+    yes = box.addButton("Sim, ativar", QMessageBox.ButtonRole.YesRole)
+    box.addButton("Cancelar", QMessageBox.ButtonRole.RejectRole)
+    box.exec()
+    return box.clickedButton() is yes
+
+
+def _qt_alert(message: str) -> None:
+    QMessageBox.warning(None, "Configurações", message)
+
+
+class SettingsPage(QWidget):
+    """Formulário reutilizável de configurações; valida em ``current_settings``."""
 
     def __init__(
         self,
@@ -60,15 +79,13 @@ class SettingsDialog(QDialog):
         alert: Callable[[str], None] | None = None,
     ) -> None:
         super().__init__(parent)
-        self.setWindowTitle("Configurações do Sopro")
-        self.setMinimumWidth(360)
-
+        self._original = settings
         self._source_checks: dict[str, QCheckBox] = {}
         self._domain_checks: dict[str, QCheckBox] = {}
         self._domains_fallback = settings.active_domains
         self._remote_consent = bool(settings.remote_consent)
-        self._confirm = confirm or self._qt_confirm
-        self._alert = alert or self._qt_alert
+        self._confirm = confirm or _qt_confirm
+        self._alert = alert or _qt_alert
 
         form = QFormLayout()
         form.setSpacing(8)
@@ -126,6 +143,10 @@ class SettingsDialog(QDialog):
         self._popup_position.setCurrentText(settings.popup_position)
         form.addRow("Posição do pop-up", self._popup_position)
 
+        self._popup_sound = QCheckBox("Tocar som ao exibir pop-up")
+        self._popup_sound.setChecked(settings.popup_sound)
+        form.addRow("", self._popup_sound)
+
         self._cooldown = QDoubleSpinBox()
         self._cooldown.setRange(0.0, 3600.0)
         self._cooldown.setSingleStep(5.0)
@@ -146,6 +167,16 @@ class SettingsDialog(QDialog):
         self._shortcut.setPlaceholderText("Ctrl+Shift+Space (vazio = sem atalho)")
         form.addRow("Atalho global", self._shortcut)
 
+        self._shortcut_history = QLineEdit(settings.shortcut_history)
+        self._shortcut_history.setPlaceholderText(
+            "Ctrl+Shift+H (vazio = sem atalho)"
+        )
+        form.addRow("Atalho do histórico", self._shortcut_history)
+
+        self._indicator = QCheckBox("Mostrar indicador flutuante de estado")
+        self._indicator.setChecked(settings.indicator_enabled)
+        form.addRow("", self._indicator)
+
         self._save_context = QCheckBox("Salvar trecho de contexto (privacidade)")
         self._save_context.setChecked(settings.save_context)
         form.addRow("", self._save_context)
@@ -156,49 +187,33 @@ class SettingsDialog(QDialog):
         scroll.setWidget(form_host)
         scroll.setWidgetResizable(True)
 
-        buttons = QDialogButtonBox(
-            QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel
-        )
-        buttons.accepted.connect(self.accept)
-        buttons.rejected.connect(self.reject)
-
         layout = QVBoxLayout(self)
+        layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(scroll)
-        layout.addWidget(buttons)
 
     # -- confirmação de privacidade (docs/05 A8) ---------------------------
-    @staticmethod
-    def _qt_confirm(message: str) -> bool:
-        box = QMessageBox()
-        box.setIcon(QMessageBox.Icon.Warning)
-        box.setWindowTitle("Nuvem ativa")
-        box.setText(message)
-        yes = box.addButton("Sim, ativar", QMessageBox.ButtonRole.YesRole)
-        box.addButton("Cancelar", QMessageBox.ButtonRole.RejectRole)
-        box.exec()
-        return box.clickedButton() is yes
+    def confirm(self, message: str) -> bool:
+        return self._confirm(message)
 
-    @staticmethod
-    def _qt_alert(message: str) -> None:
-        QMessageBox.warning(None, "Configurações", message)
+    def alert(self, message: str) -> None:
+        self._alert(message)
 
-    def accept(self) -> None:
-        """Valida, pede consentimento da nuvem se preciso e só então fecha."""
+    def _checked(self, checks: dict[str, QCheckBox]) -> tuple[str, ...]:
+        return tuple(key for key, box in checks.items() if box.isChecked())
+
+    def resolve_settings(self) -> Settings | None:
+        """Valida, pede consentimento da nuvem se preciso e devolve (ou ``None``)."""
         try:
             candidate = self.current_settings()
         except ConfigError as exc:
-            self._alert(f"Configuração inválida: {exc}")
-            return
+            self.alert(f"Configuração inválida: {exc}")
+            return None
         names = cloud_providers(candidate)
         if names and not self._remote_consent:
-            if not self._confirm(privacy_message(names)):
-                return
+            if not self.confirm(privacy_message(names)):
+                return None
             self._remote_consent = True
-        super().accept()
-
-    # -- leitura dos campos -------------------------------------------------
-    def _checked(self, checks: dict[str, QCheckBox]) -> tuple[str, ...]:
-        return tuple(key for key, box in checks.items() if box.isChecked())
+        return candidate
 
     def current_settings(self) -> Settings:
         """Monta e valida um ``Settings`` a partir dos campos (pode lançar ConfigError)."""
@@ -207,7 +222,8 @@ class SettingsDialog(QDialog):
             if self._domain_checks
             else self._domains_fallback
         )
-        return Settings(
+        return replace(
+            self._original,
             audio_sources=self._checked(self._source_checks),
             active_domains=domains,
             output_lang=self._output_lang.text().strip(),
@@ -217,10 +233,50 @@ class SettingsDialog(QDialog):
             popup_duration_s=float(self._popup_duration.value()),
             popup_max=int(self._popup_max.value()),
             popup_position=self._popup_position.currentText(),
+            popup_sound=self._popup_sound.isChecked(),
             cooldown_s=float(self._cooldown.value()),
             budget_per_minute=int(self._budget.value()),
             theme=self._theme.currentText(),
             shortcut=self._shortcut.text().strip(),
+            shortcut_history=self._shortcut_history.text().strip(),
+            indicator_enabled=self._indicator.isChecked(),
             save_context=self._save_context.isChecked(),
             remote_consent=self._remote_consent,
         )
+
+
+class SettingsDialog(PageHost):
+    """Diálogo de configurações; produz um ``Settings`` validado em ``current_settings``."""
+
+    def __init__(
+        self,
+        settings: Settings,
+        domain_slugs: Sequence[str] = (),
+        parent: QWidget | None = None,
+        *,
+        confirm: Callable[[str], bool] | None = None,
+        alert: Callable[[str], None] | None = None,
+    ) -> None:
+        super().__init__(parent)
+        self.setWindowTitle("Configurações do Sopro")
+        self.setMinimumWidth(360)
+
+        page = SettingsPage(
+            settings, domain_slugs, parent=self, confirm=confirm, alert=alert
+        )
+        buttons = QDialogButtonBox(
+            QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel
+        )
+        buttons.accepted.connect(self.accept)
+        buttons.rejected.connect(self.reject)
+
+        layout = QVBoxLayout(self)
+        layout.addWidget(page)
+        layout.addWidget(buttons)
+        self._page = page
+
+    def accept(self) -> None:
+        """Valida, pede consentimento da nuvem se preciso e só então fecha."""
+        if self._page.resolve_settings() is None:
+            return
+        PageHost.accept(self)

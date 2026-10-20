@@ -42,17 +42,28 @@ class Settings:
     popup_duration_s: float = 7.0
     popup_max: int = 3
     popup_position: str = "bottom-right"
+    popup_sound: bool = True
+    """Toca um bipe curto quando um pop-up aparece."""
     cooldown_s: float = 30.0
     budget_per_minute: int = 6
     theme: str = "system"
     save_context: bool = False
     save_transcript: bool = False
     shortcut: str = DEFAULT_SHORTCUT
+    shortcut_history: str = ""
+    """Atalho global para abrir o histórico (vazio = sem atalho)."""
     resolution_threshold: float = 0.30
     resolution_window_s: float = 20.0
     llm_candidates: bool = False
     llm_candidates_per_minute: int = 2
     remote_consent: bool = False
+    first_run_done: bool = False
+    """Marca que o assistente de primeira execução (consentimento) já foi exibido."""
+    indicator_enabled: bool = True
+    """Mostra o indicador flutuante de estado ("bolinha com glow")."""
+    indicator_x: int = -1
+    indicator_y: int = -1
+    """Posição salva do indicador flutuante (-1 = posição padrão)."""
 
     def __post_init__(self) -> None:
         self.validate()
@@ -98,6 +109,11 @@ class Settings:
                 parse_hotkey(self.shortcut)
             except HotkeyError as exc:
                 raise ConfigError(f"atalho inválido: {exc}") from exc
+        if self.shortcut_history:
+            try:
+                parse_hotkey(self.shortcut_history)
+            except HotkeyError as exc:
+                raise ConfigError(f"atalho de histórico inválido: {exc}") from exc
 
     def to_dict(self) -> dict[str, Any]:
         return {f.name: getattr(self, f.name) for f in fields(self)}

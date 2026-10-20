@@ -135,6 +135,43 @@ adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 - Aviso de privacidade e confirmação explícita antes de ativar provedores em nuvem, com
   consentimento persistido (`remote_consent`) e indicador permanente de "Nuvem ativa" na
   bandeja (`config.cloud_providers`, `tray.set_remote`).
+- Assistente de primeira execução (`platform/popup.first_run`): consentimento LGPD, escolha
+  de domínio, idioma de saída e fontes de áudio, gravando `first_run_done` (ignorado em
+  `--demo`).
+- Logging em arquivo com rotação e sem conteúdo de fala (`app/logging_setup`): filtro que
+  descarta registros marcados como fala, em `logs/sopro.log` na pasta de dados.
+- Erros amigáveis (`platform/popup.errors`): `friendly_message` (dicas por tipo de exceção)
+  e diálogo `show_error`, usados na inicialização e em falhas de pipeline.
+- Tela de gerenciamento de glossários (`platform/popup.glossary_window`): lista domínios,
+  importa/exporta pacotes e ativa/desativa domínios, com ação "Glossários…" na bandeja e
+  `Repository.set_domain_active` (RF-23).
+- Listagem de pacotes de domínio disponíveis (`core/glossary.package.list_package_slugs`).
+- Hub/janela principal (`platform/popup.hub`): `HubWindow` com navegação lateral entre
+  páginas (Status, Configurações, Glossários, Termos, Histórico, Demonstração) e botão
+  "Aplicar" por página; a bandeja e o menu "Abrir Sopro…" abrem o hub em cada seção.
+- Páginas reutilizáveis (`platform/popup.pages`): `StatusPage` (estado + atalhos),
+  `HistoryPage` (tabela com busca, filtro por aprendido e período, exportar CSV/Markdown),
+  `DemoPage` e `TermsPage` (editar/criar/excluir termos com acepções).
+- Indicador de estado com glow (`platform/popup.status_indicator`): bolinha flutuante
+  frameless, sempre no topo, sem foco e **arrastável** (posição lembrada), com estados
+  `loading`/`listening`/`analyzing`/`paused`/`error` e pulso em tempo real pelo nível de
+  áudio; opção de ocultar (`Settings.indicator_enabled`). No demo o nível é simulado.
+- Demonstração embutida (`platform/popup.demo_player`): monta `Detection` reais a partir do
+  glossário ativo e injeta no overlay ("Ver exemplo de pop-up"), sem áudio nem modelo.
+- Histórico com filtros (`Repository.history(..., query, learned, since, until)`) e
+  `Repository.delete_term` (cascata, preservando o histórico).
+- Segundo atalho global para o histórico (`Settings.shortcut_history`) com campo nas
+  Configurações e listener dedicado.
+- Progresso de inicialização (RNF-08): download/warmup do modelo roda fora da UI; o indicador
+  e a bandeja mostram `Carregando…` com a fração baixada; falha vai para `ERROR` com
+  "Tentar de novo" (a bandeja permanece viva).
+- Erro amigável para `ImportError` (dependências do extra `ui`) em `platform/popup.errors`.
+- Efeito sonoro opcional ao exibir um pop-up (`Settings.popup_sound`): bipe curto de duas
+  notas sintetizado em memória (`core/audio/chime`, sem arquivos de mídia), reproduzido de
+  forma assíncrona via `winsound` no Windows e com fallback para o beep do sistema.
+- Instância única (`app/single_instance`): `QLockFile` na pasta de dados + `QLocalServer`;
+  a segunda execução não abre banco nem carrega modelo, apenas ativa o hub da instância
+  existente e encerra. O modo `--demo` usa trava separada (pode rodar ao lado do app real).
 
 ### Changed
 - Decisões registradas em `docs/02 §13`, `docs/01` (RNF-08) e README: modelos **on-demand**
@@ -142,15 +179,41 @@ adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
   protótipo.
 - Documentação de produto/engenharia (01–07) movida para [`docs/`](docs/); README
   reorganizado como porta de entrada do projeto (único README do repositório).
+- Tela de configurações passa a preservar campos não expostos ao editar (usa
+  `dataclasses.replace` sobre o `Settings` original em vez de recriá-lo).
+- Instalador Inno Setup grava a saída em `dist/` (`OutputDir`), alinhado ao que o workflow
+  de release publica, e usa a arquitetura `x64compatible` (sem aviso de deprecação). Ganhou
+  um segundo atalho no Menu Iniciar, `Sopro (demonstração)` → `Sopro.exe --demo`.
+- Configurações e Glossários foram divididos em *páginas* reutilizáveis (`SettingsPage`,
+  `GlossaryPage`) e *diálogos* finos (`PageHost`) que as hospedam — as mesmas páginas aparecem
+  no hub. `QApplication.setQuitOnLastWindowClosed(False)` evita que fechar uma tela encerre o
+  app (que vive na bandeja).
+- Pop-ups redesenhados para **alta legibilidade**: superfície própria 100% opaca pintada à
+  mão (a translucidez da janela serve só para cantos/sombra), cartão mais largo (380 px),
+  tipografia maior, divisória, botão de fechar explícito e contraste reforçado nos temas
+  claro/escuro.
+
+### Fixed
+- **Erro de SQLite ao iniciar a captura real** (`SQLite objects created in a thread can only
+  be used in that same thread`): o banco em arquivo passou a usar uma conexão por thread
+  (`threading.local`), com WAL e `busy_timeout`, permitindo que a thread de áudio grave
+  detecções enquanto a UI lê o histórico. Bancos `:memory:` continuam compartilhados e
+  serializados por lock.
+- Execuções duplicadas do app (cliques repetidos no atalho) agora são bloqueadas; a segunda
+  instância ativa a existente em vez de abrir outra bandeja e disputar o mesmo banco.
 
 ### Notas de retomada
-- Estado: **Fase 3 concluída e publicada** (`origin/main` em `f723c42`). Ainda **sem release
-  marcada** — tudo acima segue em `Unreleased`.
-- Próxima sessão, tarefa inicial: revisar o que já foi executado (rodar `pytest -q`, o
-  validador do glossário e `SOPRO_SMOKE_MS=1500 python -m sopro --demo`; conferir as
-  migrações v3/v4) antes de iniciar a **Fase 4 — Empacotamento** (instalador, primeira
-  execução/consentimento, logs sem fala e gestão de glossários).
-- Detalhes e checklist em [TODO.md](TODO.md) → seção "Retomada".
+- Estado: **Fase 4 concluída** (instalador compilado e testado, primeira execução, logs e
+  gestão de glossários) + **terceira rodada de ajustes A4.0–A4.7 implementada** (hub/páginas,
+  indicador com glow, demo embutido, histórico com filtros, edição de termos, 2º atalho,
+  progresso de inicialização, correção do encerramento). **392 testes passando**; `--demo`
+  smoke OK. Rebuild feito (`dist/Sopro-0.1.0-portable.zip` + `dist/Sopro-Setup-0.1.0.exe`) e
+  ciclo instalar → abrir → desinstalar validado (dados em `%LOCALAPPDATA%\Sopro` preservados;
+  2º atalho de demonstração). Ainda **sem release marcada** — tudo acima segue em `Unreleased`.
+- **Pendência:** reteste manual do mantenedor (pop-ups, hub, indicador arrastável, histórico,
+  termos).
+- Detalhes e checklist em [TODO.md](TODO.md) → seções "Retomada" e "Ajustes pós-Fase 4
+  (terceira rodada)".
 
 ## [0.0.0] - 2026-10-07
 

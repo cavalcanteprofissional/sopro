@@ -10,13 +10,18 @@ projeto não dependa do extra ``ui``.
 from __future__ import annotations
 
 import argparse
+import logging
+import math
 import os
+import subprocess
 import sys
 import threading
+from dataclasses import replace
 from pathlib import Path
 
 from sopro.app.detection import DetectionService
 from sopro.app.home import db_path, ensure_home, resolve_home
+from sopro.app.logging_setup import configure_logging
 from sopro.app.realtime import RealtimePipeline
 from sopro.core.config import (
     ConfigError,
@@ -74,8 +79,21 @@ def _load_settings(repo: Repository) -> Settings:
 
 
 def _load_active_package(repo: Repository, settings: Settings, domains_root: Path):
-    """Importa o primeiro domínio ativo no banco e devolve (pacote, domain_id)."""
-    slug = settings.active_domains[0]
+    """Importa o primeiro domínio ativo disponível e devolve (pacote, domain_id).
+
+    Se o domínio configurado não existir no disco, cai para o primeiro pacote
+    disponível; falha com mensagem clara quando não há nenhum.
+    """
+    from sopro.core.glossary import list_package_slugs
+
+    available = list_package_slugs(domains_root)
+    slug = next((s for s in settings.active_domains if s in available), None)
+    if slug is None and available:
+        slug = sorted(available)[0]
+    if slug is None:
+        raise FileNotFoundError(
+            f"nenhum pacote de domínio encontrado em {domains_root}"
+        )
     package_dir = domains_root / slug
     domain_id = import_package(repo, package_dir)
     return build_domain_package(repo, slug), domain_id
@@ -99,7 +117,9 @@ def _build_llm_provider(settings):
     try:
         return create_provider(settings)
     except Exception as exc:  # noqa: BLE001 - LLM é opcional; degrada sem ele
-        print(f"LLM indisponível ({exc}); seguindo sem LLM", file=sys.stderr)
+        logging.getLogger("sopro").warning(
+            "LLM indisponível (%s); seguindo sem LLM", exc
+        )
         return None
 
 
@@ -165,20 +185,33 @@ def _build_service(settings, package, domain_id, repo, session_id, provider):
     )
 
 
-def _build_provider(settings: Settings, home: Path, secret_store=None):
+def _build_provider(settings: Settings, home: Path, secret_store=None, on_progress=None):
     from sopro.core.stt import STTError
     from sopro.platform.stt.factory import create_provider, faster_whisper
 
     if settings.stt_provider != "groq":
         return faster_whisper(
-            model_id=settings.stt_model, home=home / "models", language="en"
+            model_id=settings.stt_model,
+            home=home / "models",
+            language="en",
+            progress=on_progress,
         )
     try:
-        return create_provider(settings, home=home / "models", secret_store=secret_store)
+        return create_provider(
+            settings,
+            home=home / "models",
+            secret_store=secret_store,
+            progress=on_progress,
+        )
     except STTError as exc:
-        print(f"Groq indisponível ({exc}); usando transcrição local", file=sys.stderr)
+        logging.getLogger("sopro").warning(
+            "Groq indisponível (%s); usando transcrição local", exc
+        )
         return faster_whisper(
-            model_id="whisper-tiny-en", home=home / "models", language="en"
+            model_id="whisper-tiny-en",
+            home=home / "models",
+            language="en",
+            progress=on_progress,
         )
 
 
@@ -188,30 +221,67 @@ def _build_audio_source(settings: Settings):
     return WindowsAudioSource()
 
 
-def _start_hotkey(settings: Settings, callback) -> object | None:
-    """Registra o atalho global; devolve o listener ou ``None`` (degradação graciosa)."""
+def _launch_demo_instance() -> None:
+    """Abre uma nova instância do Sopro em modo demonstração (decisão D4.2)."""
+    if getattr(sys, "frozen", False):
+        argv = [sys.executable, "--demo"]
+    else:
+        argv = [sys.executable, "-m", "sopro", "--demo"]
+    try:
+        subprocess.Popen(argv)
+    except OSError as exc:  # noqa: BLE001 - nunca derruba a instância atual
+        logging.getLogger("sopro").warning(
+            "não foi possível abrir a demonstração: %s", exc
+        )
+
+
+def _start_hotkey_for(shortcut: str, callback) -> object | None:
+    """Registra um atalho global; devolve o listener ou ``None`` (degradação graciosa)."""
     from sopro.platform.hotkey.windows import HotkeyUnavailable
 
-    if not settings.shortcut:
+    if not shortcut:
         return None
+    log = logging.getLogger("sopro")
     try:
-        hotkey = parse_hotkey(settings.shortcut)
+        hotkey = parse_hotkey(shortcut)
     except HotkeyError as exc:
-        print(f"atalho ignorado: {exc}", file=sys.stderr)
+        log.warning("atalho ignorado: %s", exc)
         return None
     listener = create_listener(hotkey)
     if listener is None:
-        print(
-            f"atalho global não suportado neste SO: {settings.shortcut}",
-            file=sys.stderr,
-        )
+        log.info("atalho global não suportado neste SO: %s", shortcut)
         return None
     try:
         listener.start(callback)
     except HotkeyUnavailable as exc:
-        print(f"atalho ignorado: {exc}", file=sys.stderr)
+        log.warning("atalho ignorado: %s", exc)
         return None
     return listener
+
+
+def _start_hotkey(settings: Settings, callback) -> object | None:
+    """Registra o atalho global de pausar/retomar."""
+    return _start_hotkey_for(settings.shortcut, callback)
+
+
+def _maybe_first_run(args, repo: Repository, settings: Settings, domains_root: Path) -> Settings:
+    """Exibe o assistente de primeira execução (fora do modo demo)."""
+    if args.demo or settings.first_run_done:
+        return settings
+    from sopro.core.glossary import list_package_slugs
+    from sopro.platform.popup.first_run import FirstRunDialog
+
+    slugs = list_package_slugs(domains_root) or settings.active_domains
+    dialog = FirstRunDialog(settings, domain_slugs=slugs)
+    if not dialog.exec():
+        return settings
+    try:
+        new_settings = dialog.current_settings()
+    except ConfigError as exc:
+        logging.getLogger("sopro").warning("primeira execução inválida: %s", exc)
+        return settings
+    save_settings(repo, new_settings)
+    return new_settings
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -221,14 +291,30 @@ def main(argv: list[str] | None = None) -> int:
 
     args = build_parser().parse_args(argv)
     home = ensure_home(args.home or resolve_home())
+    configure_logging(home)
+    log = logging.getLogger("sopro")
+
     domains_root = Path(args.domains_root) if args.domains_root else _domains_root()
+
+    instance = None
+    try:
+        from sopro.app.single_instance import InstanceLock
+    except ImportError:
+        pass
+    else:
+        instance = InstanceLock(home, demo=args.demo)
+        if not instance.acquire():
+            log.info("Sopro já está em execução; ativando a instância existente")
+            instance.notify_active()
+            return 0
 
     repo = _open_repo(home)
     settings = _load_settings(repo)
 
     try:
-        return _run(args, home, repo, settings, domains_root)
+        return _run(args, home, repo, settings, domains_root, instance)
     except ImportError as exc:
+        log.error("dependência ausente: %s", exc)
         print(
             f"dependência ausente: {exc}. Instale os extras de UI/áudio/STT "
             "(pip install 'sopro[ui,audio,stt]').",
@@ -237,22 +323,84 @@ def main(argv: list[str] | None = None) -> int:
         return 2
     finally:
         repo.database.close()
+        if instance is not None:
+            instance.release()
 
 
-def _run(args, home, repo, settings, domains_root) -> int:
+def _configure_app(app) -> None:
+    """Ajustes de ciclo de vida do app de bandeja (docs/09).
+
+    ``setQuitOnLastWindowClosed(False)`` é essencial: a bandeja não conta como
+    janela, então sem isso fechar Configurações/Glossários encerra o aplicativo.
+    """
+    app.setApplicationName("Sopro")
+    app.setQuitOnLastWindowClosed(False)
+
+
+def _run(args, home, repo, settings, domains_root, instance=None) -> int:
     from PySide6.QtCore import QObject, QTimer, Signal
     from PySide6.QtWidgets import QApplication
 
+    from sopro.platform.popup.errors import show_error
     from sopro.platform.popup.overlay import OverlayController
-    from sopro.platform.popup.settings_window import SettingsDialog
     from sopro.platform.popup.tray import TrayIcon, TrayState
 
+    log = logging.getLogger("sopro")
+
     app = QApplication.instance() or QApplication([])
-    app.setApplicationName("Sopro")
+    _configure_app(app)
+
+    settings = _maybe_first_run(args, repo, settings, domains_root)
+
+    thread: threading.Thread | None = None
+    stop = threading.Event()
+
+    class StatusBridge(QObject):
+        level = Signal(float, bool)
+        analyzing = Signal(bool)
+        progress = Signal(float)
+        ready = Signal()
+        failed = Signal(str)
+
+    status_bridge = StatusBridge()
+
+    try:
+        package, domain_id = _load_active_package(repo, settings, domains_root)
+    except Exception as exc:  # noqa: BLE001 - erro amigável, sem derrubar o app
+        log.exception("falha ao carregar o glossário ativo")
+        show_error(exc)
+        return 2
+
+    from sopro.platform.popup.status_indicator import IndicatorState, StatusIndicator
 
     overlay = OverlayController(settings)
     tray = TrayIcon()
-    state = {"paused": False, "running": True}
+    state = {"paused": False, "running": True, "status": IndicatorState.LISTENING}
+    hub = None
+
+    def on_indicator_moved(x: int, y: int) -> None:
+        save_settings(repo, replace(settings, indicator_x=x, indicator_y=y))
+
+    indicator = (
+        StatusIndicator(size=48, on_moved=on_indicator_moved)
+        if settings.indicator_enabled
+        else None
+    )
+    TRAY_FOR = {
+        IndicatorState.LOADING: TrayState.LOADING,
+        IndicatorState.LISTENING: TrayState.LISTENING,
+        IndicatorState.ANALYZING: TrayState.LISTENING,
+        IndicatorState.PAUSED: TrayState.PAUSED,
+        IndicatorState.ERROR: TrayState.ERROR,
+    }
+
+    def set_status(kind: IndicatorState) -> None:
+        state["status"] = kind
+        tray.set_state(TRAY_FOR[kind])
+        if indicator is not None:
+            indicator.set_state(kind)
+        if hub is not None:
+            hub.set_state(kind)
 
     class Bridge(QObject):
         detected = Signal(object)
@@ -264,19 +412,148 @@ def _run(args, home, repo, settings, domains_root) -> int:
         if not state["paused"]:
             bridge.detected.emit(detection)
 
-    package, domain_id = _load_active_package(repo, settings, domains_root)
-    session_id = repo.start_session("tempo real", settings.audio_sources)
+    if indicator is not None:
+        if settings.indicator_x >= 0 and settings.indicator_y >= 0:
+            indicator.place(settings.indicator_x, settings.indicator_y)
+        else:
+            rect = app.primaryScreen().availableGeometry()
+            indicator.place(rect.x() + 24, rect.y() + 24)
+        indicator.show()
 
-    thread: threading.Thread | None = None
-    stop = threading.Event()
-    provider = None
+    def on_level(level: float, _speaking: bool) -> None:
+        if indicator is not None:
+            indicator.set_level(level)
+        if hub is not None:
+            hub.set_level(level)
+
+    def on_analyzing(active: bool) -> None:
+        if state["paused"]:
+            return
+        set_status(IndicatorState.ANALYZING if active else IndicatorState.LISTENING)
+
+    def on_progress(fraction: float) -> None:
+        set_status(IndicatorState.LOADING)
+        if indicator is not None:
+            indicator.set_level(fraction)
+
+    def on_ready() -> None:
+        set_status(IndicatorState.LISTENING)
+
+    def on_failed(message: str) -> None:
+        set_status(IndicatorState.ERROR)
+        tray.notify("Sopro", f"Falha ao iniciar a captura: {message}")
+
+    status_bridge.level.connect(on_level)
+    status_bridge.analyzing.connect(on_analyzing)
+    status_bridge.progress.connect(on_progress)
+    status_bridge.ready.connect(on_ready)
+    status_bridge.failed.connect(on_failed)
+
+    from sopro.platform.popup.demo_player import DemoPlayer, build_demo_detections
+
+    demo_detections = build_demo_detections(package)
+    demo_pairs = [(detection.term, detection.translation or "") for detection in demo_detections]
+    demo_player = DemoPlayer(demo_detections)
+    demo_player.card.connect(overlay.present)
+
+    demo_pulse = QTimer()
+    demo_pulse.setInterval(120)
+    pulse_phase = {"v": 0.0}
+
+    def pulse_tick() -> None:
+        pulse_phase["v"] += 0.45
+        if indicator is not None:
+            indicator.set_level(0.4 + 0.4 * abs(math.sin(pulse_phase["v"])))
+
+    demo_pulse.timeout.connect(pulse_tick)
+
+    def on_demo_finished() -> None:
+        demo_pulse.stop()
+        if not state["paused"]:
+            set_status(IndicatorState.LISTENING)
+
+    demo_player.finished.connect(on_demo_finished)
+
+    def on_demo() -> None:
+        if demo_player.count == 0:
+            tray.notify("Sopro", "Nenhum termo no glossário ativo para demonstrar.")
+            return
+        demo_player.start()
+        set_status(IndicatorState.ANALYZING)
+        demo_pulse.start()
+
+    session_holder = {"id": None}
+    provider_holder = {"obj": None}
+
+    def start_realtime() -> None:
+        """Constrói o pipeline (com download/warmup) e inicia a captura, fora da UI."""
+        nonlocal thread
+        from sopro.core.audio import CaptureConfig
+
+        def run() -> None:
+            try:
+                try:
+                    session_id = repo.start_session(
+                        "tempo real", settings.audio_sources
+                    )
+                    session_holder["id"] = session_id
+                    provider = _build_provider(
+                        settings,
+                        home,
+                        on_progress=lambda done, total: status_bridge.progress.emit(
+                            done / total if total else 0.0
+                        ),
+                    )
+                    provider_holder["obj"] = provider
+                    provider.warmup()
+                    service = _build_service(
+                        settings, package, domain_id, repo, session_id, provider
+                    )
+                    pipeline = RealtimePipeline(
+                        service,
+                        on_level=status_bridge.level.emit,
+                        on_analyzing=status_bridge.analyzing.emit,
+                    )
+                except Exception as exc:  # noqa: BLE001 - mantém a bandeja viva
+                    logging.getLogger("sopro").exception(
+                        "falha ao iniciar o pipeline"
+                    )
+                    status_bridge.failed.emit(str(exc))
+                    return
+                status_bridge.ready.emit()
+                source = _build_audio_source(settings)
+                capture = CaptureConfig(sources=settings.audio_sources)
+                source.start(capture)
+                try:
+                    pipeline.run(
+                        source, should_stop=stop.is_set, on_detection=emit
+                    )
+                finally:
+                    source.close()
+            finally:
+                repo.database.close()
+
+        thread = threading.Thread(target=run, name="sopro-audio", daemon=True)
+        thread.start()
 
     if args.demo:
         from sopro.app.demo import DemoAudioSource, DemoProvider
 
-        provider = DemoProvider()
-        service = _build_service(settings, package, domain_id, repo, session_id, provider)
-        pipeline = RealtimePipeline(service)
+        session_holder["id"] = repo.start_session("tempo real", settings.audio_sources)
+        provider_holder["obj"] = DemoProvider()
+        service = _build_service(
+            replace(settings, cooldown_s=0.0, budget_per_minute=120),
+            package,
+            domain_id,
+            repo,
+            session_holder["id"],
+            provider_holder["obj"],
+        )
+        pipeline = RealtimePipeline(
+            service,
+            on_level=status_bridge.level.emit,
+            on_analyzing=status_bridge.analyzing.emit,
+        )
         demo_source = DemoAudioSource()
         demo_source.start(None)
 
@@ -290,68 +567,123 @@ def _run(args, home, repo, settings, domains_root) -> int:
         timer = QTimer()
         timer.timeout.connect(tick)
         timer.start(DEMO_TICK_MS)
+        set_status(IndicatorState.LISTENING)
     else:
-        provider = _build_provider(settings, home)
-        provider.warmup()
-        service = _build_service(settings, package, domain_id, repo, session_id, provider)
-        pipeline = RealtimePipeline(service)
+        set_status(IndicatorState.LOADING)
+        start_realtime()
 
-        from sopro.core.audio import CaptureConfig
-
-        source = _build_audio_source(settings)
-        capture = CaptureConfig(sources=settings.audio_sources)
-
-        def worker() -> None:
-            source.start(capture)
-            try:
-                pipeline.run(
-                    source, should_stop=stop.is_set, on_detection=emit
-                )
-            finally:
-                source.close()
-
-        thread = threading.Thread(target=worker, name="sopro-audio", daemon=True)
-        thread.start()
+    hotkey = None
+    hotkey_history = None
 
     def on_toggle() -> None:
         state["paused"] = not state["paused"]
-        tray.set_state(TrayState.PAUSED if state["paused"] else TrayState.LISTENING)
-
-    def on_settings() -> None:
-        dialog = SettingsDialog(
-            settings, domain_slugs=[d.slug for d in repo.list_domains()]
+        set_status(
+            IndicatorState.PAUSED if state["paused"] else IndicatorState.LISTENING
         )
+
+    def on_hub_settings(new_settings) -> None:
+        save_settings(repo, new_settings)
+        remote = bool(cloud_providers(new_settings))
+        tray.set_remote(remote)
+        if hub is not None:
+            hub.set_remote(remote)
+
+    def on_hub_domains(new_settings) -> None:
+        save_settings(repo, new_settings)
+        log.info("domínios ativos: %s", ", ".join(new_settings.active_domains))
+        if hub is not None:
+            hub.refresh_history()
+
+    def on_assistant() -> None:
+        from sopro.core.glossary import list_package_slugs
+        from sopro.platform.popup.first_run import FirstRunDialog
+
+        slugs = list_package_slugs(domains_root) or settings.active_domains
+        dialog = FirstRunDialog(settings, domain_slugs=slugs)
         if dialog.exec():
             try:
                 new_settings = dialog.current_settings()
             except ConfigError as exc:
-                print(f"configuração inválida: {exc}", file=sys.stderr)
+                log.warning("assistente inválido: %s", exc)
                 return
             save_settings(repo, new_settings)
-            tray.set_remote(bool(cloud_providers(new_settings)))
+
+    def on_retry() -> None:
+        if args.demo:
+            return
+        stop.clear()
+        state["paused"] = False
+        set_status(IndicatorState.LOADING)
+        start_realtime()
 
     def on_quit() -> None:
         state["running"] = False
         stop.set()
         if hotkey is not None:
             hotkey.stop()
+        if hotkey_history is not None:
+            hotkey_history.stop()
         if thread is not None:
             thread.join(timeout=2.0)
         overlay.stop()
+        if indicator is not None:
+            indicator.hide()
+        if activation is not None:
+            activation.stop()
         tray.hide()
         app.quit()
 
+    def ensure_hub():
+        nonlocal hub
+        if hub is None:
+            from sopro.platform.popup.hub import HubWindow
+
+            hub = HubWindow(repo, settings, domains_root, demo_pairs=demo_pairs)
+            hub.settings_saved.connect(on_hub_settings)
+            hub.domains_changed.connect(on_hub_domains)
+            hub.toggle_requested.connect(on_toggle)
+            hub.demo_requested.connect(on_demo)
+            hub.demo_instance_requested.connect(_launch_demo_instance)
+            hub.assistant_requested.connect(on_assistant)
+            hub.quit_requested.connect(on_quit)
+            hub.set_state(state["status"])
+            hub.set_remote(bool(cloud_providers(settings)))
+        return hub
+
+    def open_hub(page: str) -> None:
+        ensure_hub().show_page(page)
+
+    activation = None
+    if instance is not None:
+        from sopro.app.single_instance import ActivationServer
+
+        activation = ActivationServer(instance.name)
+        activation.activated.connect(lambda: open_hub("Status"))
+        if not activation.start():
+            log.warning("canal de ativação indisponível; instância única só por trava")
+
+    tray.show_requested.connect(lambda: open_hub("Status"))
     tray.toggle_requested.connect(on_toggle)
-    tray.settings_requested.connect(on_settings)
+    tray.settings_requested.connect(lambda: open_hub("Configurações"))
+    tray.glossary_requested.connect(lambda: open_hub("Glossários"))
+    tray.history_requested.connect(lambda: open_hub("Histórico"))
+    tray.demo_requested.connect(on_demo)
+    tray.demo_instance_requested.connect(_launch_demo_instance)
+    tray.assistant_requested.connect(on_assistant)
+    tray.retry_requested.connect(on_retry)
     tray.quit_requested.connect(on_quit)
-    tray.set_state(TrayState.LISTENING)
     tray.set_remote(bool(cloud_providers(settings)))
     tray.show()
 
     hotkey = _start_hotkey(settings, on_toggle)
+    hotkey_history = _start_hotkey_for(
+        settings.shortcut_history, lambda: open_hub("Histórico")
+    )
 
     if args.demo:
         print("Sopro em modo demonstração — pop-ups fictícios a cada poucos segundos.")
+
+    log.info("Sopro iniciado (demo=%s, fontes=%s)", args.demo, settings.audio_sources)
 
     smoke_ms = os.environ.get("SOPRO_SMOKE_MS")
     if smoke_ms:
@@ -359,12 +691,16 @@ def _run(args, home, repo, settings, domains_root) -> int:
 
     exit_code = app.exec()
 
+    if activation is not None:
+        activation.stop()
     stop.set()
     if thread is not None:
         thread.join(timeout=2.0)
-    if provider is not None:
-        provider.close()
-    repo.end_session(session_id)
+    if provider_holder["obj"] is not None:
+        provider_holder["obj"].close()
+    if session_holder["id"] is not None:
+        repo.end_session(session_holder["id"])
+    log.info("Sopro encerrado (exit=%s)", exit_code)
     return exit_code
 
 

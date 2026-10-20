@@ -80,6 +80,13 @@ class Repository:
         ).fetchall()
         return [_domain(row) for row in rows]
 
+    def set_domain_active(self, slug: str, active: bool = True) -> None:
+        """Liga/desliga um domínio importado (gestão de glossários, RF-23)."""
+        with self._db.transaction() as conn:
+            conn.execute(
+                "UPDATE domain SET active = ? WHERE slug = ?", (int(active), slug)
+            )
+
     def set_stoplist(self, domain_id: int, words: Sequence[str]) -> None:
         with self._db.transaction() as conn:
             conn.execute("DELETE FROM domain_stoplist WHERE domain_id = ?", (domain_id,))
@@ -217,6 +224,27 @@ class Repository:
             if term is not None:
                 results.append(term)
         return results
+
+    def delete_term(self, term_id: int) -> None:
+        """Remove um termo (acepções, aliases, FTS e vetores) preservando o histórico.
+
+        As detecções que apontavam para o termo/acepção ficam sem referência, mas o
+        histórico (quando/termo/tradução) é preservado via os campos já gravados.
+        """
+        with self._db.transaction() as conn:
+            conn.execute(
+                "UPDATE detection SET term_id = NULL, sense_id = NULL WHERE term_id = ?",
+                (term_id,),
+            )
+            conn.execute(
+                "DELETE FROM sense_vec WHERE sense_id IN "
+                "(SELECT id FROM sense WHERE term_id = ?)",
+                (term_id,),
+            )
+            conn.execute("DELETE FROM sense WHERE term_id = ?", (term_id,))
+            conn.execute("DELETE FROM term_alias WHERE term_id = ?", (term_id,))
+            conn.execute("DELETE FROM term_fts WHERE rowid = ?", (term_id,))
+            conn.execute("DELETE FROM term WHERE id = ?", (term_id,))
 
     def _term(self, row) -> TermRecord:
         aliases = self._db.connection.execute(
@@ -463,6 +491,11 @@ class Repository:
         session_id: int | None = None,
         include_context: bool = False,
         limit: int | None = None,
+        *,
+        query: str | None = None,
+        learned: bool | None = None,
+        since: str | None = None,
+        until: str | None = None,
     ) -> list[HistoryEntry]:
         sql = (
             "SELECT d.at AS at, d.session_id AS session_id, "
@@ -474,10 +507,29 @@ class Repository:
             "LEFT JOIN term t ON t.id = d.term_id "
             "LEFT JOIN sense s ON s.id = d.sense_id"
         )
+        conditions: list[str] = []
         params: list[object] = []
         if session_id is not None:
-            sql += " WHERE d.session_id = ?"
+            conditions.append("d.session_id = ?")
             params.append(session_id)
+        if query:
+            like = f"%{query}%"
+            conditions.append(
+                "(t.canonical_en LIKE ? OR s.translation_pt LIKE ? "
+                "OR d.context_snippet LIKE ?)"
+            )
+            params.extend([like, like, like])
+        if learned is not None:
+            conditions.append("d.learned = ?")
+            params.append(int(learned))
+        if since:
+            conditions.append("d.at >= ?")
+            params.append(since)
+        if until:
+            conditions.append("d.at <= ?")
+            params.append(until)
+        if conditions:
+            sql += " WHERE " + " AND ".join(conditions)
         sql += " ORDER BY d.at, d.id"
         if limit is not None:
             sql += " LIMIT ?"

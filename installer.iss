@@ -14,11 +14,12 @@ VersionInfoVersion={#Version}
 DefaultDirName={localappdata}\Programs\Sopro
 DefaultGroupName=Sopro
 PrivilegesRequired=lowest
+OutputDir=dist
 OutputBaseFilename=Sopro-Setup-{#Version}
 Compression=lzma2
 SolidCompression=yes
-ArchitecturesInstallIn64BitMode=x64
-ArchitecturesAllowed=x64
+ArchitecturesInstallIn64BitMode=x64compatible
+ArchitecturesAllowed=x64compatible
 WizardStyle=modern
 DisableProgramGroupPage=yes
 UninstallDisplayIcon={app}\Sopro.exe
@@ -35,6 +36,7 @@ Source: "dist\Sopro\*"; DestDir: "{app}"; Flags: recursesubdirs ignoreversion
 
 [Icons]
 Name: "{userprograms}\Sopro"; Filename: "{app}\Sopro.exe"
+Name: "{userprograms}\Sopro (demonstração)"; Filename: "{app}\Sopro.exe"; Parameters: "--demo"
 Name: "{userdesktop}\Sopro"; Filename: "{app}\Sopro.exe"; Tasks: desktopicon
 
 [Run]

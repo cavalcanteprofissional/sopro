@@ -117,3 +117,47 @@ def test_overlay_positions_cards_on_screen(qt_app):
         assert 0 <= point.x() <= 1000
         assert 0 <= point.y() <= 800
     controller.stop()
+
+
+def test_overlay_plays_sound_for_new_cards(qt_app):
+    calls: list[str] = []
+    settings = Settings(popup_max=3, popup_sound=True)
+    controller = OverlayController(
+        settings,
+        screen_rect=lambda: (0, 0, 1000, 800),
+        clock=lambda: 0.0,
+        sound=lambda: calls.append("beep"),
+    )
+
+    controller.present(_detection("a"))
+    controller.present(_detection("a"))
+    controller.present(_detection("b"))
+
+    assert calls == ["beep", "beep"]
+    controller.stop()
+
+
+def test_overlay_respects_disabled_sound(qt_app):
+    calls: list[str] = []
+    settings = Settings(popup_sound=False)
+    controller = OverlayController(
+        settings,
+        screen_rect=lambda: (0, 0, 1000, 800),
+        clock=lambda: 0.0,
+        sound=lambda: calls.append("beep"),
+    )
+
+    controller.present(_detection("a"))
+
+    assert calls == []
+    controller.stop()
+
+
+def test_card_surface_is_opaque():
+    from PySide6.QtGui import QColor
+
+    from sopro.platform.popup.theme import palette
+
+    for theme in ("light", "dark"):
+        assert QColor(palette(theme).surface).alpha() == 255
+        assert palette(theme).text != palette(theme).surface

@@ -1,6 +1,7 @@
 """Testes do banco e das migrações (sopro.core.repo.database)."""
 
 import sqlite3
+import threading
 
 from sopro.core.repo.database import Database
 from sopro.core.repo.migrations import LATEST_VERSION
@@ -79,3 +80,33 @@ def test_foreign_key_violation_is_enforced():
         pass
     else:  # pragma: no cover
         raise AssertionError("esperava IntegrityError por chave estrangeira")
+
+
+def test_file_database_uses_wal(tmp_path):
+    with Database(tmp_path / "sopro.db") as db:
+        mode = db.connection.execute("PRAGMA journal_mode").fetchone()[0]
+
+    assert mode.lower() == "wal"
+
+
+def test_file_database_can_be_used_from_another_thread(tmp_path):
+    from sopro.core.repo import Repository
+
+    repo = Repository(Database(tmp_path / "sopro.db"))
+    result: dict[str, object] = {}
+
+    def worker() -> None:
+        try:
+            result["session"] = repo.start_session("tempo real", ("system",))
+        except Exception as exc:  # noqa: BLE001 - o teste reporta o erro abaixo
+            result["error"] = exc
+
+    thread = threading.Thread(target=worker, name="sopro-audio")
+    thread.start()
+    thread.join(timeout=5.0)
+
+    assert not thread.is_alive()
+    assert "error" not in result, result.get("error")
+    session_id = result["session"]
+    assert session_id is not None
+    assert repo.start_session("principal", ("system",)) != session_id

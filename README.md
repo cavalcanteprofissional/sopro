@@ -1,46 +1,145 @@
-# Sopro (nome provisório)
+<div align="center">
 
-**Um companheiro discreto que explica termos técnicos em inglês no momento exato em que eles são falados.**
+<img src="docs/assets/banner.svg" alt="Sopro" width="720">
 
-> Status: **protótipo funcional**. Captura → VAD → transcrição → matcher → pop-up +
-> histórico (SQLite) rodam de ponta a ponta; overlay, bandeja e tela de configurações
-> estão prontos. RAG/desambiguação (Fase 3) está implementado — acepção contextual,
-> termos fora do glossário via LLM e provedor Groq opcional com aviso de privacidade.
-> Falta empacotar e distribuir (Fase 4).
+# Sopro
 
-Você está vendo uma aula, palestra ou call técnica em inglês e ouve *"fairness"* ou *"backlog"* passar rápido. Pesquisar quebra a atenção. Legenda automática não explica o termo nem escolhe o sentido certo para a área.
+**Um companheiro discreto que explica termos técnicos em inglês no exato momento em que eles são falados.**
 
-O Sopro resolve assim: escuta o áudio do seu PC (ou do microfone), detecta o termo quando é falado e mostra um cartão curto com o termo, a tradução e a definição no contexto da área — sem interromper a aula e sem roubar o foco da janela.
+[![Status](https://img.shields.io/badge/status-prot%C3%B3tipo%20funcional-blueviolet)](#roadmap-em-5-fases)
+[![Versão](https://img.shields.io/badge/vers%C3%A3o-0.1.0-blue)](CHANGELOG.md)
+[![Python](https://img.shields.io/badge/python-3.11%20%7C%203.12-3776AB?logo=python&logoColor=white)](pyproject.toml)
+[![Plataforma](https://img.shields.io/badge/plataforma-Windows%2010%2F11-0078D4?logo=windows&logoColor=white)](#instalação-windows)
+[![Testes](https://img.shields.io/badge/testes-403%20passando-success)](tests)
+[![Licença](https://img.shields.io/badge/licen%C3%A7a-a%20definir-lightgrey)](LICENSE)
 
-## Destaques
+[Visão geral](#-por-que-o-sopro) ·
+[Como funciona](#-como-funciona) ·
+[Stack](#-stack) ·
+[Instalação](#-instalação-windows) ·
+[Desenvolvimento](#-uso-a-partir-do-fonte) ·
+[Roadmap](#-roadmap-em-5-fases) ·
+[Changelog](#-versões-e-changelog)
 
-- **Pop-up por termo, não legenda corrida** — cartão temporário, sempre no topo, sem roubar foco do Teams/Meet/Zoom.
-- **Local primeiro** — roda 100% offline por padrão; nuvem (Groq) é opcional e só com aviso explícito.
-- **Definição certa para a área** — recuperação semântica escolhe a acepção correta (ex.: *fairness* = "equidade" em IA, não "justiça" genérica).
-- **Privacidade** — áudio não é gravado em disco; sem telemetria; dados não saem do computador.
-- **Só free tier** — Whisper local, SQLite, ferramentas gratuitas.
-- **Escalável** — glossários por domínio: tecnologia hoje, direito/saúde/finanças depois.
+</div>
 
-## Como funciona (resumo)
+---
 
+Você está numa aula, palestra ou call técnica em inglês e ouve *“fairness”* ou *“backlog”*
+passar rápido. Parar para pesquisar quebra a atenção; a legenda automática traduz a frase, mas
+não explica o termo nem escolhe o sentido certo para a área.
+
+O **Sopro** escuta o áudio do seu computador (ou do microfone), detecta o termo quando ele é
+falado e mostra um cartão curto com **termo, tradução e definição no contexto da área** — sem
+interromper a aula e sem roubar o foco da janela.
+
+> **Status:** protótipo funcional — Fases 0–4 concluídas. O pipeline completo
+> (captura → VAD → transcrição → matcher → pop-up → histórico) roda de ponta a ponta, com
+> instalador Windows, assistente de primeira execução, logs sem conteúdo de fala e gestão de
+> glossários. A próxima etapa é a **Fase 5** (escala e portabilidade). **403 testes
+> automatizados** passando.
+
+## ✨ Por que o Sopro
+
+- **Pop-up por termo, não legenda corrida** — um cartão temporário, sempre no topo, sem roubar
+  o foco do Teams/Meet/Zoom.
+- **Local primeiro** — funciona 100% offline por padrão. A nuvem (Groq) é opcional e só com
+  aviso explícito.
+- **A definição certa para a área** — recuperação semântica escolhe a acepção correta
+  (ex.: *fairness* = “equidade” em IA, não “justiça” genérica).
+- **Privacidade por padrão** — o áudio não é gravado em disco, não há telemetria e seus dados
+  não saem do computador.
+- **Somente free tier** — Whisper local, SQLite e ferramentas open source.
+- **Escalável por domínio** — glossários de tecnologia hoje; direito, saúde e finanças depois.
+
+## 🔍 Como funciona
+
+```mermaid
+flowchart LR
+    A["🎧 Áudio\n(saída do PC / mic)"] --> B["VAD\ndetecção de fala"]
+    B --> C["STT\nWhisper local"]
+    C --> D["Matcher\nglossário do domínio"]
+    D --> E["RAG\ndesambiguação"]
+    E --> F["💬 Pop-up\ntermo · tradução · definição"]
+    E --> G["💾 Histórico\nSQLite local"]
+    E -.->|opcional| H["☁️ Groq\n(opt-in)"]
 ```
-Áudio (saída do PC / microfone)
-   → detecção de fala (VAD)
-   → transcrição em tempo real (Whisper local)
-   → busca no glossário do domínio ativo
-   → escolha da acepção pelo contexto (RAG)
-   → pop-up com termo, tradução e definição
-   → registro no histórico local (SQLite)
-```
 
-O LLM **não** processa toda frase: o caminho rápido é busca em glossário local. RAG/LLM só entra para resolver ambiguidade ou termos fora do glossário — isso mantém latência, CPU e custo baixos.
+O LLM **não** processa toda frase: o caminho rápido é a busca no glossário local. RAG/LLM só
+entram para resolver ambiguidade ou termos fora do glossário — o que mantém latência, CPU e
+custo baixos.
 
-## Início rápido (desenvolvimento)
+## 🖥️ Destaques da interface
+
+- **Pop-ups** sem borda, sempre no topo e sem receber foco; superfície opaca de alto contraste,
+  pausa no hover, ação “fixar” e **som opcional** ao exibir.
+- **Indicador de estado** flutuante e arrastável, com pulso em tempo real pelo nível de áudio
+  e estados `Carregando`, `Ouvindo`, `Analisando`, `Pausado` e `Erro`.
+- **Hub** único com Status, Configurações, Glossários, Termos, Histórico e Demonstração.
+- **Histórico** com busca, filtro por “aprendido” e período, além de exportação CSV/Markdown.
+- **Bandeja** com atalhos para pausar, abrir o hub, revisar o histórico e ver um exemplo de
+  pop-up — e um segundo atalho global para abrir o histórico diretamente.
+- **Demonstração embutida** com termos reais do glossário ativo, sem áudio nem download de
+  modelo.
+- **Instância única** — reabrir o app traz o hub existente para frente em vez de duplicá-lo.
+
+## 🧰 Stack
+
+<table>
+<tr>
+<td valign="top" width="50%">
+
+**Núcleo & aplicação**
+
+| Camada | Tecnologia |
+|---|---|
+| Linguagem | Python 3.11+ (testado em 3.12) |
+| Núcleo portável | `core/` puro (text, glossary, matcher, rag, llm, repo, config) |
+| Orquestração | `app/` (run, realtime, single-instance, atalhos globais) |
+| Banco de dados | SQLite (WAL, conexão por thread) |
+| Empacotamento | PyInstaller (onedir) + Inno Setup |
+
+</td>
+<td valign="top" width="50%">
+
+**Áudio, IA & interface**
+
+| Camada | Tecnologia |
+|---|---|
+| Captura de áudio | WASAPI loopback + microfone (`PyAudioWPatch`) |
+| Detecção de fala | VAD por energia (adaptável) · candidato: Silero |
+| Transcrição | Whisper local (`faster-whisper`) · Groq (opcional) |
+| Desambiguação | Embeddings (`sentence-transformers`, opcional) / embedder offline |
+| Interface | PySide6 (overlay, bandeja, indicador, hub) |
+
+</td>
+</tr>
+</table>
+
+Detalhes de licenças, versões e free tier ficam em [docs/06-referencias.md](docs/06-referencias.md).
+
+## 📦 Instalação (Windows)
+
+Requisitos: **Windows 10 (build 1809+) ou Windows 11, 64-bit**; CPU com AVX2 recomendada.
+
+1. Baixe `Sopro-Setup-x.y.z.exe` na página de [Releases](../../releases).
+2. Execute o instalador (per-user, **não** exige administrador).
+3. Na primeira execução, aceite o aviso de consentimento (LGPD) e escolha domínio, idioma de
+   saída e fontes de áudio. O modelo de STT é baixado na hora, com progresso no indicador e na
+   bandeja.
+
+A versão portátil (`Sopro-x.y.z-portable.zip`) dispensa instalação: extraia e execute
+`Sopro/Sopro.exe`. O modo demonstração (`Sopro.exe --demo`) funciona sem áudio e sem modelos.
+
+> Ainda não há release pública marcada; o instalador já é gerado localmente e pelo CI. Os
+> artefatos seguem o versionamento descrito em [Versões e changelog](#-versões-e-changelog).
+
+## 🛠️ Uso a partir do fonte
 
 Requisitos: Python 3.11+.
 
 ```bash
-# criar e ativar ambiente virtual
+# criar e ativar o ambiente virtual
 python -m venv .venv
 . .venv/Scripts/activate        # Windows (Git Bash)
 # source .venv/bin/activate     # Linux/macOS
@@ -48,163 +147,146 @@ python -m venv .venv
 # instalar em modo editável com dependências de desenvolvimento
 python -m pip install -e ".[dev]"
 
-# (opcional) motor de STT local — dependência pesada, baixa ~75–460 MB de modelos
-python -m pip install -e ".[stt]"
-
-# (opcional) captura de áudio no Windows (loopback WASAPI + microfone)
-python -m pip install -e ".[audio]"
-
-# (opcional) overlay, bandeja e tela de configurações (PySide6)
-python -m pip install -e ".[ui]"
-
-# (opcional) embeddings reais para desambiguação contextual — sem ele usa o
-# embedder offline por padrão (hashing)
-python -m pip install -e ".[rag]"
+# extras opcionais
+python -m pip install -e ".[stt]"     # STT local (modelos de ~75–460 MB)
+python -m pip install -e ".[audio]"   # captura WASAPI no Windows
+python -m pip install -e ".[ui]"      # overlay, bandeja, indicador e hub (PySide6)
+python -m pip install -e ".[rag]"     # embeddings reais (sem ele, usa o embedder offline)
 
 # rodar o app (precisa de 'ui' e, para áudio real, de 'audio' + 'stt')
 python -m sopro
 
-# modo demonstração: pipeline + UI sem microfone e sem baixar modelos
-# (pop-ups fictícios; os dados vão para uma pasta isolada com --home/SOPRO_HOME)
+# demonstração: pipeline + UI sem microfone e sem baixar modelos
 python -m sopro --demo
 
 # sonda de captura: mede o nível por fonte sem gravar em disco (10 s)
 sopro-capture-probe --seconds 10
 
-# rodar os testes
+# testes e validação do pacote de domínio seed
 pytest -q
-
-# validar o pacote de domínio seed (checklist do docs/07 §6)
 sopro-validate-glossary data/domains/tech-en-pt
 
-# benchmark offline (requer o extra 'stt'); o modelo é baixado e verificado no 1º uso
+# benchmark offline (requer o extra 'stt')
 sopro-benchmark aula.wav anotacao.csv --provider sopro.platform.stt.factory:faster_whisper
 ```
 
-Esses comandos também estão disponíveis pelo task runner `python scripts/tasks.py
-<dev|demo|test|bench|validate|build|install>`, que funciona sem `make`/`just`/`uv`. Veja
-[docs/10-dev-workflow.md](docs/10-dev-workflow.md) para o fluxo completo (incluindo o
-empacotamento portátil).
+Os mesmos comandos estão no task runner `python scripts/tasks.py
+<dev|demo|test|bench|validate|build|install>`, que funciona sem `make`/`just`/`uv`. O fluxo
+completo está em [docs/10-dev-workflow.md](docs/10-dev-workflow.md).
 
-## Estrutura do repositório
+### Build local do executável
+
+```powershell
+python -m pip install -e ".[packaging]"
+powershell -ExecutionPolicy Bypass -File scripts/build-windows.ps1
+# ou: python scripts/tasks.py build
+```
+
+Saída em `dist/`: `Sopro/` (onedir com `Sopro.exe`), `Sopro-<versão>-portable.zip` e
+`SHA256SUMS.txt`. Para o instalador, compile `installer.iss` com
+`iscc /DVersion=<versão> installer.iss`. O workflow `.github/workflows/release.yml` automatiza
+build, instalador e publicação em uma tag `v*`.
+
+## 🗂️ Estrutura do repositório
 
 ```
-docs/                         Documentação de produto e engenharia (01–09)
+docs/                         Documentação de produto e engenharia
 data/domains/                 Pacotes de domínio (glossários)
   └─ tech-en-pt/              Pacote seed: Tecnologia e IA (EN→PT)
 src/sopro/
   ├─ core/                    Núcleo portável (text, glossary, matcher, rag, llm, repo, config)
   ├─ platform/                Camadas dependentes de SO/UI (audio, stt, llm, popup)
-  └─ app/                     Orquestração, ciclo de vida, bandeja, atalhos
+  └─ app/                     Orquestração, ciclo de vida, bandeja e atalhos
 tests/                        Testes automatizados (pytest)
 fixtures/                     Dados de apoio (ex.: template do conjunto de teste)
 ```
 
-**Regra de arquitetura:** `core` não depende de SO nem de UI; `platform` isola isso. Isso viabiliza portar para Linux, macOS e mobile sem reescrever o núcleo.
+**Regra de arquitetura:** `core` não depende de SO nem de UI; `platform` isola essas
+dependências. É isso que permite portar para Linux, macOS e mobile sem reescrever o núcleo.
 
-## Roadmap em 5 fases
+## 🗺️ Roadmap em 5 fases
 
-1. **Validação** — glossário seed e conjunto de teste anotado
-2. **Pipeline em CLI** — captura, VAD, transcrição e matcher medidos
-3. **Overlay e persistência** — pop-up, SQLite, configurações
-4. **RAG e desambiguação** — acepção contextual + provedor Groq opcional
-5. **Empacotamento** — instalador Windows e primeira execução
+| Fase | Foco | Estado |
+|---|---|---|
+| **1. Validação** | Glossário seed e conjunto de teste anotado | ✅ |
+| **2. Pipeline em CLI** | Captura, VAD, transcrição e matcher medidos | ✅ |
+| **3. RAG e desambiguação** | Acepção contextual e provedor Groq opcional | ✅ |
+| **4. Empacotamento** | Instalador Windows, primeira execução, logs, glossários e hub | ✅ |
+| **5. Escala e portabilidade** | Linux/macOS, novos domínios e feedback do usuário | ⏳ |
 
 Detalhes e definições de pronto em [docs/04-roadmap.md](docs/04-roadmap.md).
 
-## Próximos passos (retomada)
+## 🏷️ Versões e changelog
 
-Estado atual em `origin/main`: **Fases 0–3 concluídas** — pipeline completo (captura → VAD →
-matcher → pop-up → histórico), RAG/desambiguação, termos fora do glossário via LLM e provedor
-Groq opcional com aviso de privacidade. 359 testes passando.
+O Sopro segue [Versionamento Semântico](https://semver.org/lang/pt-BR/) (`MAJOR.MINOR.PATCH`):
 
-Próxima sessão começa **revisando o que já foi executado** (rodar `pytest -q`, o validador do
-glossário e `SOPRO_SMOKE_MS=1500 python -m sopro --demo`; conferir as migrações v3/v4) e então
-segue para a **Fase 4 — Empacotamento**: instalador Windows, primeira execução com
-consentimento (LGPD), logs sem conteúdo de fala e tela de gestão de glossários.
+- **MAJOR** — mudanças incompatíveis (formato de pacote de domínio, esquema do banco).
+- **MINOR** — novas funcionalidades compatíveis.
+- **PATCH** — correções compatíveis.
 
-O checklist detalhado e onde paramos estão em [TODO.md](TODO.md) → "Retomada" e no
-[CHANGELOG](CHANGELOG.md) → "Notas de retomada".
+O histórico completo e as notas de retomada ficam no [CHANGELOG.md](CHANGELOG.md), organizado
+no formato [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). A versão atual dos
+artefatos de build é **`0.1.0`**; até a primeira release marcada, as mudanças permanecem na
+seção `Unreleased`. Cada release publicada usa uma tag `vX.Y.Z` em
+[Releases](../../releases), com instalador, zip portátil e `SHA256SUMS.txt`.
 
-## Distribuição e downloads
-
-Ainda **não há release publicada**. Quando a Fase 4 chegar, cada versão será publicada em
-**[Releases](../../releases)** com:
-
-- `Sopro-Setup-x.y.z.exe` — instalador Windows (per-user, sem administrador);
-- `Sopro-x.y.z-portable.zip` — versão portátil;
-- `SHA256SUMS.txt` — hashes para verificação.
-
-Requisitos do executável: **Windows 10 (build 1809+) ou Windows 11, 64-bit**, CPU com AVX2
-recomendada. Os modelos são baixados na primeira execução (instalador enxuto). O guia
-completo de empacotamento, assinatura e CI está em
-[docs/09-empacotamento-e-release.md](docs/09-empacotamento-e-release.md).
-
-### Build local do executável portátil
-
-Gera um `.exe` **standalone** (não exige Python instalado) e um zip portátil:
-
-```powershell
-# instala o ferramental de empacotamento no ambiente (uma vez)
-python -m pip install -e ".[packaging]"
-
-# build + zip + SHA256SUMS.txt em dist/ (roda os testes antes; use -SkipTests para pular)
-powershell -ExecutionPolicy Bypass -File scripts/build-windows.ps1
-# ou, via task runner:
-python scripts/tasks.py build
-```
-
-Saída em `dist/`: `Sopro/` (pasta *onedir* com `Sopro.exe`), `Sopro-<versão>-portable.zip` e
-`SHA256SUMS.txt`. Para rodar a versão portátil, basta extrair o zip e executar
-`Sopro/Sopro.exe` (`--demo` funciona sem áudio nem modelos). Para gerar o instalador com o
-Inno Setup, compile `installer.iss` com `iscc /DVersion=<versão> installer.iss`. O workflow
-`.github/workflows/release.yml` automatiza build, instalador e publicação em uma tag `v*`.
-
-
-## Documentação
+## 📚 Documentação
 
 Toda a documentação de produto e engenharia está em [`docs/`](docs/). Leia na ordem:
 
 | Arquivo | O que tem |
 |---|---|
-| [01-visao-e-requisitos.md](docs/01-visao-e-requisitos.md) | O problema, a visão, requisitos (RF/RNF/RN), critérios de aceite e notas legais |
+| [01-visao-e-requisitos.md](docs/01-visao-e-requisitos.md) | Problema, visão, requisitos (RF/RNF/RN), critérios de aceite e notas legais |
 | [02-arquitetura-e-especificacoes.md](docs/02-arquitetura-e-especificacoes.md) | Pipeline, módulos, contratos, modelo de dados e especificação do pop-up |
 | [03-estado-da-arte.md](docs/03-estado-da-arte.md) | Pesquisa de soluções existentes e a lacuna que o Sopro preenche |
 | [04-roadmap.md](docs/04-roadmap.md) | Fases de implementação, métricas, riscos e marcos |
 | [05-prompts.md](docs/05-prompts.md) | Prompts de desenvolvimento (por fase) e de runtime do app |
 | [06-referencias.md](docs/06-referencias.md) | Links, bibliotecas, limites de free tier e notas legais |
-| [07-glossario-seed-modelo.md](docs/07-glossario-seed-modelo.md) | Formato do pacote de domínio (JSON/CSV), manifesto e entradas de exemplo |
-| [08-distribuicao-e-offline.md](docs/08-distribuicao-e-offline.md) | Modelos sob demanda, verificação de integridade, cache local e o que roda sem internet |
-| [09-empacotamento-e-release.md](docs/09-empacotamento-e-release.md) | Executável standalone, instalador, CI de release e compatibilidade de Windows |
+| [07-glossario-seed-modelo.md](docs/07-glossario-seed-modelo.md) | Formato do pacote de domínio (JSON/CSV), manifesto e exemplos |
+| [08-distribuicao-e-offline.md](docs/08-distribuicao-e-offline.md) | Modelos sob demanda, verificação de integridade, cache e uso offline |
+| [09-empacotamento-e-release.md](docs/09-empacotamento-e-release.md) | Executável standalone, instalador, CI de release e compatibilidade |
 | [10-dev-workflow.md](docs/10-dev-workflow.md) | Executar a partir do fonte, task runner, modo demo e build portátil |
 
 Convenções de leitura: **RF-xx** requisito funcional, **RNF-xx** requisito não funcional,
 **RN-xx** regra de negócio; itens **(verificar)** dependem de confirmação em fonte oficial;
 metas numéricas são **hipóteses iniciais** a calibrar no protótipo.
 
-## Decisões já tomadas
+## 🧭 Decisões de produto
 
 | Tema | Decisão |
 |---|---|
-| Plataforma do protótipo | Windows (arquitetura deve permitir Linux, macOS e, no futuro, mobile) |
+| Nome | **Sopro** (definitivo) |
+| Plataforma do protótipo | Windows; a arquitetura permite Linux, macOS e, no futuro, mobile |
 | Idioma do áudio | Inglês |
 | Idioma de saída | Escolhido pelo usuário (padrão: português do Brasil) |
 | Transcrição | Híbrida: **local por padrão** (Whisper), Groq **opcional** |
-| Área inicial | Tecnologia (com arquitetura de "pacotes de domínio" para outras áreas) |
+| Área inicial | Tecnologia, com arquitetura de “pacotes de domínio” para outras áreas |
 | Custo | Somente free tier / open source |
 | Dados | Tudo local (SQLite); áudio não é gravado por padrão |
-| Distribuição de modelos | **On-demand**: instalador enxuto; download na 1ª execução com verificação de integridade (sha256) |
-| Motor de STT local | Decidido por **benchmark** (faster-whisper vs whisper.cpp), isolado pela interface `STTProvider` |
-| Nome | Provisório. Candidatos: **Sopro**, Tip Fellow, Jargonaut, TermoPop, Glossa Live (verificar INPI, GitHub e domínio) |
+| Distribuição de modelos | **On-demand**: instalador enxuto; download na 1ª execução com sha256 |
+| Motor de STT local | Decidido por **benchmark**, isolado pela interface `STTProvider` |
 
-## Contribuindo
+## 🤝 Contribuindo
 
-Veja [CONTRIBUTING.md](CONTRIBUTING.md) e o [Código de Conduta](CODE_OF_CONDUCT.md). O trabalho segue as regras do **Prompt-mestre** em [docs/05-prompts.md](docs/05-prompts.md).
+Veja [CONTRIBUTING.md](CONTRIBUTING.md) e o [Código de Conduta](CODE_OF_CONDUCT.md). O trabalho
+segue as regras do **Prompt-mestre** em [docs/05-prompts.md](docs/05-prompts.md).
 
-## Segurança e privacidade
+```bash
+python -m pip install -e ".[dev,ui,audio,stt]"
+pytest -q
+```
 
-Processamento local por padrão; áudio em memória e descartado. Provedor em nuvem só com opt-in, aviso e indicador permanente. Gravar/transcrever reuniões pode exigir consentimento dos participantes (LGPD — Lei 13.709/2018). Veja [SECURITY.md](SECURITY.md).
+## 🔒 Segurança e privacidade
 
-## Licença
+Processamento local por padrão; o áudio fica em memória e é descartado. Provedor em nuvem só
+com opt-in, aviso e indicador permanente. Gravar ou transcrever reuniões pode exigir
+consentimento dos participantes (LGPD — Lei 13.709/2018). Veja [SECURITY.md](SECURITY.md).
 
-A definir — pendente de revisão das licenças dos glossários e fontes (ver [docs/06-referencias.md](docs/06-referencias.md)). Ver [LICENSE](LICENSE).
+## 📄 Licença
+
+A definir — pendente de revisão das licenças dos glossários e fontes. Veja
+[docs/06-referencias.md](docs/06-referencias.md) e [LICENSE](LICENSE).
+
+<div align="center">
+<sub>Feito com atenção à privacidade e à legibilidade. ✨</sub>
+</div>
