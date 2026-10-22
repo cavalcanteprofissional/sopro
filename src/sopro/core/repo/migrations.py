@@ -123,11 +123,16 @@ ALTER TABLE generated_entry ADD COLUMN confidence  REAL NOT NULL DEFAULT 0;
 CREATE INDEX idx_generated_entry_term ON generated_entry(term);
 """
 
+SCHEMA_V5 = """
+ALTER TABLE term ADD COLUMN context_hints TEXT NOT NULL DEFAULT '[]';
+"""
+
 MIGRATIONS: tuple[tuple[int, str], ...] = (
     (1, SCHEMA_V1),
     (2, SCHEMA_V2),
     (3, SCHEMA_V3),
     (4, SCHEMA_V4),
+    (5, SCHEMA_V5),
 )
 
 LATEST_VERSION = MIGRATIONS[-1][0]

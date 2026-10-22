@@ -46,6 +46,8 @@ class Settings:
     popup_position: str = "bottom-right"
     popup_sound: bool = True
     """Toca um bipe curto quando um pop-up aparece."""
+    popup_volume: float = 0.25
+    """Volume do bipe dos pop-ups (0-1)."""
     show_source: bool = True
     """Mostra no cartão de onde veio a fala (microfone ou áudio do sistema)."""
     cooldown_s: float = 30.0
@@ -81,6 +83,9 @@ class Settings:
     hotword_listen_device: str | None = None
     """Dispositivo de áudio prioritário para hotword (None = padrão)."""
     hotword_volume: float = 0.4
+    """Volume dos sons de ativação/desativação do hotword (0-1)."""
+    active_tracks: tuple[str, ...] = ()
+    """Trilhas ativas por domínio (lista vazia = todas)."""
     """Volume do som ao ligar/desligar por hotword."""
     popup_volume: float = 0.25
     """Volume do som de popup (suavizado)."""

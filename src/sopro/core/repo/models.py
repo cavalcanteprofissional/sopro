@@ -49,6 +49,7 @@ class TermRecord:
     is_ambiguous: bool = False
     stoplisted: bool = False
     aliases: tuple[str, ...] = field(default_factory=tuple)
+    context_hints: tuple[str, ...] = field(default_factory=tuple)
 
 
 @dataclass(frozen=True)

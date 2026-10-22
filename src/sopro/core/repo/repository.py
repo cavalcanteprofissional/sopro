@@ -7,6 +7,7 @@ escritas são idempotentes o quanto possível para permitir reimportação de pa
 
 from __future__ import annotations
 
+import json
 import struct
 from datetime import datetime, timezone
 from pathlib import Path
@@ -117,15 +118,25 @@ class Repository:
         stoplisted: bool = False,
         aliases: Sequence[str] = (),
         senses: Sequence[SenseInput] = (),
+        context_hints: Sequence[str] = (),
     ) -> int:
         with self._db.transaction() as conn:
             conn.execute(
-                "INSERT INTO term(domain_id, canonical_en, pos, priority, is_ambiguous, stoplisted) "
-                "VALUES(?, ?, ?, ?, ?, ?) "
+                "INSERT INTO term(domain_id, canonical_en, pos, priority, is_ambiguous, stoplisted, context_hints) "
+                "VALUES(?, ?, ?, ?, ?, ?, ?) "
                 "ON CONFLICT(domain_id, canonical_en) DO UPDATE SET "
                 "pos=excluded.pos, priority=excluded.priority, "
-                "is_ambiguous=excluded.is_ambiguous, stoplisted=excluded.stoplisted",
-                (domain_id, canonical_en, pos, priority, int(is_ambiguous), int(stoplisted)),
+                "is_ambiguous=excluded.is_ambiguous, stoplisted=excluded.stoplisted, "
+                "context_hints=excluded.context_hints",
+                (
+                    domain_id,
+                    canonical_en,
+                    pos,
+                    priority,
+                    int(is_ambiguous),
+                    int(stoplisted),
+                    json.dumps(list(context_hints)),
+                ),
             )
             row = conn.execute(
                 "SELECT id FROM term WHERE domain_id = ? AND canonical_en = ?",
@@ -260,7 +271,22 @@ class Repository:
             is_ambiguous=bool(row["is_ambiguous"]),
             stoplisted=bool(row["stoplisted"]),
             aliases=tuple(alias["alias"] for alias in aliases),
+            context_hints=self._hints(row),
         )
+
+    @staticmethod
+    def _hints(row) -> tuple[str, ...]:
+        keys = row.keys()
+        if "context_hints" not in keys:
+            return ()
+        raw = row["context_hints"] or "[]"
+        try:
+            values = json.loads(raw)
+        except (TypeError, ValueError):
+            return ()
+        if not isinstance(values, list):
+            return ()
+        return tuple(str(value) for value in values)
 
     # -- embeddings das acepções (sense_vec) --------------------------------
 

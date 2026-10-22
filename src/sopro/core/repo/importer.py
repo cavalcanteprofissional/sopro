@@ -60,6 +60,7 @@ def import_package(repo: Repository, package_path: str | Path) -> int:
             stoplisted=term.stoplisted,
             aliases=term.aliases,
             senses=senses,
+            context_hints=term.context_hints,
         )
     return domain_id
 
@@ -83,6 +84,7 @@ def export_package_json(
                 "priority": term.priority,
                 "is_ambiguous": term.is_ambiguous,
                 "stoplisted": term.stoplisted,
+                "context_hints": list(term.context_hints),
                 "senses": [
                     {
                         "ordinal": sense.ordinal,
@@ -154,7 +156,7 @@ def build_domain_package(repo: Repository, slug: str) -> DomainPackage:
                 priority=term.priority,
                 is_ambiguous=term.is_ambiguous,
                 stoplisted=term.stoplisted,
-                context_hints=(),
+                context_hints=term.context_hints,
                 senses=tuple(
                     Sense(
                         ordinal=sense.ordinal,
