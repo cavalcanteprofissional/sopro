@@ -427,7 +427,7 @@ com licença do software + "about me" do dev (analisado o GitHub `cavalcanteprof
     créditos; **rodada extra**: hotword (openWakeWord) com palavra configurável, indicador
     clicável, sons distintos e verificação de conflito I/O de áudio.
 
-## Sétima rodada — Nichos/trilhas do glossário `tech` (PLANEJADA)
+## Sétima rodada — Nichos/trilhas do glossário `tech` (EM ANDAMENTO)
 
 O glossário `tech` cresce **em nichos**: a área de tecnologia passa a ter **trilhas**
 (programação, ciência de dados, devops, frontend, backend) como sub-pacotes do **mesmo
@@ -447,28 +447,28 @@ domínio lógico**, com seleção múltipla simultânea pelo usuário.
 
 - [x] Plano registrado neste TODO, em `docs/07 §7` (formato das trilhas) e `docs/02 §7/§9`.
 
-### A7.1 — Modelo de dados (P0)
+### A7.1 — Modelo de dados (P0) · concluído
 
-- [ ] `Manifest`: `parent_slug`, `track`, `track_label`, `track_order`; `Term.tracks`;
+- [x] `Manifest`: `parent_slug`, `track`, `track_label`, `track_order`; `Term.tracks`;
   `Sense.track`; `DomainPackage.track`/`is_track` (`core/glossary/package.py`).
-- [ ] Migração **v6** (`core/repo/migrations.py`): `domain.parent_slug`, `domain.track`,
+- [x] Migração **v6** (`core/repo/migrations.py`): `domain.parent_slug`, `domain.track`,
   `term.tracks`, `sense.track`.
-- [ ] `Repository.upsert_domain(..., parent_slug, track)`, `add_term(..., tracks)`,
+- [x] `Repository.upsert_domain(..., parent_slug, track)`, `add_term(..., tracks)`,
   `SenseInput.track`; `DomainRecord`/`TermRecord`/`SenseRecord` com os campos novos.
-- [ ] `core/repo/importer.py`: import/export preservando os campos novos (hoje o export é lossy).
+- [x] `core/repo/importer.py`: import/export preservando os campos novos (hoje o export é lossy).
 
-### A7.2 — Agregação em runtime (P0)
+### A7.2 — Agregação em runtime (P0) · concluído
 
-- [ ] `core/glossary/aggregate.py`: `aggregate_packages(packages, active_tracks)` → um
+- [x] `core/glossary/aggregate.py`: `aggregate_packages(packages, active_tracks)` → um
   `DomainPackage` unificado (dedup por `canonical_en`, senses com ordinals finais únicos,
   stoplist unificada) + `build_aggregate_from_repo` (modo offline/SQLite).
 
-### A7.3 — Runtime (P0)
+### A7.3 — Runtime (P0) · concluído
 
-- [ ] `app/run.py`: `_load_active_package` → `_load_active_packages` (base + trilhas ativas).
-- [ ] `app/detection.py`: `_persist` busca o termo em todos os domínios ativos.
-- [ ] `Settings.active_tracks` (vazio = todas) e correção do `indicator_enabled` duplicado.
-- [ ] `core/stt/vocabulary.py`: hint aceita vários pacotes (base → trilhas ativas) no limite
+- [x] `app/run.py`: `_load_active_package` → `_load_active_packages` (base + trilhas ativas).
+- [x] `app/detection.py`: `_persist` busca o termo em todos os domínios ativos.
+- [x] `Settings.active_tracks` (vazio = todas) e correção do `indicator_enabled` duplicado.
+- [x] `core/stt/vocabulary.py`: hint aceita vários pacotes (base → trilhas ativas) no limite
   de ~220 tokens.
 
 ### A7.4 — UI (P1)
@@ -478,9 +478,11 @@ domínio lógico**, com seleção múltipla simultânea pelo usuário.
 
 ### A7.5 — Curadoria (P1)
 
-- [ ] Redistribuir a base (201 termos) entre genérico e trilhas.
-- [ ] 5 trilhas × 60–90 termos (programação, data science, devops, frontend, backend).
-- [ ] `sopro-validate-glossary` sem erros em todos os pacotes.
+- [x] Base recuperada do banco (99 termos).
+- [ ] Redistribuir a base entre termos genéricos e trilhas.
+- [x] 5 trilhas geradas com 60–90 termos cada.
+- [ ] Revisar ao menos 20 termos por trilha e marcar `needs_review=false`.
+- [x] `sopro-validate-glossary --all`: 0 erros; restam avisos de revisão humana.
 
 ### A7.6 — Testes, docs e release (P0)
 
@@ -495,6 +497,16 @@ domínio lógico**, com seleção múltipla simultânea pelo usuário.
 - [ ] Camadas de plataforma para Linux e macOS
 - [ ] Avaliar versão mobile (microfone) reutilizando o núcleo
 - [ ] Botão "irrelevante" alimentando a lista de exclusão
+
+## Fase 6 — Curadoria assistida por IA (futura)
+
+- [ ] Registrar proveniência de fontes: obra, edição, página/capítulo, licença e hash.
+- [ ] Extrair candidatos com BoW/TF-IDF e n-gramas.
+- [ ] Agrupar candidatos com embeddings e clusters (BERTopic/HDBSCAN).
+- [ ] Usar LLM para propor rótulos, traduções e definições curtas.
+- [ ] Exigir revisão humana antes de `needs_review=false`.
+- [ ] Publicar pacote com página de fontes e rastreabilidade.
+- [ ] Detalhar o fluxo em `docs/roadmap/` e no `CONTRIBUTING.md`.
 
 ## DX — execução local e modo demo (implementar no final, após as fases)
 

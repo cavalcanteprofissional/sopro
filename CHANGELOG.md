@@ -8,6 +8,12 @@ adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 ## [Unreleased]
 
 ### Added
+- Mapa de fluxos em `docs/roadmap/`: 14 documentos com diagramas Mermaid para usuário,
+  sistema, glossários/trilhas, dados, modelos, build e qualidade, complementando o roadmap
+  cronológico de `docs/04-roadmap.md`.
+- Seção de arquitetura no README com fluxo geral e fluxo de glossário/trilhas; guia detalhado
+  de criação de glossários no `CONTRIBUTING.md`, incluindo a futura curadoria assistida por
+  IA (Fase 6).
 - Estrutura inicial do repositório de código em Python (núcleo portável em `src/sopro/core`,
   camadas de plataforma em `src/sopro/platform` e orquestração em `src/sopro/app`).
 - Contratos de captura de áudio independentes de SO (`core/audio`): `AudioSource`,

@@ -10,11 +10,12 @@
 [![Versão](https://img.shields.io/badge/vers%C3%A3o-0.1.0-blue)](CHANGELOG.md)
 [![Python](https://img.shields.io/badge/python-3.11%20%7C%203.12-3776AB?logo=python&logoColor=white)](pyproject.toml)
 [![Plataforma](https://img.shields.io/badge/plataforma-Windows%2010%2F11-0078D4?logo=windows&logoColor=white)](#instalação-windows)
-[![Testes](https://img.shields.io/badge/testes-403%20passando-success)](tests)
+[![Testes](https://img.shields.io/badge/testes-414%20passando-success)](tests)
 [![Licença](https://img.shields.io/badge/licen%C3%A7a-MIT-blue)](LICENSE)
 
 [Visão geral](#-por-que-o-sopro) ·
 [Como funciona](#-como-funciona) ·
+[Arquitetura](#arquitetura) ·
 [Stack](#-stack) ·
 [Instalação](#-instalação-windows) ·
 [Desenvolvimento](#-uso-a-partir-do-fonte) ·
@@ -36,7 +37,7 @@ interromper a aula e sem roubar o foco da janela.
 > **Status:** protótipo funcional — Fases 0–4 concluídas. O pipeline completo
 > (captura → VAD → transcrição → matcher → pop-up → histórico) roda de ponta a ponta, com
 > instalador Windows, assistente de primeira execução, logs sem conteúdo de fala e gestão de
-> glossários. A próxima etapa é a **Fase 5** (escala e portabilidade). **403 testes
+> glossários. A próxima etapa é a **Fase 5** (escala e portabilidade). **414 testes
 > automatizados** passando.
 
 ## ✨ Por que o Sopro
@@ -68,6 +69,101 @@ flowchart LR
 O LLM **não** processa toda frase: o caminho rápido é a busca no glossário local. RAG/LLM só
 entram para resolver ambiguidade ou termos fora do glossário — o que mantém latência, CPU e
 custo baixos.
+
+## Arquitetura
+
+O Sopro separa três camadas com uma regra rígida: **`core` não conhece sistema operacional,
+Qt nem rede**. `platform` isola tudo que depende do ambiente; `app` compõe o pipeline e o
+ciclo de vida. Áudio, transcrição e SQLite são locais por padrão; nuvem é uma exceção
+explícita.
+
+```mermaid
+flowchart TB
+    subgraph APP["app — orquestração"]
+        RUN["run.py\nciclo de vida e composição"]
+        RT["RealtimePipeline\ncaptura → VAD → STT"]
+        DS["DetectionService\nmatcher → resolvedor → histórico"]
+        UI["Hub, bandeja, overlay,\nindicador e atalhos"]
+    end
+
+    subgraph CORE["core — portável, sem SO/UI"]
+        GL["Glossário\nvalidação, importação\ne agregação"]
+        TEXT["Texto\nnormalização"]
+        MATCH["Matcher\nn-gramas, stoplist,\ncooldown e orçamento"]
+        RES["SenseResolver\ncascata e RAG"]
+        REPO["Repository\nSQLite, histórico\ne configurações"]
+    end
+
+    subgraph PLATFORM["platform — depende do ambiente"]
+        AUDIO["AudioSource\nWASAPI: sistema e microfone"]
+        STT["STTProvider\nWhisper local ou Groq"]
+        LLM["LLMProvider\nlocal ou Groq"]
+        QT["PySide6\noverlay, hub e bandeja"]
+    end
+
+    DATA[("data/domains\nbase + trilhas")]
+    DB[("sopro.db\nSQLite WAL")]
+    CLOUD["Provedores remotos\nopt-in e consentimento"]
+
+    AUDIO --> RT
+    RT --> STT
+    STT --> DS
+    DS --> TEXT
+    TEXT --> MATCH
+    MATCH --> RES
+    RES --> REPO
+    DATA --> GL
+    GL --> REPO
+    REPO --> MATCH
+    REPO --> RES
+    DS --> REPO
+    REPO --> DB
+    DS --> UI
+    UI --> QT
+    RUN --> RT
+    RUN --> DS
+    RUN --> UI
+    RES -.->|ambíguo| LLM
+    STT -.->|opt-in| CLOUD
+    LLM -.->|opt-in| CLOUD
+
+    classDef local fill:#0f172a,stroke:#22d3ee,color:#e2e8f0
+    classDef remote fill:#1e1b4b,stroke:#a78bfa,color:#e2e8f0,stroke-dasharray: 5 3
+    class DATA,DB local
+    class CLOUD remote
+```
+
+### Glossário e trilhas
+
+O conhecimento é composto por uma **base** (`tech-en-pt`) e **trilhas** filhas
+(`tech-programming-en-pt`, `tech-data-science-en-pt`, `tech-devops-en-pt`,
+`tech-frontend-en-pt`, `tech-backend-en-pt`). O runtime importa os pacotes e monta um
+**agregado em memória**: termos são deduplicados, acepções são mescladas e as da trilha ativa
+têm prioridade. `active_tracks` vazio significa “todas as trilhas”.
+
+```mermaid
+flowchart LR
+    BASE["Pacote base\ntech-en-pt"] --> VALIDATE["Validação\n--all --strict"]
+    TRACKS["Trilhas\nparent_slug = tech-en-pt"] --> VALIDATE
+    VALIDATE --> IMPORT["Importação\nupsert no SQLite"]
+    IMPORT --> DB[("SQLite\ndomain, term, sense")]
+    ACTIVE["Settings\nactive_tracks"] --> AGG["aggregate_packages()"]
+    DB --> AGG
+    AGG --> PACKAGE["Pacote agregado\ntermos e acepções únicos"]
+    PACKAGE --> MATCH["Matcher"]
+    PACKAGE --> RAG["SenseResolver\nembed_aggregate()"]
+    MATCH --> DET["DetectionService"]
+    RAG --> DET
+    DET --> SAVE["Histórico\nno domínio de origem"]
+```
+
+Um pacote é apenas conteúdo: criar um glossário ou uma trilha **não exige mudar o núcleo**.
+O formato, o validador e o passo a passo para contribuidores estão em
+[CONTRIBUTING.md](CONTRIBUTING.md#criando-um-glossário-ou-uma-trilha); os fluxos completos,
+em [`docs/roadmap/`](docs/roadmap/README.md) — em especial
+[01-visao-geral.md](docs/roadmap/01-visao-geral.md),
+[08-glossarios-e-trilhas.md](docs/roadmap/08-glossarios-e-trilhas.md) e
+[09-construcao-de-glossario.md](docs/roadmap/09-construcao-de-glossario.md).
 
 ## 🖥️ Destaques da interface
 
@@ -246,6 +342,7 @@ Toda a documentação de produto e engenharia está em [`docs/`](docs/). Leia na
 | [08-distribuicao-e-offline.md](docs/08-distribuicao-e-offline.md) | Modelos sob demanda, verificação de integridade, cache e uso offline |
 | [09-empacotamento-e-release.md](docs/09-empacotamento-e-release.md) | Executável standalone, instalador, CI de release e compatibilidade |
 | [10-dev-workflow.md](docs/10-dev-workflow.md) | Executar a partir do fonte, task runner, modo demo e build portátil |
+| [roadmap/README.md](docs/roadmap/README.md) | Mapa de fluxos de usuário, sistema e engenharia, com diagramas Mermaid |
 
 Convenções de leitura: **RF-xx** requisito funcional, **RNF-xx** requisito não funcional,
 **RN-xx** regra de negócio; itens **(verificar)** dependem de confirmação em fonte oficial;

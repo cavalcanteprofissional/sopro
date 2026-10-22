@@ -2,6 +2,10 @@
 
 Estimativas em semanas de trabalho parcial; ajuste conforme sua disponibilidade. Cada fase termina com uma **definição de pronto (DoD)** verificável.
 
+> Os fluxos de usuário, sistema e engenharia — como cada parte funciona hoje e como se
+> conecta — estão no [mapa de fluxos](roadmap/README.md). Este documento trata da **ordem
+> cronológica** das fases; ele não substitui os fluxos.
+
 ## Fase 0 — Validação (1 semana)
 
 **Objetivo:** provar que o conceito funciona antes de construir.
@@ -64,6 +68,20 @@ cumprido. *Estado: concluída (inclui a terceira rodada de ajustes A4.0–A4.7).
 - Camadas de plataforma para Linux e macOS.
 - Avaliar versão mobile (microfone) reutilizando o núcleo.
 - Feedback de usuário: botão "irrelevante" alimentando a lista de exclusão.
+
+## Fase 6 — Curadoria assistida por IA (futura)
+
+Objetivo: acelerar a criação de trilhas a partir de livros e artigos, **sem publicar conteúdo
+gerado automaticamente**. A curadoria humana continua sendo o portão de entrada.
+
+1. **Proveniência**: registrar obra, edição, página/capítulo, licença e hash da fonte.
+2. **Candidatos**: BoW/TF-IDF e n-gramas para levantar termos recorrentes.
+3. **Agrupamento**: embeddings e clusters (BERTopic/HDBSCAN) para sugerir trilhas e temas.
+4. **Rótulos e definições**: LLM propõe nome, tradução e definição curta por acepção.
+5. **Revisão humana**: aprovar, editar ou rejeitar; `needs_review=false` só após revisão.
+6. **Publicação**: gerar pacote, página em `docs/trilhas/` e registro de fontes.
+
+O detalhamento operacional fica em [CONTRIBUTING.md](../CONTRIBUTING.md#curadoria-assistida-por-ia--fase-futura).
 
 ## Métricas de acompanhamento
 
