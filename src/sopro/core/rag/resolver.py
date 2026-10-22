@@ -15,7 +15,7 @@ from typing import Protocol
 from sopro.core.glossary.package import Sense, Term
 from sopro.core.rag.embeddings import EmbeddingProvider, cosine, default_embedder
 
-RESOLVE_METHODS = ("single_sense", "domain_tag", "vector", "llm")
+RESOLVE_METHODS = ("single_sense", "track", "domain_tag", "vector", "llm")
 DEFAULT_THRESHOLD = 0.25
 VECTOR_FALLBACK_SCORE = 0.0
 
@@ -65,9 +65,11 @@ class SenseResolver:
         llm: SenseChooser | None = None,
         threshold: float = DEFAULT_THRESHOLD,
         vectors: Mapping[object, Sequence[float]] | None = None,
+        active_tracks: tuple[str, ...] = (),
     ) -> None:
         self._embedder = embedder or default_embedder()
         self._domain_tag = domain_tag
+        self._active_tracks = tuple(active_tracks)
         self._llm = llm
         self._threshold = threshold
         self._known = {key: list(vector) for key, vector in (vectors or {}).items()}
@@ -93,6 +95,15 @@ class SenseResolver:
             return Resolution(senses[0], 1.0, "single_sense")
 
         candidates = list(senses)
+        if self._active_tracks:
+            selected = set(self._active_tracks)
+            preferred = [sense for sense in senses if sense.track in selected]
+            if len(preferred) == 1:
+                return Resolution(preferred[0], 0.95, "track")
+            if preferred:
+                generic = [sense for sense in senses if not sense.track]
+                others = [sense for sense in senses if sense not in preferred and sense not in generic]
+                candidates = preferred + generic + others
         if self._domain_tag:
             tagged = list(term.domain_senses(self._domain_tag))
             if len(tagged) == 1:

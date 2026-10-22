@@ -34,7 +34,7 @@ from sopro.core.rag.resolver import (
     sense_key,
     sense_text,
 )
-from sopro.core.rag.store import embed_domain, load_vectors
+from sopro.core.rag.store import embed_aggregate, embed_domain, load_vectors
 
 __all__ = [
     "Case",
@@ -56,6 +56,7 @@ __all__ = [
     "cosine",
     "create_embedder",
     "default_embedder",
+    "embed_aggregate",
     "embed_domain",
     "evaluate",
     "load_vectors",

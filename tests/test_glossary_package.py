@@ -65,7 +65,7 @@ def test_load_real_seed_package():
     package = load_package(PACKAGE_DIR)
 
     assert package.manifest.slug == "tech-en-pt"
-    assert package.manifest.version == "0.1.0"
+    assert package.manifest.version == "0.2.0"
     assert package.domain_tag == "tech"
     assert len(package.terms) >= 50
     assert "model" in package.stoplist

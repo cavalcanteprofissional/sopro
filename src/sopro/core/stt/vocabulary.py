@@ -21,12 +21,24 @@ def _token_count(text: str) -> int:
 
 
 def vocabulary_hint(
-    package: DomainPackage, limit: int = DEFAULT_VOCAB_LIMIT
+    package: DomainPackage,
+    limit: int = DEFAULT_VOCAB_LIMIT,
+    active_tracks: tuple[str, ...] = (),
 ) -> tuple[str, ...]:
-    """Termos e aliases prioritários do pacote, truncados por ~limite de tokens."""
+    """Termos e aliases prioritários do pacote, truncados por ~limite de tokens.
+
+    Termos das trilhas ativas vêm antes dos genéricos, preservando ``priority``
+    dentro de cada grupo.
+    """
     if limit <= 0:
         return ()
-    ordered = sorted(package.terms, key=lambda term: term.priority)
+    selected = set(active_tracks)
+
+    def order(term) -> tuple[int, int, str]:
+        in_track = bool(selected) and bool(set(term.tracks) & selected)
+        return (0 if in_track else 1, term.priority, term.canonical_en)
+
+    ordered = sorted(package.terms, key=order)
     seen: set[str] = set()
     hint: list[str] = []
     tokens = 0

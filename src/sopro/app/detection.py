@@ -10,6 +10,7 @@ Qt, captura de áudio) ficam em ``sopro.platform`` e são injetados pelo app.
 from __future__ import annotations
 
 import time
+from collections.abc import Sequence
 from dataclasses import dataclass, replace
 from typing import Callable
 
@@ -42,6 +43,7 @@ class Detection:
     register: str | None = None
     resolve_method: str = ""
     detection_id: int | None = None
+    track: str | None = None
 
 
 def _primary_sense(term: Term) -> Sense | None:
@@ -63,6 +65,8 @@ class DetectionService:
         matcher_config: MatcherConfig | None = None,
         repo: Repository | None = None,
         domain_id: int | None = None,
+        domain_ids: Sequence[int] = (),
+        active_tracks: tuple[str, ...] = (),
         session_id: int | None = None,
         popup: PopupQueue | None = None,
         resolver: SenseResolver | None = None,
@@ -81,6 +85,9 @@ class DetectionService:
         self._matcher = matcher or Matcher(package, matcher_config)
         self._repo = repo
         self._domain_id = domain_id
+        self._domain_ids = tuple(domain_ids) or (
+            (domain_id,) if domain_id is not None else ()
+        )
         self._session_id = session_id
         self._popup = popup
         self._resolver = resolver
@@ -96,9 +103,9 @@ class DetectionService:
         self._save_context = save_context
         self._language = language
         self._hint = (
-            vocabulary_hint(package, vocab_limit)
+            vocabulary_hint(package, vocab_limit, active_tracks)
             if vocab_limit is not None
-            else vocabulary_hint(package)
+            else vocabulary_hint(package, active_tracks=active_tracks)
         )
         self._clock = clock or time.monotonic
 
@@ -218,6 +225,7 @@ class DetectionService:
             definition=sense.definition_pt if sense else "",
             register=sense.register if sense else None,
             resolve_method=method,
+            track=sense.track if sense else None,
         )
 
     def _persist(self, detection: Detection, text: str) -> int | None:
@@ -225,14 +233,19 @@ class DetectionService:
             return None
         term_id = None
         sense_id = None
-        if self._domain_id is not None:
-            record = self._repo.get_term_by_canonical(self._domain_id, detection.term)
-            if record is not None:
-                term_id = record.id
-                for sense in self._repo.list_senses(term_id):
-                    if sense.translation_pt == detection.translation:
-                        sense_id = sense.id
-                        break
+        for domain_id in self._domain_ids:
+            record = self._repo.get_term_by_canonical(domain_id, detection.term)
+            if record is None:
+                continue
+            term_id = record.id
+            for sense in self._repo.list_senses(term_id):
+                same_translation = sense.translation_pt == detection.translation
+                same_track = not detection.track or sense.track == detection.track
+                if same_translation and same_track:
+                    sense_id = sense.id
+                    break
+            if sense_id is not None:
+                break
         return self._repo.add_detection(
             self._session_id,
             term_id=term_id,

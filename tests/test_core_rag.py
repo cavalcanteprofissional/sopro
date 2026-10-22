@@ -258,3 +258,31 @@ def test_sense_text_includes_example_and_tag():
 def test_load_package_domain_tag_is_prefix():
     package = load_package(SEED_PATH)
     assert package.domain_tag == "tech"
+
+
+def test_resolver_prefers_active_track_sense():
+    term = Term(
+        canonical_en="cache",
+        pos="noun",
+        senses=(
+            _sense(1, "tech", "Armazenamento genérico."),
+            Sense(
+                ordinal=2,
+                domain_tag="tech",
+                translation_pt="cache de servidor",
+                definition_pt="Camada de cache no servidor.",
+                track="backend",
+            ),
+        ),
+    )
+    resolver = SenseResolver(
+        embedder=HashingEmbedder(dim=64),
+        domain_tag="tech",
+        active_tracks=("backend",),
+    )
+
+    resolution = resolver.resolve(term, "the server cache stores sessions")
+
+    assert resolution is not None
+    assert resolution.method == "track"
+    assert resolution.sense.track == "backend"

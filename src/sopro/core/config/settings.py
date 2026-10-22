@@ -86,9 +86,6 @@ class Settings:
     """Volume dos sons de ativação/desativação do hotword (0-1)."""
     active_tracks: tuple[str, ...] = ()
     """Trilhas ativas por domínio (lista vazia = todas)."""
-    """Volume do som ao ligar/desligar por hotword."""
-    popup_volume: float = 0.25
-    """Volume do som de popup (suavizado)."""
 
     def __post_init__(self) -> None:
         self.validate()
@@ -149,7 +146,7 @@ class Settings:
         kwargs: dict[str, Any] = {
             key: value for key, value in data.items() if key in known
         }
-        for name in ("audio_sources", "active_domains"):
+        for name in ("audio_sources", "active_domains", "active_tracks"):
             if name in kwargs:
                 kwargs[name] = tuple(kwargs[name])
         try:

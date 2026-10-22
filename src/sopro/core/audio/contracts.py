@@ -16,9 +16,19 @@ SAMPLE_RATE_HZ = 16_000
 SOURCE_SYSTEM = "system"
 SOURCE_MIC = "mic"
 SOURCE_LABELS = (SOURCE_SYSTEM, SOURCE_MIC)
+SOURCE_NAMES = {
+    SOURCE_SYSTEM: ("Sistema", "Áudio do sistema"),
+    SOURCE_MIC: ("Microfone", "Microfone"),
+}
 DEFAULT_FRAME_MS = 30
 MIN_FRAME_MS = 10
 MAX_FRAME_MS = 100
+
+
+def source_label(source: str, short: bool = False) -> str:
+    """Rótulo legível da fonte de áudio (``system``/``mic``)."""
+    short_name, full_name = SOURCE_NAMES.get(source, (source, source))
+    return short_name if short else full_name
 
 
 class AudioError(Exception):

@@ -16,7 +16,7 @@ import os
 import subprocess
 import sys
 import threading
-from dataclasses import replace
+from dataclasses import dataclass, replace
 from pathlib import Path
 
 from sopro.app.detection import DetectionService
@@ -33,7 +33,7 @@ from sopro.core.config import (
 from sopro.core.hotkeys import HotkeyError, parse_hotkey
 from sopro.core.paths import data_path
 from sopro.core.rag import default_embedder
-from sopro.core.repo import Database, Repository, build_domain_package, import_package
+from sopro.core.repo import Database, Repository, import_package
 from sopro.core.audio.io_check import check_audio_io_conflict
 from sopro.platform.hotkey import create_listener
 
@@ -79,25 +79,85 @@ def _load_settings(repo: Repository) -> Settings:
         return Settings()
 
 
-def _load_active_package(repo: Repository, settings: Settings, domains_root: Path):
-    """Importa o primeiro domínio ativo disponível e devolve (pacote, domain_id).
+@dataclass(frozen=True)
+class LoadedGlossary:
+    """Glossário agregado em memória e suas origens persistidas."""
 
-    Se o domínio configurado não existir no disco, cai para o primeiro pacote
-    disponível; falha com mensagem clara quando não há nenhum.
+    package: object
+    domain_ids: tuple[int, ...]
+    sources: tuple[tuple[object, int], ...]
+    active_tracks: tuple[str, ...]
+
+
+def _load_active_glossary(
+    repo: Repository, settings: Settings, domains_root: Path
+) -> LoadedGlossary:
+    """Importa base + trilhas ativas e devolve o pacote agregado.
+
+    ``active_domains`` pode apontar para a base e/ou diretamente para trilhas.
+    ``active_tracks`` vazio significa todas as trilhas filhas da base.
     """
-    from sopro.core.glossary import list_package_slugs
+    from sopro.core.glossary import (
+        aggregate_packages,
+        list_package_slugs,
+        load_package,
+    )
 
     available = list_package_slugs(domains_root)
-    slug = next((s for s in settings.active_domains if s in available), None)
-    if slug is None and available:
-        slug = sorted(available)[0]
-    if slug is None:
+    if not available:
         raise FileNotFoundError(
             f"nenhum pacote de domínio encontrado em {domains_root}"
         )
-    package_dir = domains_root / slug
-    domain_id = import_package(repo, package_dir)
-    return build_domain_package(repo, slug), domain_id
+    packages = {slug: load_package(domains_root / slug) for slug in available}
+    configured = [
+        packages[slug] for slug in settings.active_domains if slug in packages
+    ]
+    bases = [
+        package
+        for package in packages.values()
+        if not package.manifest.parent_slug
+    ]
+    base = next((p for p in configured if p in bases), None)
+    if base is None:
+        for package in configured:
+            parent = packages.get(package.manifest.parent_slug or "")
+            if parent is not None and not parent.manifest.parent_slug:
+                base = parent
+                break
+    if base is None:
+        base = sorted(bases, key=lambda p: p.manifest.slug)[0]
+    base_slug = base.manifest.slug
+
+    tracks = [
+        package
+        for package in packages.values()
+        if package.manifest.parent_slug == base_slug
+    ]
+    active_tracks = tuple(settings.active_tracks)
+    if not active_tracks:
+        configured_tracks = {
+            package.manifest.track
+            for package in configured
+            if package.manifest.parent_slug == base_slug and package.manifest.track
+        }
+        active_tracks = tuple(sorted(configured_tracks))
+    selected = [
+        package
+        for package in tracks
+        if not active_tracks or package.manifest.track in active_tracks
+    ]
+
+    sources: list[tuple[object, int]] = []
+    sources.append((base, import_package(repo, base.path)))
+    for package in selected:
+        sources.append((package, import_package(repo, package.path)))
+    aggregate = aggregate_packages(base, selected, active_tracks)
+    return LoadedGlossary(
+        package=aggregate,
+        domain_ids=tuple(domain_id for _package, domain_id in sources),
+        sources=tuple(sources),
+        active_tracks=active_tracks,
+    )
 
 
 def _matcher_config(settings: Settings):
@@ -152,33 +212,34 @@ def _build_generated(settings, package, repo, provider):
     return service, RateLimiter(settings.llm_candidates_per_minute)
 
 
-def _build_resolver(repo, package, domain_id, settings, provider):
-    """Vetoriza as acepções (cache no banco) e monta o resolvedor (docs/02 §3.4)."""
-    from sopro.core.rag import SenseResolver, embed_domain, load_vectors
+def _build_resolver(repo, loaded, settings, provider):
+    """Vetoriza as acepções do agregado e monta o resolvedor (docs/02 §3.4)."""
+    from sopro.core.rag import SenseResolver, embed_aggregate
 
     embedder = default_embedder()
-    embed_domain(repo, package, domain_id, embedder)
-    vectors = load_vectors(repo, package, domain_id, model=embedder.name)
+    vectors = embed_aggregate(repo, loaded.package, loaded.sources, embedder)
     return SenseResolver(
         embedder=embedder,
-        domain_tag=package.domain_tag,
-        llm=_build_chooser(settings, package, provider),
+        domain_tag=loaded.package.domain_tag,
+        llm=_build_chooser(settings, loaded.package, provider),
         threshold=settings.resolution_threshold,
         vectors=vectors,
+        active_tracks=loaded.active_tracks,
     )
 
 
-def _build_service(settings, package, domain_id, repo, session_id, provider):
+def _build_service(settings, loaded, repo, session_id, provider):
     llm = _build_llm_provider(settings)
-    generated, limiter = _build_generated(settings, package, repo, llm)
+    generated, limiter = _build_generated(settings, loaded.package, repo, llm)
     return DetectionService(
         provider,
-        package,
+        loaded.package,
         matcher_config=_matcher_config(settings),
         repo=repo,
-        domain_id=domain_id,
+        domain_ids=loaded.domain_ids,
+        active_tracks=loaded.active_tracks,
         session_id=session_id,
-        resolver=_build_resolver(repo, package, domain_id, settings, llm),
+        resolver=_build_resolver(repo, loaded, settings, llm),
         generated=generated,
         candidate_limiter=limiter,
         context_window_s=settings.resolution_window_s,
@@ -376,7 +437,7 @@ def _run(args, home, repo, settings, domains_root, instance=None) -> int:
     status_bridge = StatusBridge()
 
     try:
-        package, domain_id = _load_active_package(repo, settings, domains_root)
+        loaded = _load_active_glossary(repo, settings, domains_root)
     except Exception as exc:  # noqa: BLE001 - erro amigável, sem derrubar o app
         log.exception("falha ao carregar o glossário ativo")
         show_error(exc)
@@ -462,7 +523,7 @@ def _run(args, home, repo, settings, domains_root, instance=None) -> int:
 
     from sopro.platform.popup.demo_player import DemoPlayer, build_demo_detections
 
-    demo_detections = build_demo_detections(package)
+    demo_detections = build_demo_detections(loaded.package)
     demo_pairs = [(detection.term, detection.translation or "") for detection in demo_detections]
     demo_player = DemoPlayer(demo_detections)
     demo_player.card.connect(overlay.present)
@@ -518,7 +579,7 @@ def _run(args, home, repo, settings, domains_root, instance=None) -> int:
                     provider_holder["obj"] = provider
                     provider.warmup()
                     service = _build_service(
-                        settings, package, domain_id, repo, session_id, provider
+                        settings, loaded, repo, session_id, provider
                     )
                     pipeline = RealtimePipeline(
                         service,
@@ -568,8 +629,7 @@ def _run(args, home, repo, settings, domains_root, instance=None) -> int:
         provider_holder["obj"] = DemoProvider()
         service = _build_service(
             replace(settings, cooldown_s=0.0, budget_per_minute=120),
-            package,
-            domain_id,
+            loaded,
             repo,
             session_holder["id"],
             provider_holder["obj"],

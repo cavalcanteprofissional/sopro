@@ -8,6 +8,7 @@ emitem sinais; quem decide é o orquestrador do app.
 from __future__ import annotations
 
 from enum import StrEnum
+from pathlib import Path
 
 from PySide6.QtCore import QObject, Qt, Signal
 from PySide6.QtGui import QAction, QColor, QIcon, QPainter, QPixmap
@@ -36,6 +37,13 @@ STATE_LABELS = {
     TrayState.PAUSED: "Pausado",
     TrayState.ERROR: "Erro",
 }
+
+
+def brand_icon() -> QIcon:
+    """Ícone de marca do aplicativo (fallback para o disco de estado)."""
+    path = Path(__file__).with_name("assets") / "sopro.ico"
+    icon = QIcon(str(path))
+    return icon if not icon.isNull() else state_icon(TrayState.LISTENING)
 
 
 def state_icon(state: TrayState) -> QIcon:
