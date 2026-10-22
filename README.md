@@ -10,7 +10,7 @@
 [![Versão](https://img.shields.io/badge/vers%C3%A3o-0.1.0-blue)](CHANGELOG.md)
 [![Python](https://img.shields.io/badge/python-3.11%20%7C%203.12-3776AB?logo=python&logoColor=white)](pyproject.toml)
 [![Plataforma](https://img.shields.io/badge/plataforma-Windows%2010%2F11-0078D4?logo=windows&logoColor=white)](#instalação-windows)
-[![Testes](https://img.shields.io/badge/testes-414%20passando-success)](tests)
+[![Testes](https://img.shields.io/badge/testes-416%20passando-success)](tests)
 [![Licença](https://img.shields.io/badge/licen%C3%A7a-MIT-blue)](LICENSE)
 
 [Visão geral](#-por-que-o-sopro) ·
@@ -37,7 +37,7 @@ interromper a aula e sem roubar o foco da janela.
 > **Status:** protótipo funcional — Fases 0–4 concluídas. O pipeline completo
 > (captura → VAD → transcrição → matcher → pop-up → histórico) roda de ponta a ponta, com
 > instalador Windows, assistente de primeira execução, logs sem conteúdo de fala e gestão de
-> glossários. A próxima etapa é a **Fase 5** (escala e portabilidade). **414 testes
+> glossários. A próxima etapa é a **Fase 5** (escala e portabilidade). **416 testes
 > automatizados** passando.
 
 ## ✨ Por que o Sopro

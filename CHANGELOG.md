@@ -200,6 +200,10 @@ adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
   claro/escuro.
 
 ### Fixed
+- **Inicialização do executável congelado (`--demo`)**: `app_stylesheet` passou a existir em
+  `platform/popup/theme.py` (tema global de hub/diálogos) e `MatcherConfig` não recebe mais o
+  argumento inexistente `fuzzy`. Sem isso, o app encerrava com `ImportError`/`TypeError` antes
+  de abrir o pipeline.
 - **Erro de SQLite ao iniciar a captura real** (`SQLite objects created in a thread can only
   be used in that same thread`): o banco em arquivo passou a usar uma conexão por thread
   (`threading.local`), com WAL e `busy_timeout`, permitindo que a thread de áudio grave

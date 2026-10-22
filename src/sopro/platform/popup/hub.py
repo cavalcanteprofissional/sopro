@@ -56,6 +56,7 @@ class HubWindow(QWidget):
         demo_pairs: Sequence[tuple[str, str]] = (),
     ) -> None:
         super().__init__(parent)
+        self.setObjectName("SoproHub")
         self.setWindowTitle("Sopro")
         self.setMinimumSize(720, 520)
         self._repo = repo

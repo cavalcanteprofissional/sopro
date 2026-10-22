@@ -166,7 +166,6 @@ def _matcher_config(settings: Settings):
     return MatcherConfig(
         cooldown_s=settings.cooldown_s,
         max_popups_per_minute=settings.budget_per_minute,
-        fuzzy=getattr(settings, "matcher_fuzzy", True),
     )
 
 

@@ -56,6 +56,70 @@ def palette(theme: str) -> Palette:
     return PALETTES.get(theme, PALETTES[LIGHT])
 
 
+def app_stylesheet(theme: str) -> str:
+    """Folha global de diálogos e do hub; o cartão tem QSS próprio."""
+    colors = palette(theme)
+    return f"""
+    QWidget#SoproHub, QDialog {{
+        background-color: {colors.surface};
+        color: {colors.text};
+    }}
+    QWidget#SoproHub QLabel, QDialog QLabel,
+    QWidget#SoproHub QCheckBox, QDialog QCheckBox,
+    QWidget#SoproHub QRadioButton, QDialog QRadioButton {{
+        color: {colors.text};
+    }}
+    QLineEdit, QComboBox, QSpinBox, QDoubleSpinBox {{
+        background-color: {colors.surface};
+        color: {colors.text};
+        border: 1px solid {colors.border};
+        border-radius: 4px;
+        padding: 3px 6px;
+    }}
+    QPushButton {{
+        background-color: {colors.divider};
+        color: {colors.text};
+        border: 1px solid {colors.border};
+        border-radius: 4px;
+        padding: 4px 10px;
+    }}
+    QPushButton:hover {{
+        background-color: {colors.border};
+    }}
+    QPushButton:disabled {{
+        color: {colors.muted};
+    }}
+    QListWidget, QTableWidget, QTreeWidget {{
+        background-color: {colors.surface};
+        color: {colors.text};
+        border: 1px solid {colors.border};
+    }}
+    QHeaderView::section {{
+        background-color: {colors.divider};
+        color: {colors.text};
+        border: none;
+        padding: 4px;
+    }}
+    QGroupBox {{
+        border: 1px solid {colors.border};
+        border-radius: 6px;
+        margin-top: 10px;
+        padding-top: 6px;
+    }}
+    QGroupBox::title {{
+        color: {colors.muted};
+        subcontrol-origin: margin;
+        left: 8px;
+        padding: 0 3px;
+    }}
+    QToolTip {{
+        background-color: {colors.text};
+        color: {colors.surface};
+        border: 1px solid {colors.border};
+    }}
+    """
+
+
 def card_stylesheet(theme: str) -> str:
     """Folha de estilo dos textos e botões do cartão (o fundo é pintado à mão)."""
     colors = palette(theme)
