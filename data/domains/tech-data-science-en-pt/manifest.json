@@ -1,0 +1,19 @@
+{
+  "slug": "tech-data-science-en-pt",
+  "name": "Tecnologia — Ciência de Dados (EN→PT)",
+  "version": "0.1.0",
+  "source_lang": "en",
+  "output_langs": [
+    "pt-BR"
+  ],
+  "license": "MIT",
+  "authors": [
+    "Lucas Cavalcante dos Santos"
+  ],
+  "created_at": "2026-10-22",
+  "embedding_model": null,
+  "parent_slug": "tech-en-pt",
+  "track": "data-science",
+  "track_label": "Ciência de Dados e Machine Learning",
+  "track_order": 2
+}

@@ -1,0 +1,19 @@
+{
+  "slug": "tech-frontend-en-pt",
+  "name": "Tecnologia — Frontend (EN→PT)",
+  "version": "0.1.0",
+  "source_lang": "en",
+  "output_langs": [
+    "pt-BR"
+  ],
+  "license": "MIT",
+  "authors": [
+    "Lucas Cavalcante dos Santos"
+  ],
+  "created_at": "2026-10-22",
+  "embedding_model": null,
+  "parent_slug": "tech-en-pt",
+  "track": "frontend",
+  "track_label": "Frontend e Experiência Web",
+  "track_order": 4
+}

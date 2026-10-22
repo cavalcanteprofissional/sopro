@@ -1,0 +1,1506 @@
+[
+  {
+    "canonical_en": "abstract syntax tree",
+    "pos": "noun",
+    "aliases": [
+      "AST"
+    ],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "árvore sintática abstrata",
+        "definition_pt": "Representação em árvore da estrutura do código.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "abstraction",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "abstração",
+        "definition_pt": "Exposição apenas do essencial, escondendo detalhes.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "annotation",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "anotação",
+        "definition_pt": "Metadado anexado a código para ferramentas ou runtime.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "argument",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "argumento",
+        "definition_pt": "Valor concreto passado a uma função.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "array",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "vetor",
+        "definition_pt": "Coleção indexada de elementos do mesmo tipo.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "boolean",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "booleano",
+        "definition_pt": "Tipo com os valores verdadeiro e falso.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "bytecode",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "bytecode",
+        "definition_pt": "Código intermediário executado por uma máquina virtual.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "class",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "classe",
+        "definition_pt": "Molde que define estrutura e comportamento de objetos.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "closure",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "fechamento",
+        "definition_pt": "Função que captura variáveis do escopo onde foi criada.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "conditional",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "condicional",
+        "definition_pt": "Estrutura que escolhe um caminho conforme uma condição.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "constant",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "constante",
+        "definition_pt": "Valor nomeado que não muda durante a execução.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "constructor",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "construtor",
+        "definition_pt": "Rotina que inicializa uma nova instância.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "deadlock",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "impasse",
+        "definition_pt": "Espera circular em que processos não avançam.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "decorator",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "decorador",
+        "definition_pt": "Função que envolve outra para acrescentar comportamento.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "dictionary",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "dicionário",
+        "definition_pt": "Coleção de pares chave-valor.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "encapsulation",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "encapsulamento",
+        "definition_pt": "Ocultação do estado interno atrás de métodos.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "exception",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "exceção",
+        "definition_pt": "Evento que interrompe o fluxo normal e pode ser tratado.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "float",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "ponto flutuante",
+        "definition_pt": "Tipo numérico com parte fracionária.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "function",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "função",
+        "definition_pt": "Bloco nomeado que recebe entradas e devolve um resultado.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "garbage collection",
+    "pos": "noun",
+    "aliases": [
+      "GC"
+    ],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "coleta de lixo",
+        "definition_pt": "Liberação automática de memória não usada.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "generator",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "gerador",
+        "definition_pt": "Função que produz valores sob demanda.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "generic",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "genérico",
+        "definition_pt": "Código parametrizado por um ou mais tipos.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "higher-order function",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "função de ordem superior",
+        "definition_pt": "Função que recebe ou devolve outra função.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "immutability",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "imutabilidade",
+        "definition_pt": "Propriedade de não permitir alteração após a criação.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "inheritance",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "herança",
+        "definition_pt": "Reuso de membros de uma classe por outra.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "integer",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "inteiro",
+        "definition_pt": "Tipo numérico sem parte fracionária.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "integration testing",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "teste de integração",
+        "definition_pt": "Verificação da interação entre componentes do sistema.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "interface",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "interface",
+        "definition_pt": "Contrato de métodos que uma implementação deve cumprir.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "iteration",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "iteração",
+        "definition_pt": "Repetição de um bloco sobre uma sequência.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "iterator",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "iterador",
+        "definition_pt": "Objeto que percorre elementos um a um.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "lambda",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "expressão lambda",
+        "definition_pt": "Função anônima e concisa.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "list",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "lista",
+        "definition_pt": "Coleção ordenada e mutável de elementos.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "loop",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "laço",
+        "definition_pt": "Estrutura que repete instruções até uma condição.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "memoization",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "memoização",
+        "definition_pt": "Cache de resultados para evitar cálculos repetidos.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "memory leak",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "vazamento de memória",
+        "definition_pt": "Memória alocada que deixa de ser liberada.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "method",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "método",
+        "definition_pt": "Função associada a um objeto ou classe.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "mutex",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "mutex",
+        "definition_pt": "Trava que garante acesso exclusivo a um recurso.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "null pointer",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "ponteiro nulo",
+        "definition_pt": "Referência inválida que não aponta para um objeto.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "object",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "objeto",
+        "definition_pt": "Instância que reúne dados e comportamento.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "parameter",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "parâmetro",
+        "definition_pt": "Nome declarado na assinatura de uma função.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "parser",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "analisador sintático",
+        "definition_pt": "Componente que transforma texto em estrutura sintática.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "pointer",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "ponteiro",
+        "definition_pt": "Variável que guarda um endereço de memória.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "polymorphism",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "polimorfismo",
+        "definition_pt": "Uso da mesma interface por tipos diferentes.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "pure function",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "função pura",
+        "definition_pt": "Função sem efeitos colaterais e determinística.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "race condition",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "condição de corrida",
+        "definition_pt": "Falha causada pelo acesso concorrente sem sincronização.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "recursion",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "recursão",
+        "definition_pt": "Técnica em que uma função chama a si mesma.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "reference",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "referência",
+        "definition_pt": "Identificador que aponta para um objeto existente.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "return value",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "valor de retorno",
+        "definition_pt": "Resultado devolvido por uma função.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "scope",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "escopo",
+        "definition_pt": "Região do código onde um nome é visível.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "semantics",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "semântica",
+        "definition_pt": "Significado atribuído às construções da linguagem.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "semaphore",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "semáforo",
+        "definition_pt": "Contador que limita acessos concorrentes a um recurso.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "set",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "conjunto",
+        "definition_pt": "Coleção sem elementos repetidos e sem ordem.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "side effect",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "efeito colateral",
+        "definition_pt": "Mudança observável fora do retorno da função.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "stack trace",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "rastreamento de pilha",
+        "definition_pt": "Relação de chamadas ativas no momento do erro.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "string",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "cadeia de caracteres",
+        "definition_pt": "Sequência de caracteres textuais.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "syntax",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "sintaxe",
+        "definition_pt": "Regras de escrita válida de uma linguagem.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "template",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "modelo",
+        "definition_pt": "Estrutura reutilizável especializada com tipos concretos.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "tuple",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "tupla",
+        "definition_pt": "Coleção ordenada e imutável de elementos.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "type system",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "sistema de tipos",
+        "definition_pt": "Regras que classificam e verificam valores e expressões.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "variable",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "programming"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "variável",
+        "definition_pt": "Espaço nomeado que guarda um valor mutável.",
+        "register": null,
+        "example_en": null,
+        "track": "programming"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  }
+]

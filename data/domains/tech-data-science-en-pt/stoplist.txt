@@ -1,0 +1,7 @@
+mean
+mode
+sample
+feature
+label
+trend
+bias

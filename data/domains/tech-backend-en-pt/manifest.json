@@ -1,0 +1,19 @@
+{
+  "slug": "tech-backend-en-pt",
+  "name": "Tecnologia — Backend (EN→PT)",
+  "version": "0.1.0",
+  "source_lang": "en",
+  "output_langs": [
+    "pt-BR"
+  ],
+  "license": "MIT",
+  "authors": [
+    "Lucas Cavalcante dos Santos"
+  ],
+  "created_at": "2026-10-22",
+  "embedding_model": null,
+  "parent_slug": "tech-en-pt",
+  "track": "backend",
+  "track_label": "Backend, APIs e Dados",
+  "track_order": 5
+}

@@ -1,0 +1,1962 @@
+[
+  {
+    "canonical_en": "ab testing",
+    "pos": "noun",
+    "aliases": [
+      "A/B testing"
+    ],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "teste A/B",
+        "definition_pt": "Comparação de duas variantes em um experimento controlado.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "accuracy",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "acurácia",
+        "definition_pt": "Proporção de previsões corretas.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "anomaly detection",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "detecção de anomalias",
+        "definition_pt": "Identificação de padrões raros ou suspeitos.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "arima",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "ARIMA",
+        "definition_pt": "Modelo clássico para séries temporais com termos autorregressivos e médias móveis.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "auc",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "AUC",
+        "definition_pt": "Área sob a curva ROC.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "autocorrelation",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "autocorrelação",
+        "definition_pt": "Correlação de uma série com versões defasadas de si mesma.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "bagging",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "bagging",
+        "definition_pt": "Treino de modelos em amostras bootstrap e agregação.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "baseline",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "linha de base",
+        "definition_pt": "Resultado de referência para comparar modelos.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "bayesian optimization",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "otimização bayesiana",
+        "definition_pt": "Busca de hiperparâmetros guiada por modelo probabilístico.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "bias",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "viés",
+        "definition_pt": "Erro sistemático do modelo ou dos dados.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "boosting",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "boosting",
+        "definition_pt": "Treino sequencial de modelos que corrigem erros anteriores.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "box plot",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "gráfico de caixa",
+        "definition_pt": "Gráfico que resume mediana, quartis e valores atípicos.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "causality",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "causalidade",
+        "definition_pt": "Relação em que uma variável influencia outra.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "confidence interval",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "intervalo de confiança",
+        "definition_pt": "Faixa estimada que deve conter o parâmetro com certa confiança.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "correlation",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "correlação",
+        "definition_pt": "Grau de associação linear entre duas variáveis.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "covariance",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "covariância",
+        "definition_pt": "Medida de variação conjunta de duas variáveis.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "cross-validation",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "validação cruzada",
+        "definition_pt": "Avaliação do modelo em múltiplas divisões dos dados.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "dashboard",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "painel",
+        "definition_pt": "Tela que reúne indicadores e gráficos para acompanhamento.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "data cleaning",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "limpeza de dados",
+        "definition_pt": "Correção de erros, duplicatas e inconsistências.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "data lake",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "lago de dados",
+        "definition_pt": "Repositório de dados brutos em grande volume.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "data leakage",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "vazamento de dados",
+        "definition_pt": "Uso indevido de informação do teste durante o treino.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "data warehouse",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "armazém de dados",
+        "definition_pt": "Repositório central de dados estruturados para análise.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "data wrangling",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "preparação de dados",
+        "definition_pt": "Transformação de dados brutos em formato analisável.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "dataframe",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "dataframe",
+        "definition_pt": "Tabela bidimensional com colunas nomeadas.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "decision tree",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "árvore de decisão",
+        "definition_pt": "Modelo que divide os dados por regras sucessivas.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "dimensionality reduction",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "redução de dimensionalidade",
+        "definition_pt": "Projeção dos dados em menos dimensões.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "distribution",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "distribuição",
+        "definition_pt": "Padrão de frequência dos valores de uma variável.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "ensemble",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "ensemble",
+        "definition_pt": "Combinação de vários modelos para melhorar previsões.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "etl",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "ETL",
+        "definition_pt": "Extração, transformação e carga de dados.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "exploratory data analysis",
+    "pos": "noun",
+    "aliases": [
+      "EDA"
+    ],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "análise exploratória de dados",
+        "definition_pt": "Investigação inicial de padrões e anomalias.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "f1-score",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "pontuação F1",
+        "definition_pt": "Média harmônica entre precisão e recall.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "feature engineering",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "engenharia de atributos",
+        "definition_pt": "Criação e transformação de variáveis preditoras.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "feature selection",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "seleção de atributos",
+        "definition_pt": "Escolha do subconjunto de variáveis mais útil ao modelo.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "forecasting",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "previsão",
+        "definition_pt": "Estimativa de valores futuros a partir de dados passados.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "gradient boosting",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "gradient boosting",
+        "definition_pt": "Boosting que ajusta modelos ao gradiente do erro.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "grid search",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "busca em grade",
+        "definition_pt": "Varredura sistemática de combinações de hiperparâmetros.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "group by",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "agrupamento",
+        "definition_pt": "Agrupamento de linhas para cálculo de agregados.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "heatmap",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "mapa de calor",
+        "definition_pt": "Representação de valores por intensidade de cor.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "histogram",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "histograma",
+        "definition_pt": "Gráfico de frequência por faixas de valores.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "hypothesis testing",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "teste de hipóteses",
+        "definition_pt": "Procedimento para avaliar evidência contra uma hipótese.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "imputation",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "imputação",
+        "definition_pt": "Preenchimento de valores ausentes com estimativas.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "join",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "junção",
+        "definition_pt": "Operação que combina linhas de duas tabelas por uma condição.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "k-nearest neighbors",
+    "pos": "noun",
+    "aliases": [
+      "KNN"
+    ],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "k vizinhos mais próximos",
+        "definition_pt": "Classificação pela proximidade a exemplos vizinhos.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "linear regression",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "regressão linear",
+        "definition_pt": "Modelo que ajusta uma relação linear entre variáveis.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "logistic regression",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "regressão logística",
+        "definition_pt": "Modelo linear para estimar probabilidade de classes.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "mean",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "média",
+        "definition_pt": "Soma dos valores dividida pela quantidade de observações.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "median",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "mediana",
+        "definition_pt": "Valor central de um conjunto ordenado.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "missing value",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "valor ausente",
+        "definition_pt": "Dado não registrado em uma ou mais observações.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "mode",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "moda",
+        "definition_pt": "Valor mais frequente de um conjunto.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "model selection",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "seleção de modelo",
+        "definition_pt": "Escolha do modelo mais adequado por validação.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "naive bayes",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "naive Bayes",
+        "definition_pt": "Classificador probabilístico que assume independência entre atributos.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "normal distribution",
+    "pos": "noun",
+    "aliases": [
+      "Gaussian distribution"
+    ],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "distribuição normal",
+        "definition_pt": "Distribuição simétrica em forma de sino.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "normalization",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "normalização",
+        "definition_pt": "Reescala de valores para uma faixa comum.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "notebook",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "notebook",
+        "definition_pt": "Ambiente interativo que mistura código, texto e resultados.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "outlier",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "valor atípico",
+        "definition_pt": "Observação muito distante das demais.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "p-value",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "valor-p",
+        "definition_pt": "Probabilidade de observar um resultado ao menos tão extremo sob a hipótese nula.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "population",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "população",
+        "definition_pt": "Conjunto completo de elementos de interesse.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "principal component analysis",
+    "pos": "noun",
+    "aliases": [
+      "PCA"
+    ],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "análise de componentes principais",
+        "definition_pt": "Técnica linear de redução de dimensionalidade.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "probability",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "probabilidade",
+        "definition_pt": "Medida da chance de ocorrência de um evento.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "random forest",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "floresta aleatória",
+        "definition_pt": "Conjunto de árvores de decisão treinadas com aleatoriedade.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "random search",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "busca aleatória",
+        "definition_pt": "Amostragem aleatória de combinações de hiperparâmetros.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "recommender system",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "sistema de recomendação",
+        "definition_pt": "Sistema que sugere itens relevantes ao usuário.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "roc curve",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "curva ROC",
+        "definition_pt": "Curva de taxa de verdadeiros positivos contra falsos positivos.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "sample",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "amostra",
+        "definition_pt": "Subconjunto de observações retirado de uma população.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "scatter plot",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "gráfico de dispersão",
+        "definition_pt": "Gráfico de pontos para duas variáveis numéricas.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "seasonality",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "sazonalidade",
+        "definition_pt": "Padrão recorrente em intervalos regulares de tempo.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "sql",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "SQL",
+        "definition_pt": "Linguagem para consultar e manipular dados relacionais.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "standard deviation",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "desvio padrão",
+        "definition_pt": "Raiz quadrada da variância.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "standardization",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "padronização",
+        "definition_pt": "Transformação para média zero e desvio padrão um.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "statistics",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "estatística",
+        "definition_pt": "Área que coleta, analisa e interpreta dados.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "t-SNE",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "t-SNE",
+        "definition_pt": "Técnica não linear para visualizar dados em poucas dimensões.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "time series",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "série temporal",
+        "definition_pt": "Sequência de observações ordenadas no tempo.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "train-test split",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "divisão treino-teste",
+        "definition_pt": "Separação dos dados entre ajuste e avaliação.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "trend",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "tendência",
+        "definition_pt": "Direção de longo prazo de uma série temporal.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "UMAP",
+    "pos": "acronym",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "UMAP",
+        "definition_pt": "Técnica de redução de dimensionalidade baseada em variedades.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "variance",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "variância",
+        "definition_pt": "Dispersão média dos valores em relação à média.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "variance tradeoff",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "trade-off de viés e variância",
+        "definition_pt": "Equilíbrio entre subajuste e sobreajuste.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "window function",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "data-science"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "função de janela",
+        "definition_pt": "Cálculo sobre uma janela de linhas relacionadas.",
+        "register": null,
+        "example_en": null,
+        "track": "data-science"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  }
+]

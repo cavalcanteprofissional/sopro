@@ -1,0 +1,7 @@
+node
+secret
+volume
+build
+cluster
+service
+event

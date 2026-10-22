@@ -1,0 +1,2193 @@
+[
+  {
+    "canonical_en": "alerting",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "alerta",
+        "definition_pt": "Notificação automática quando uma condição crítica ocorre.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "ansible",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "Ansible",
+        "definition_pt": "Ferramenta de automação de configuração e provisionamento.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "artifact",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "artefato",
+        "definition_pt": "Arquivo imutável gerado por um build.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "autoscaling",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "escalonamento automático",
+        "definition_pt": "Ajuste automático de recursos conforme a demanda.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "backup",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "backup",
+        "definition_pt": "Cópia de dados para recuperação futura.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "bastion host",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "host bastião",
+        "definition_pt": "Servidor intermediário para acesso seguro a uma rede privada.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "blue-green deployment",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "implantação azul-verde",
+        "definition_pt": "Alternância entre dois ambientes completos.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "build",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "compilação",
+        "definition_pt": "Processo que transforma código em artefato executável.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "canary deployment",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "implantação canário",
+        "definition_pt": "Liberação gradual para uma pequena parte do tráfego.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "certificate",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "certificado",
+        "definition_pt": "Credencial digital usada para autenticar um serviço.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "chaos engineering",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "engenharia do caos",
+        "definition_pt": "Testes deliberados de falhas para validar resiliência.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "circuit breaker",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "disjuntor",
+        "definition_pt": "Padrão que interrompe chamadas a um serviço com falha.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "cluster",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "cluster",
+        "definition_pt": "Conjunto de máquinas que executam cargas distribuídas.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "configmap",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "ConfigMap",
+        "definition_pt": "Objeto que armazena configuração não sensível.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "configuration management",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "gestão de configuração",
+        "definition_pt": "Controle automatizado do estado de servidores e aplicações.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "container image",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "imagem de contêiner",
+        "definition_pt": "Sistema de arquivos empacotado para executar um contêiner.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "continuous delivery",
+    "pos": "noun",
+    "aliases": [
+      "CD"
+    ],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "entrega contínua",
+        "definition_pt": "Manutenção do software sempre pronto para implantação.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "continuous deployment",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "implantação contínua",
+        "definition_pt": "Publicação automática de cada alteração aprovada.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "continuous integration",
+    "pos": "noun",
+    "aliases": [
+      "CI"
+    ],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "integração contínua",
+        "definition_pt": "Integração frequente de código com build e testes automáticos.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "cron job",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "tarefa agendada",
+        "definition_pt": "Tarefa executada periodicamente por um agendador.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "daemonset",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "DaemonSet",
+        "definition_pt": "Controlador que executa um pod em cada nó do cluster.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "disaster recovery",
+    "pos": "noun",
+    "aliases": [
+      "DR"
+    ],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "recuperação de desastre",
+        "definition_pt": "Plano para restaurar serviços após uma falha grave.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "dns",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "DNS",
+        "definition_pt": "Sistema que traduz nomes de domínio em endereços IP.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "dockerfile",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "Dockerfile",
+        "definition_pt": "Arquivo que descreve a construção de uma imagem de contêiner.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "event bus",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "barramento de eventos",
+        "definition_pt": "Canal que distribui eventos entre serviços.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "failover",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "failover",
+        "definition_pt": "Transferência automática para uma réplica disponível.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "fault tolerance",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "tolerância a falhas",
+        "definition_pt": "Capacidade de continuar operando apesar de falhas.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "firewall",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "firewall",
+        "definition_pt": "Filtro de tráfego de rede por regras.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "function as a service",
+    "pos": "noun",
+    "aliases": [
+      "FaaS"
+    ],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "função como serviço",
+        "definition_pt": "Execução sob demanda de funções em nuvem.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "gitops",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "GitOps",
+        "definition_pt": "Operação de infraestrutura guiada pelo estado do repositório Git.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "grafana",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "Grafana",
+        "definition_pt": "Plataforma de painéis e visualização de métricas.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "helm",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "Helm",
+        "definition_pt": "Gerenciador de pacotes para Kubernetes.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "helm chart",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "gráfico Helm",
+        "definition_pt": "Pacote de manifestos parametrizáveis para Kubernetes.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "high availability",
+    "pos": "noun",
+    "aliases": [
+      "HA"
+    ],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "alta disponibilidade",
+        "definition_pt": "Projeto que minimiza interrupções do serviço.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "horizontal pod autoscaler",
+    "pos": "noun",
+    "aliases": [
+      "HPA"
+    ],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "escalador horizontal de pods",
+        "definition_pt": "Aumenta ou reduz réplicas com base em métricas.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "horizontal scaling",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "escalonamento horizontal",
+        "definition_pt": "Adição de instâncias para aumentar a capacidade.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "iam",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "IAM",
+        "definition_pt": "Gestão de identidades e permissões de acesso.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "immutable infrastructure",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "infraestrutura imutável",
+        "definition_pt": "Servidores são substituídos, nunca alterados no lugar.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "incident",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "incidente",
+        "definition_pt": "Evento que degrada ou interrompe um serviço.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "infrastructure as code",
+    "pos": "noun",
+    "aliases": [
+      "IaC"
+    ],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "infraestrutura como código",
+        "definition_pt": "Definição de infraestrutura em arquivos versionados.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "ingress",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "ingress",
+        "definition_pt": "Regra que expõe serviços HTTP externamente no Kubernetes.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "kafka",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "Kafka",
+        "definition_pt": "Plataforma distribuída de streaming de eventos.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "kubernetes",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "Kubernetes",
+        "definition_pt": "Orquestrador de contêineres em cluster.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "liveness probe",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "sondagem de vivacidade",
+        "definition_pt": "Verificação que reinicia um contêiner travado.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "logging",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "registro de logs",
+        "definition_pt": "Coleta de eventos textuais emitidos por aplicações.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "message queue",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "fila de mensagens",
+        "definition_pt": "Componente que enfileira mensagens entre produtores e consumidores.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "metrics",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "métricas",
+        "definition_pt": "Medidas numéricas agregadas ao longo do tempo.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "monitoring",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "monitoramento",
+        "definition_pt": "Coleta contínua do estado e desempenho de sistemas.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "namespace",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "namespace",
+        "definition_pt": "Divisão lógica de recursos dentro de um cluster.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "nginx",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "NGINX",
+        "definition_pt": "Servidor web e proxy reverso de alto desempenho.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "node",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "nó",
+        "definition_pt": "Máquina que participa de um cluster.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "object storage",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "armazenamento de objetos",
+        "definition_pt": "Armazenamento de arquivos como objetos endereçáveis.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "observability",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "observabilidade",
+        "definition_pt": "Capacidade de entender o estado interno pelos sinais externos.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "on-call",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "plantão",
+        "definition_pt": "Regime em que alguém responde a alertas fora do horário normal.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "persistent volume",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "volume persistente",
+        "definition_pt": "Volume cujo ciclo de vida independe do pod.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "pod",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "pod",
+        "definition_pt": "Menor unidade executável no Kubernetes.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "postmortem",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "postmortem",
+        "definition_pt": "Análise sem culpa após um incidente.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "prometheus",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "Prometheus",
+        "definition_pt": "Sistema de coleta e consulta de métricas.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "rabbitmq",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "RabbitMQ",
+        "definition_pt": "Broker de mensagens baseado em filas.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "rate limiting",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "limitação de taxa",
+        "definition_pt": "Restrição da quantidade de requisições por intervalo.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "readiness probe",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "sondagem de prontidão",
+        "definition_pt": "Verificação que decide se um pod pode receber tráfego.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "redis",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "Redis",
+        "definition_pt": "Armazenamento em memória usado como cache e broker.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "registry",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "registro de imagens",
+        "definition_pt": "Serviço que armazena e distribui imagens de contêiner.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "replica set",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "conjunto de réplicas",
+        "definition_pt": "Controlador que mantém um número estável de pods.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "resource limits",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "limites de recursos",
+        "definition_pt": "Tetos de CPU e memória por contêiner.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "reverse proxy",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "proxy reverso",
+        "definition_pt": "Servidor que encaminha requisições para serviços internos.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "rollback",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "reversão",
+        "definition_pt": "Retorno para uma versão anterior após falha.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "rolling update",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "atualização gradual",
+        "definition_pt": "Substituição de instâncias sem interromper o serviço.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "runbook",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "runbook",
+        "definition_pt": "Procedimento operacional para tratar uma situação conhecida.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "scaling",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "escalonamento",
+        "definition_pt": "Ajuste da capacidade para atender à demanda.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "secret",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "segredo",
+        "definition_pt": "Objeto que armazena dados sensíveis.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "security group",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "grupo de segurança",
+        "definition_pt": "Conjunto de regras de firewall para recursos em nuvem.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "serverless",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "sem servidor",
+        "definition_pt": "Modelo em que a plataforma gerencia servidores automaticamente.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "service discovery",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "descoberta de serviços",
+        "definition_pt": "Localização automática de instâncias de um serviço.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "service mesh",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "malha de serviços",
+        "definition_pt": "Camada de infraestrutura para comunicação entre serviços.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "sla",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "SLA",
+        "definition_pt": "Acordo formal sobre o nível de serviço entregue.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "sli",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "SLI",
+        "definition_pt": "Indicador que mede o nível de serviço.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "slo",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "SLO",
+        "definition_pt": "Meta interna de nível de serviço.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "ssh",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "SSH",
+        "definition_pt": "Protocolo seguro para acesso remoto a servidores.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "statefulset",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "StatefulSet",
+        "definition_pt": "Controlador para aplicações com identidade e estado persistentes.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "subnet",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "sub-rede",
+        "definition_pt": "Divisão lógica de uma rede IP.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "terraform",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "Terraform",
+        "definition_pt": "Ferramenta declarativa de infraestrutura como código.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "tls",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "TLS",
+        "definition_pt": "Protocolo que cifra e autentica conexões de rede.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "tracing",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "rastreamento distribuído",
+        "definition_pt": "Acompanhamento de uma requisição entre vários serviços.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "virtual machine",
+    "pos": "noun",
+    "aliases": [
+      "VM"
+    ],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "máquina virtual",
+        "definition_pt": "Sistema operacional isolado executado sobre um hipervisor.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "volume",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "volume",
+        "definition_pt": "Armazenamento montado em um contêiner.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "vpc",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "devops"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "VPC",
+        "definition_pt": "Rede virtual isolada na nuvem.",
+        "register": null,
+        "example_en": null,
+        "track": "devops"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  }
+]

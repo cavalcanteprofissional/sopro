@@ -1,0 +1,1933 @@
+[
+  {
+    "canonical_en": "accessibility",
+    "pos": "noun",
+    "aliases": [
+      "a11y"
+    ],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "acessibilidade",
+        "definition_pt": "Prática de tornar interfaces utilizáveis por todos.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "angular",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "Angular",
+        "definition_pt": "Framework completo para aplicações web.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "animation",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "animação",
+        "definition_pt": "Sequência de mudanças visuais ao longo do tempo.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "aria",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "ARIA",
+        "definition_pt": "Atributos que descrevem papéis e estados para tecnologias assistivas.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "babel",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "Babel",
+        "definition_pt": "Compilador que transforma JavaScript moderno em versões compatíveis.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "box model",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "modelo de caixa",
+        "definition_pt": "Modelo de margem, borda, preenchimento e conteúdo.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "browser",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "navegador",
+        "definition_pt": "Aplicação que interpreta e exibe conteúdo web.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "bundler",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "empacotador",
+        "definition_pt": "Ferramenta que reúne módulos em arquivos para o navegador.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "canvas",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "canvas",
+        "definition_pt": "Área de desenho programático em bitmap.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "cascade",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "cascata",
+        "definition_pt": "Ordem de aplicação e prioridade das regras CSS.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "code splitting",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "divisão de código",
+        "definition_pt": "Separação do bundle em partes carregadas sob demanda.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "component",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "componente",
+        "definition_pt": "Unidade reutilizável de interface.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "cookie",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "cookie",
+        "definition_pt": "Pequeno dado armazenado pelo navegador e enviado ao servidor.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "core web vitals",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "Core Web Vitals",
+        "definition_pt": "Métricas do Google para experiência de carregamento e interação.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "cors",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "CORS",
+        "definition_pt": "Mecanismo que controla requisições entre origens diferentes.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "css",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "CSS",
+        "definition_pt": "Linguagem de estilos que define a apresentação visual.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "css variable",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "variável CSS",
+        "definition_pt": "Valor reutilizável definido em propriedades customizadas.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "design system",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "sistema de design",
+        "definition_pt": "Conjunto de componentes e regras visuais reutilizáveis.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "event bubbling",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "propagação de evento",
+        "definition_pt": "Subida do evento do alvo para os ancestrais.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "event delegation",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "delegação de evento",
+        "definition_pt": "Tratamento de eventos no ancestral em vez de cada filho.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "event listener",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "ouvinte de evento",
+        "definition_pt": "Função registrada para reagir a um evento.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "export",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "exportação",
+        "definition_pt": "Declaração que disponibiliza código para outros módulos.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "fetch",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "fetch",
+        "definition_pt": "API do navegador para requisições HTTP assíncronas.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "flexbox",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "flexbox",
+        "definition_pt": "Modelo de layout unidimensional flexível.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "form",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "formulário",
+        "definition_pt": "Elemento que coleta dados do usuário.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "grid",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "grid",
+        "definition_pt": "Modelo de layout bidimensional em linhas e colunas.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "hook",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "hook",
+        "definition_pt": "Função que permite usar recursos do framework em componentes.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "hot module replacement",
+    "pos": "noun",
+    "aliases": [
+      "HMR"
+    ],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "substituição de módulo a quente",
+        "definition_pt": "Atualização de módulos sem recarregar a página.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "html",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "HTML",
+        "definition_pt": "Linguagem de marcação que estrutura páginas web.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "hydration",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "hidratação",
+        "definition_pt": "Associação de comportamento JavaScript ao HTML renderizado.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "import",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "importação",
+        "definition_pt": "Declaração que traz código de outro módulo.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "indexeddb",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "IndexedDB",
+        "definition_pt": "Banco de dados transacional no navegador.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "javascript",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "JavaScript",
+        "definition_pt": "Linguagem de programação executada no navegador.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "jsx",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "JSX",
+        "definition_pt": "Sintaxe que mistura marcação com JavaScript.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "layout",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "layout",
+        "definition_pt": "Organização espacial dos elementos na tela.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "lazy loading",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "carregamento tardio",
+        "definition_pt": "Carregamento de recursos apenas quando necessários.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "lighthouse",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "Lighthouse",
+        "definition_pt": "Ferramenta que audita desempenho, acessibilidade e SEO.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "local storage",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "armazenamento local",
+        "definition_pt": "Armazenamento persistente por origem no navegador.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "lockfile",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "arquivo de bloqueio",
+        "definition_pt": "Arquivo que fixa versões exatas das dependências.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "media query",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "consulta de mídia",
+        "definition_pt": "Regra CSS aplicada conforme características do dispositivo.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "module",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "módulo",
+        "definition_pt": "Arquivo isolado que exporta e importa funcionalidades.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "npm",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "npm",
+        "definition_pt": "Gerenciador de pacotes do ecossistema JavaScript.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "pnpm",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "pnpm",
+        "definition_pt": "Gerenciador de pacotes eficiente em espaço em disco.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "progressive web app",
+    "pos": "noun",
+    "aliases": [
+      "PWA"
+    ],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "aplicativo web progressivo",
+        "definition_pt": "Aplicação web com recursos semelhantes a apps nativos.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "props",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "props",
+        "definition_pt": "Dados passados de um componente pai para um filho.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "react",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "React",
+        "definition_pt": "Biblioteca JavaScript para construir interfaces.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "redux",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "Redux",
+        "definition_pt": "Biblioteca de gestão de estado previsível.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "rendering",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "renderização",
+        "definition_pt": "Processo de transformar código em interface visível.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "responsive design",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "design responsivo",
+        "definition_pt": "Adaptação da interface a diferentes tamanhos de tela.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "routing",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "roteamento",
+        "definition_pt": "Mapeamento de URLs para telas ou componentes.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "semantic html",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "HTML semântico",
+        "definition_pt": "Uso de elementos que expressam o significado do conteúdo.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "seo",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "SEO",
+        "definition_pt": "Otimização para melhorar a visibilidade em buscadores.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "service worker",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "service worker",
+        "definition_pt": "Script em segundo plano que intercepta rede e cache.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "session storage",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "armazenamento de sessão",
+        "definition_pt": "Armazenamento temporário por aba no navegador.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "shadow dom",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "Shadow DOM",
+        "definition_pt": "Árvore DOM isolada para encapsular estilos e marcação.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "spa",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "SPA",
+        "definition_pt": "Aplicação de página única que atualiza o conteúdo sem recarregar.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "specificity",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "especificidade",
+        "definition_pt": "Peso que define qual regra CSS prevalece.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "ssg",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "SSG",
+        "definition_pt": "Geração estática das páginas durante o build.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "ssr",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "SSR",
+        "definition_pt": "Renderização da página no servidor a cada requisição.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "state",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "estado",
+        "definition_pt": "Dados mutáveis que determinam a interface atual.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "state management",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "gestão de estado",
+        "definition_pt": "Organização centralizada do estado da aplicação.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "storybook",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "Storybook",
+        "definition_pt": "Ferramenta para desenvolver e documentar componentes isoladamente.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "svelte",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "Svelte",
+        "definition_pt": "Framework que compila componentes em JavaScript otimizado.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "svg",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "SVG",
+        "definition_pt": "Formato vetorial para gráficos escaláveis.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "transform",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "transformação",
+        "definition_pt": "Alteração geométrica de um elemento.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "transition",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "transição",
+        "definition_pt": "Interpolação suave entre dois estados visuais.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "transpilation",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "transpilação",
+        "definition_pt": "Conversão de código entre versões ou linguagens.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "tree shaking",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "tree shaking",
+        "definition_pt": "Remoção de código não utilizado do bundle.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "typescript",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "TypeScript",
+        "definition_pt": "Superset de JavaScript com tipagem estática.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "validation",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "validação",
+        "definition_pt": "Verificação da conformidade dos dados informados.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "viewport",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "viewport",
+        "definition_pt": "Área visível da página no dispositivo.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "virtual dom",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "DOM virtual",
+        "definition_pt": "Representação em memória da interface para atualizações eficientes.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "vite",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "Vite",
+        "definition_pt": "Ferramenta de build e servidor de desenvolvimento rápido.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "vue",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "Vue",
+        "definition_pt": "Framework progressivo para interfaces web.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "web component",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "componente web",
+        "definition_pt": "Componente reutilizável baseado em padrões do navegador.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "webpack",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "webpack",
+        "definition_pt": "Empacotador de módulos para aplicações web.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "yarn",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "frontend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "Yarn",
+        "definition_pt": "Gerenciador de pacotes JavaScript alternativo.",
+        "register": null,
+        "example_en": null,
+        "track": "frontend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  }
+]

@@ -1,0 +1,2258 @@
+[
+  {
+    "canonical_en": "acid",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "ACID",
+        "definition_pt": "Garantias de atomicidade, consistência, isolamento e durabilidade.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "aggregate root",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "raiz de agregado",
+        "definition_pt": "Entidade que controla o acesso a um agregado.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "api gateway",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "gateway de API",
+        "definition_pt": "Ponto único de entrada para APIs internas.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "api key",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "chave de API",
+        "definition_pt": "Credencial usada para identificar uma aplicação.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "audit log",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "registro de auditoria",
+        "definition_pt": "Histórico de ações relevantes para segurança.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "authentication",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "autenticação",
+        "definition_pt": "Verificação da identidade de quem acessa.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "authorization",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "autorização",
+        "definition_pt": "Verificação do que uma identidade pode fazer.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "background job",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "tarefa em segundo plano",
+        "definition_pt": "Trabalho executado fora do ciclo de uma requisição.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "backoff",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "espera progressiva",
+        "definition_pt": "Aumento gradual do intervalo entre tentativas.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "blob",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "blob",
+        "definition_pt": "Grande dado binário armazenado como um objeto.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "body",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "corpo",
+        "definition_pt": "Conteúdo principal de uma requisição ou resposta.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "bounded context",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "contexto delimitado",
+        "definition_pt": "Fronteira dentro da qual um modelo de domínio é válido.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "cache invalidation",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "invalidação de cache",
+        "definition_pt": "Remoção ou atualização de entradas obsoletas.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "cap theorem",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "teorema CAP",
+        "definition_pt": "Trade-off entre consistência, disponibilidade e tolerância a partição.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "chunk",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "bloco",
+        "definition_pt": "Parte de um arquivo ou fluxo transferido em etapas.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "connection pool",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "pool de conexões",
+        "definition_pt": "Conjunto reutilizável de conexões com o banco.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "consistency",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "consistência",
+        "definition_pt": "Garantia de que leitores veem dados válidos.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "content delivery network",
+    "pos": "noun",
+    "aliases": [
+      "CDN"
+    ],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "rede de entrega de conteúdo",
+        "definition_pt": "Rede de servidores que aproxima conteúdo do usuário.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "content negotiation",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "negociação de conteúdo",
+        "definition_pt": "Escolha do formato de resposta conforme o cliente.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "correlation id",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "identificador de correlação",
+        "definition_pt": "Valor que liga logs de uma mesma requisição.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "cqrs",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "CQRS",
+        "definition_pt": "Separação entre modelos de leitura e de escrita.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "crud",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "CRUD",
+        "definition_pt": "Criação, leitura, atualização e exclusão de recursos.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "denormalization",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "desnormalização",
+        "definition_pt": "Introdução controlada de redundância para desempenho.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "deprecation",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "descontinuação",
+        "definition_pt": "Marcação de recurso que será removido futuramente.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "deserialization",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "desserialização",
+        "definition_pt": "Reconstrução de objetos a partir de dados transportados.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "domain-driven design",
+    "pos": "noun",
+    "aliases": [
+      "DDD"
+    ],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "design orientado a domínio",
+        "definition_pt": "Abordagem de modelagem guiada pelo domínio do negócio.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "endpoint",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "endpoint",
+        "definition_pt": "URL que expõe uma operação de API.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "etag",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "ETag",
+        "definition_pt": "Identificador de versão de um recurso HTTP.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "event sourcing",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "event sourcing",
+        "definition_pt": "Persistência do estado como sequência de eventos.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "eventual consistency",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "consistência eventual",
+        "definition_pt": "Replicas convergem para o mesmo estado com o tempo.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "filtering",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "filtragem",
+        "definition_pt": "Restrição de resultados por critérios.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "foreign key",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "chave estrangeira",
+        "definition_pt": "Coluna que referencia a chave de outra tabela.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "graceful shutdown",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "desligamento gracioso",
+        "definition_pt": "Encerramento que conclui requisições em andamento.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "graphql",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "GraphQL",
+        "definition_pt": "Linguagem de consulta que permite ao cliente escolher os campos.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "grpc",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "gRPC",
+        "definition_pt": "RPC de alto desempenho baseado em HTTP/2 e protobuf.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "header",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "cabeçalho",
+        "definition_pt": "Metadado enviado em uma mensagem HTTP.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "health check",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "verificação de saúde",
+        "definition_pt": "Endpoint que informa se o serviço está operacional.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "http",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "HTTP",
+        "definition_pt": "Protocolo de comunicação para requisições e respostas.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "https",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "HTTPS",
+        "definition_pt": "HTTP protegido por TLS.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "idempotency",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "idempotência",
+        "definition_pt": "Propriedade de repetir uma operação sem alterar o resultado.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "isolation level",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "nível de isolamento",
+        "definition_pt": "Grau de visibilidade entre transações concorrentes.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "join",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "junção",
+        "definition_pt": "Combinação de linhas de tabelas relacionadas.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "json",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "JSON",
+        "definition_pt": "Formato textual leve para troca de dados.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "jwt",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "JWT",
+        "definition_pt": "Token assinado que carrega declarações sobre o usuário.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "long polling",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "long polling",
+        "definition_pt": "Requisição mantida aberta até haver novidade.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "migration",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "migração",
+        "definition_pt": "Alteração versionada do esquema do banco.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "monolith",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "monólito",
+        "definition_pt": "Aplicação implantada como uma única unidade.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "n+1 query",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "consulta N+1",
+        "definition_pt": "Padrão de muitas consultas pequenas em vez de uma consulta eficiente.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "normalization",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "normalização",
+        "definition_pt": "Organização de tabelas para reduzir redundância.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "oauth",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "OAuth",
+        "definition_pt": "Protocolo de autorização delegada.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "openapi",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "OpenAPI",
+        "definition_pt": "Especificação para descrever APIs HTTP.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "optimistic locking",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "bloqueio otimista",
+        "definition_pt": "Controle de concorrência por versão do registro.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "orm",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "ORM",
+        "definition_pt": "Mapeamento entre objetos da aplicação e tabelas relacionais.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "pagination",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "paginação",
+        "definition_pt": "Divisão de resultados em páginas.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "path parameter",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "parâmetro de caminho",
+        "definition_pt": "Segmento variável da URL que identifica um recurso.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "payload",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "carga útil",
+        "definition_pt": "Dados transportados no corpo da mensagem.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "pessimistic locking",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "bloqueio pessimista",
+        "definition_pt": "Bloqueio do registro durante a transação.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "polling",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "polling",
+        "definition_pt": "Consulta periódica para detectar mudanças.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "primary key",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "chave primária",
+        "definition_pt": "Coluna que identifica unicamente cada linha.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "query string",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "string de consulta",
+        "definition_pt": "Parâmetros anexados à URL após o ponto de interrogação.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "replication",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "replicação",
+        "definition_pt": "Cópia contínua de dados para outros nós.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "repository pattern",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "padrão repositório",
+        "definition_pt": "Abstração de acesso a dados no domínio.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "request",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "requisição",
+        "definition_pt": "Mensagem enviada pelo cliente ao servidor.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "response",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "resposta",
+        "definition_pt": "Mensagem devolvida pelo servidor ao cliente.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "rest",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "REST",
+        "definition_pt": "Estilo arquitetural baseado em recursos e métodos HTTP.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "retry",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "nova tentativa",
+        "definition_pt": "Repetição de uma operação que falhou.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "rpc",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "RPC",
+        "definition_pt": "Chamada de procedimento remoto entre processos.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "saga",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "saga",
+        "definition_pt": "Sequência de transações locais com compensações.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "serialization",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "serialização",
+        "definition_pt": "Conversão de objetos em formato transportável.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "service-oriented architecture",
+    "pos": "noun",
+    "aliases": [
+      "SOA"
+    ],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "arquitetura orientada a serviços",
+        "definition_pt": "Arquitetura composta por serviços interoperáveis.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "session",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "sessão",
+        "definition_pt": "Estado associado a um usuário durante um período.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "sharding",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "fragmentação",
+        "definition_pt": "Distribuição de dados entre múltiplos bancos ou nós.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "sidecar",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "sidecar",
+        "definition_pt": "Processo auxiliar executado ao lado do serviço principal.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "soap",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "SOAP",
+        "definition_pt": "Protocolo de troca de mensagens XML para serviços.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "soft delete",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "exclusão lógica",
+        "definition_pt": "Marcação de registro como removido sem apagá-lo.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "sorting",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "ordenação",
+        "definition_pt": "Organização dos resultados por um critério.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "stateful",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "com estado",
+        "definition_pt": "Componente que mantém estado entre operações.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "stateless",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "sem estado",
+        "definition_pt": "Componente que não guarda estado entre requisições.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "status code",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "código de status",
+        "definition_pt": "Número que indica o resultado de uma requisição HTTP.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "stored procedure",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "procedure armazenada",
+        "definition_pt": "Rotina SQL armazenada e executada pelo banco.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "streaming",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "streaming",
+        "definition_pt": "Processamento contínuo de dados à medida que chegam.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "swagger",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "Swagger",
+        "definition_pt": "Conjunto de ferramentas em torno da especificação OpenAPI.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "timeout",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "tempo limite",
+        "definition_pt": "Máximo de espera por uma operação.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "transaction",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "transação",
+        "definition_pt": "Conjunto de operações executadas como uma unidade.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "trigger",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "gatilho",
+        "definition_pt": "Rotina executada automaticamente por um evento no banco.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "unit of work",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "unidade de trabalho",
+        "definition_pt": "Padrão que agrupa alterações em uma transação.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "versioning",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "versionamento",
+        "definition_pt": "Gestão de mudanças compatíveis e incompatíveis em APIs.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "webhook",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "webhook",
+        "definition_pt": "Chamada HTTP enviada quando um evento ocorre.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "worker",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "worker",
+        "definition_pt": "Processo que executa tarefas em segundo plano.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "xml",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "tracks": [
+      "backend"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "XML",
+        "definition_pt": "Formato de marcação para dados estruturados.",
+        "register": null,
+        "example_en": null,
+        "track": "backend"
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  }
+]
