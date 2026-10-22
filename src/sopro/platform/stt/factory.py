@@ -15,8 +15,8 @@ from sopro.core.stt import ModelRegistry, ModelSpec, STTProvider, ensure_model
 from sopro.platform.stt.faster_whisper_engine import build_provider
 
 CATALOG_ENV_VAR = "SOPRO_CATALOG"
-DEFAULT_MODEL_ID = "whisper-tiny-en"
-DEFAULT_GROQ_STT_MODEL = "whisper-large-v3"
+DEFAULT_MODEL_ID = "whisper-small-en"
+DEFAULT_GROQ_STT_MODEL = "whisper-large-v3-turbo"
 
 
 def default_catalog_path() -> Path:
@@ -25,6 +25,24 @@ def default_catalog_path() -> Path:
     if override:
         return Path(override)
     return data_path("models.json")
+
+
+def list_stt_models() -> tuple[tuple[str, str], ...]:
+    """Modelos de STT do catálogo como ``(id, rótulo)``, para a UI de configurações.
+
+    Degrada para uma tupla vazia se o catálogo não puder ser lido.
+    """
+    try:
+        registry = ModelRegistry.load(default_catalog_path())
+    except Exception:  # noqa: BLE001 - catálogo ausente/corrompido não derruba a UI
+        return ()
+    result: list[tuple[str, str]] = []
+    for spec in registry.by_kind("stt"):
+        label = spec.name or spec.id
+        if not spec.verified:
+            label = f"{label} (indisponível)"
+        result.append((spec.id, label))
+    return tuple(result)
 
 
 def _resolve_spec(

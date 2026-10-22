@@ -55,8 +55,8 @@ class RealtimePipeline:
         if self._on_level is None:
             return
         value = rms(pcm)
-        threshold = max(1.0, float(self._vad_config.energy_threshold))
-        level = min(1.0, value / (threshold * 4.0))
+        threshold = float(self._vad_config.energy_threshold)
+        level = min(1.0, value / (threshold * 4.0)) if threshold > 0 else 0.0
         self._on_level(level, value >= threshold)
 
     def handle_frame(self, frame: AudioFrame) -> list[Detection]:

@@ -69,6 +69,11 @@
 
 ## 7. Legal e ética
 
+- **Licença do software:** **MIT** (decidido na 6ª rodada). O texto vive em `LICENSE`, no
+  `pyproject.toml` e na aba **Sobre** do app.
+- **Licenças de terceiros** (exibidas na aba Sobre): OpenAI Whisper e faster-whisper — **MIT**;
+  PySide6/Qt — **LGPL-3.0** (com alternativa GPL); modelos de STT baixados sob demanda segundo a
+  licença da fonte (Systran/faster-whisper-* — MIT).
 - Lei Geral de Proteção de Dados (Lei 13.709/2018): https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm
 - Consentimento para gravação/transcrição de reuniões: consultar regras da instituição e das plataformas (Teams, Meet, Zoom).
 - Termos de uso de provedores de API (Groq e outros) quanto a retenção e uso de dados.

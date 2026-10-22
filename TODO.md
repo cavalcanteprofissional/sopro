@@ -22,23 +22,23 @@ de fala, erros amigáveis e tela de gerenciamento de glossários (importar/expor
 - **Instância única**: segunda execução ativa o hub existente e encerra (`--demo` tem trava
   separada).
 
-**Estado:** código, testes e documentação prontos — **403 testes passando**, validador sem
-erros, `--demo` smoke OK. Build/instalador (`dist/Sopro-0.1.0-portable.zip` +
-`dist/Sopro-Setup-0.1.0.exe`) do ciclo anterior validado (instalar → abrir → desinstalar,
-dados em `%LOCALAPPDATA%\Sopro` preservados); **falta reempacotar** com estas correções.
+**Estado:** código, testes e documentação prontos — **410 testes passando**, validador sem
+erros (2 avisos: licença do pacote e 0 termos revisados), `--demo` smoke OK (fonte e
+portátil). **Reempacotado em 2026-10-20** com as correções da quinta rodada:
+`dist/Sopro-0.1.0-portable.zip` e `dist/Sopro-Setup-0.1.0.exe` (+ `SHA256SUMS.txt` com os dois).
 
-> **Falta o novo reteste manual do mantenedor** (pop-ups/som, hub, indicador arrastável,
-> histórico, edição de termos, abertura repetida do app). Se algo falhar, aplicar os ajustes
-> antes de seguir. A Fase 5 (escala e portabilidade) **não** começa até esse reteste.
+> **Reteste manual (4ª rodada):** o mantenedor validou o *demo* ("tudo ok") e pediu uma nova
+> rodada — ver a seção **"Quinta rodada — UI/UX, fonte de captura e glossário"** abaixo
+> (UI/pop-up mais tecnológico, registro da fonte de captura, diagnóstico do loopback e
+> ampliação do glossário). **A quinta rodada está concluída** (A5.0–A5.6 abaixo); falta apenas
+> a confirmação de campo do loopback/microfone com uma aula real. A Fase 5 (escala e
+> portabilidade) pode começar.
 
 **Tarefa inicial da próxima sessão — revisar antes de avançar:**
 
-1. Reempacotar (`scripts/build-windows.ps1` + `iscc`) e rodar `pytest -q`,
-   `sopro-validate-glossary data/domains/tech-en-pt` e
-   `SOPRO_SMOKE_MS=1500 python -m sopro --demo` (confira `logs/sopro.log`).
-2. Coletar o resultado do reteste manual; corrigir o que for apontado.
-3. Conferir este `TODO`, o checkpoint de release em `docs/09` §9 e os prompts `docs/05` A9/A10.
-4. Decidir as questões em aberto da seção "Decisões" (embedding, LLM local, UI, licença do
+1. Confirmar em campo (aula real) a captura do loopback e o nível/fala do microfone (A5.1).
+2. Conferir este `TODO`, o checkpoint de release em `docs/09` §9 e os prompts `docs/05` A9/A10.
+3. Decidir as questões em aberto da seção "Decisões" (embedding, LLM local, UI, licença do
    glossário) antes de fechar a v0.1.
 
 **Depois:** seguir para a **Fase 5 — Escala e portabilidade** (camadas Linux/macOS, outros
@@ -233,7 +233,261 @@ Pendente: rebuild do instalador e reteste manual do mantenedor.
 - [x] Reteste instalado/frozen: `--demo` no `Sopro.exe` portátil e no instalado retornaram
   exit 0 (log sem conteúdo de fala); ciclo instalar → abrir → desinstalar verde, com
   `%LOCALAPPDATA%\Sopro` preservado e 2º atalho de demonstração criado/removido.
-- [ ] Reteste manual do mantenedor: pop-ups, hub, indicador arrastável, histórico, termos.
+- [ ] Reteste manual do mantenedor: ver a seção **"Reteste manual do mantenedor"** abaixo
+  (instalador de 2026-10-20).
+
+## Reteste manual do mantenedor (4ª rodada) — 2026-10-20
+
+Executar com `dist/Sopro-Setup-0.1.0.exe` (build de 2026-10-20, com as correções da quarta
+rodada). Marque cada item; se algo falhar, anotar o sintoma e corrigir antes da Fase 5.
+
+- [ ] **M1 Instalação** — instalar (per-user, sem admin), abrir; assistente de primeira
+  execução aparece (consentimento LGPD, domínio, idioma, fontes de áudio).
+- [ ] **M2 Pop-ups** — bandeja → "Ver exemplo de pop-up"; cartão opaco e legível (contraste
+  reforçado), som opcional ao exibir, hover pausa, clique fecha, "fixar" funciona, fila
+  empilha por canto.
+- [ ] **M3 Indicador arrastável** — arrastar o dot; posição persiste após reiniciar
+  (`indicator_x/y`); opção nas Configurações o oculta; pulso em tempo real
+  (LOADING → LISTENING com o nível do áudio).
+- [ ] **M4 Hub** — bandeja → "Abrir Sopro…"; 6 páginas (Status/Configurações/Glossários/
+  Termos/Histórico/Demonstração); botão "Aplicar" por página; fechar o hub mantém o app
+  rodando; "Assistente inicial…" reiniciável.
+- [ ] **M5 Histórico** — busca por texto, filtro "aprendido", período com datas, exportar
+  CSV/Markdown; segundo atalho global abre o histórico.
+- [ ] **M6 Termos** — editar termo existente, adicionar novo, excluir; acepções editáveis;
+  exclusão não apaga o histórico.
+- [ ] **M7 Instância única** — abrir o Sopro uma segunda vez: ativa o hub existente e a
+  segunda execução encerra; `--demo` tem trava separada ("Abrir demonstração" abre nova
+  instância sem disputar a trava).
+- [ ] **M8 Demo** — demonstração usa os termos reais do glossário ativo.
+- [ ] **M9 Falha/retry** — se o pipeline falhar, bandeja fica em ERROR com "Tentar de novo"
+  (não sai com código 2).
+- [ ] **M10 Privacidade** — `logs/sopro.log` sem conteúdo de fala; sem chaves em texto puro;
+  ativação do Groq pede confirmação e mostra indicador na bandeja.
+
+## Quinta rodada — UI/UX, fonte de captura e glossário (CONCLUÍDA)
+
+Derivada do reteste do mantenedor: demo OK, mas pediu (a) UI/pop-up mais "tecnológico e
+atrativo", com UI/UX ideal para a ferramenta; (b) **registrar a fonte** de cada detecção
+(microfone vs. áudio do sistema); (c) verificar a captura do loopback e por que termos como
+"framework" não foram detectados.
+
+### Diagnóstico (causas-raiz identificadas)
+
+- **`context_hints` se perdem no app** (P0): `importer.build_domain_package` reconstrói
+  `Term(... context_hints=())` (`core/repo/importer.py:157`) e a tabela `term` não tem coluna
+  para eles (`core/repo/migrations.py:19-28`). Todo termo `stoplisted` (pipeline, model,
+  layer, kernel, bug, cloud, token) tem hints vazios → `_context_confirms` sempre falso →
+  **nunca dispara pop-up** no app real (nos testes passa, pois carregam o JSON direto).
+- **"framework" não existe no glossário** (66 termos): só há `docs/06` citando a palavra.
+- **Nível do indicador sempre baixo** (P2): `app/realtime.py:58` usa
+  `max(1.0, energy_threshold)` → `speaking` sempre `False` e `level` ≤ ~0,25.
+- **Loopback pode estar mudo**: volume do app/mixer/dispositivo de saída errado; validar com
+  `sopro-capture-probe`.
+
+### Decisões confirmadas
+
+- [x] **Estética:** *dark tecnológico* como padrão (fundo `#0B1120`/`#0F172A`, accent
+  ciano/violeta estilo ferramenta de dev), tema claro preservado como opção, com **detecção
+  real de `theme=system`** (hoje cai sempre no claro).
+- [x] **Glossário:** ampliar ~35 termos ausentes nesta rodada + corrigir os `context_hints`.
+- [x] **Ícone:** gerar ícone de marca (SVG→ICO) para janela/bandeja/instalador agora.
+- [ ] **Pendência futura:** o mantenedor criará o ícone definitivo no Illustrator e
+  solicitaremos a substituição do ícone gerado (registrar ao fim da rodada).
+
+### A5.0 — Correção da detecção (P0)
+
+- [x] Migração v5: coluna `context_hints TEXT NOT NULL DEFAULT '[]'` na tabela `term`.
+- [x] `Repository.add_term`/upsert e `list_terms` gravam/leem `context_hints` (JSON).
+- [x] `importer.build_domain_package` reconstrói `context_hints` do banco (sem `()` fixo);
+  `import_package`/`export_package_json` também preservam os hints.
+- [x] Testes: round-trip de hints no repo (`test_repo_repository.py`), rebuild preservando
+  hints (`test_repo_importer.py`) e disparo end-to-end do `pipeline` via banco
+  (`test_matcher.py::test_seed_stoplisted_term_fires_after_db_round_trip`).
+
+### A5.1 — Captura (diagnóstico)
+
+- [x] `sopro-capture-probe --seconds 6` (durante áudio no PC): **system rms=0.0219,
+  pico=0.2178** (loopback OK, acima do limiar 0.01); **mic rms=0.0000** (microfone
+  do headset mudo/selecionado errado). Loopback padrão = "FxSound Speakers".
+  **A confirmar com uma aula real** ao vivo pelo mantenedor.
+
+### A5.2 — Glossário
+
+- [x] 33 termos novos adicionados (framework, library, runtime, compiler, interpreter,
+  debug, callback, thread, concurrency, middleware, container, microservice, database,
+  query, schema, index, cache, server, client, protocol, gateway, websocket, load
+  balancer, SDK, IDE, branch, CI/CD, DevOps, downtime, scalability, refactor, unit test,
+  code review). Total: **99 termos**.
+- [x] `sopro-validate-glossary` sem novos erros (2 avisos pré-existentes: licença e 0
+  revisados).
+
+### A5.3 — Design tokens e tema (C1)
+
+- [x] Ampliar `Palette` (accent_soft, success/warning/danger, surface_elevated, shadow,
+  `font_family`) e criar a paleta **dark tecnológica** (padrão) + clara.
+- [x] Resolver `theme="system"` de verdade (detectar dark do SO via `winreg`); font-family real.
+- [ ] Centralizar cores hoje espalhadas: `status_indicator.py`, `tray.py`, `pages.py:66`.
+  (STATE_COLORS do indicador/bandeja mantidos de propósito — testes fixam os valores.)
+
+### A5.4 — Pop-up e fonte (B1/B2/B3 + C2)
+
+- [x] Chip de fonte no cartão ("Áudio do sistema" / "Microfone") via `Detection.source` +
+  setting `show_source` (checkbox nas Configurações).
+- [x] Badge de classe (pos), hierarquia tipográfica.
+- [x] **Animações de entrada/saída** (fade + slide ≤ 200 ms via `QPropertyAnimation`).
+- [x] Histórico/export: `source_label` rotula `system`/`mic` como "Sistema"/"Microfone".
+
+### A5.5 — Hub, ícones e microinterações (C3/C4/C5)
+
+- [x] Hub e páginas com o novo tema; navegação lateral estilizada; botões com hierarquia.
+- [x] Ícone de marca (SVG→ICO) + `setWindowIcon` + bandeja + `sopro.spec`/`installer.iss`.
+- [x] Corrigir nível/fala do indicador (`realtime.py` usava `max(1.0, threshold)` numa
+  escala `rms` 0..1 → `speaking` sempre falso; agora usa o `energy_threshold` direto).
+
+### A5.6 — Testes, docs e release (D1–D3)
+
+- [x] Preservar atributos privados testados; cores do indicador mantidas.
+- [x] Novos testes: chip de fonte, `context_hints`, label de fonte, `theme=system`, `brand_icon`.
+- [x] Atualizar `docs/02 §8`, README e `TODO`; rebuild + instalador.
+  - `410 passed`; build portátil `dist/Sopro-0.1.0-portable.zip` e instalador
+    `dist/Sopro-Setup-0.1.0.exe` regerados; `dist/SHA256SUMS.txt` com os dois arquivos.
+  - Smoke do `.exe` empacotado OK (modo demo, sem traceback).
+
+## Sexta rodada — Detecção (glossário/modelo/matcher) e aba Sobre (CONCLUÍDA)
+
+Derivada do reteste do mantenedor: "algumas palavras ainda não estão sendo identificadas" —
+melhorar o glossário e refinar/trocar o modelo STT; e adicionar uma **aba de disclaimer**
+com licença do software + "about me" do dev (analisado o GitHub `cavalcanteprofissional`).
+
+### Diagnóstico (causas-raiz — da análise do pipeline)
+
+- **STT fraco (P0)**: default é `whisper-tiny-en` (~74 MB, o pior modelo EN); `whisper-small-en`
+  existe no catálogo mas `verified:false` (não baixa). Decodificação `beam_size=1`,
+  `temperature=0` (`platform/stt/faster_whisper_engine.py:23-26`).
+- **Matcher rígido (P0)**: casa por igualdade exata de tokens após normalização, só com plural
+  (`core/matcher/matcher.py:52-80`); sem fuzzy, sem `-ing/-ed`. Qualquer erro do Whisper
+  ("imbeddings") falha.
+- **Bias do Whisper truncado (P1)**: `vocabulary_hint` limita aos **50** termos de maior
+  prioridade (`core/stt/vocabulary.py:11-21`) → os 25 termos priority-3 (bug, cloud, thread,
+  unit test…) nunca entram no `initial_prompt`.
+- **Glossário pequeno (P1)**: 99 termos.
+- **Divergência de config (P2)**: `settings.groq_stt_model="whisper-large-v3-turbo"` vs
+  `factory.DEFAULT_GROQ_STT_MODEL="whisper-large-v3"`.
+- **Licença "a definir"**: `LICENSE`, `pyproject.toml`, `README` e `manifest.json` sem licença
+  concreta; não há superfície "Sobre".
+
+### Decisões confirmadas (mantenedor)
+
+- [x] **Detecção:** ampliar glossário + variantes, melhorar o bias do Whisper, matcher tolerante
+  (fuzzy) e **trocar o modelo STT padrão**.
+- [x] **Licença:** **MIT**.
+- [x] **About:** resumo + links do GitHub (nome + bio curta + LinkedIn/portfolio/e-mail).
+
+### A6.0 — Registrar plano (antes)
+
+- [x] Plano registrado neste TODO e em `docs/02 §8` / `docs/06` antes de implementar.
+
+### A6.1 — Modelo STT padrão (P0)
+
+- [x] Preencher `whisper-small-en` no `data/models.json` (url/sha256/size, `verified:true`).
+- [x] Tornar `whisper-small-en` o default (`settings.py`, `factory.py`, fallbacks em `run.py`).
+- [x] Trocar o campo livre de `stt_model` por combo populado do catálogo (evita typo que
+  derruba o pipeline).
+
+### A6.2 — Bias do Whisper (P1)
+
+- [x] Subir o limite do `vocabulary_hint` (todos os termos, truncando por tokens ~224) e
+  incluir siglas/aliases curtos.
+
+### A6.3 — Matcher tolerante (P0)
+
+- [x] Gerar variantes `-ing/-ed/-er` além do plural.
+- [x] Fuzzy opt-in (`MatcherConfig.fuzzy`, limiar alto + comprimento mínimo; setting + checkbox).
+- [x] Testes: `deployed`→`deploy`; typo `transfomer`→`transformer` (fuzzy); termo curto não
+  casa por fuzzy.
+
+### A6.4 — Glossário (P1)
+
+- [x] Ampliar o glossário em ~80–100 termos (IA/dev) + enriquecer aliases (formas verbais).
+- [x] `sopro-validate-glossary` sem erros; meta > 180 termos.
+
+### A6.5 — Aba Sobre / Licença (P0)
+
+- [x] `AboutPage` (Sobre, Licença MIT + terceiros, Aviso/LGPD, Sobre o desenvolvedor com links)
+  + item "Sobre" no Hub; `_apply` desabilitado nessa aba.
+- [x] Definir MIT: `LICENSE`, `pyproject.toml`, `README`, `manifest.json` (licença + autores).
+
+### A6.6 — Testes, docs e release
+
+- [x] Testes: `AboutPage`, aba no Hub, matcher (fuzzy/flexões), glossário, default do modelo.
+- [x] Atualizar docs/TODO (depois); `pytest`; rebuild portátil + instalador + `SHA256SUMS.txt`.
+  - `410 passed` → glossário com 201 termos (SaaS/PaaS/IaaS, cloud, containers, IAM…), matcher
+    com flexões + fuzzy opt-in, modelo padrão `whisper-small-en`, aba "Sobre" com MIT e
+    créditos; **rodada extra**: hotword (openWakeWord) com palavra configurável, indicador
+    clicável, sons distintos e verificação de conflito I/O de áudio.
+
+## Sétima rodada — Nichos/trilhas do glossário `tech` (PLANEJADA)
+
+O glossário `tech` cresce **em nichos**: a área de tecnologia passa a ter **trilhas**
+(programação, ciência de dados, devops, frontend, backend) como sub-pacotes do **mesmo
+domínio lógico**, com seleção múltipla simultânea pelo usuário.
+
+### Decisões confirmadas (mantenedor)
+
+- [x] **Slug**: `tech-<trilha>-en-pt` (mantém `domain_tag == "tech"` — o matcher, o resolver e o
+  validador seguem funcionando sem reescrita).
+- [x] **Escopo**: implementar as 5 trilhas; o usuário pode escolher **várias** trilhas ao mesmo
+  tempo (além da base).
+- [x] **Tamanho**: 60–90 termos por trilha.
+- [x] **Base**: **redistribuir** — termos específicos saem da base e entram na trilha.
+- [x] **UI**: agrupamento em árvore no glossário + seletor de trilhas nas configurações.
+
+### A7.0 — Registrar plano (antes)
+
+- [x] Plano registrado neste TODO, em `docs/07 §7` (formato das trilhas) e `docs/02 §7/§9`.
+
+### A7.1 — Modelo de dados (P0)
+
+- [ ] `Manifest`: `parent_slug`, `track`, `track_label`, `track_order`; `Term.tracks`;
+  `Sense.track`; `DomainPackage.track`/`is_track` (`core/glossary/package.py`).
+- [ ] Migração **v6** (`core/repo/migrations.py`): `domain.parent_slug`, `domain.track`,
+  `term.tracks`, `sense.track`.
+- [ ] `Repository.upsert_domain(..., parent_slug, track)`, `add_term(..., tracks)`,
+  `SenseInput.track`; `DomainRecord`/`TermRecord`/`SenseRecord` com os campos novos.
+- [ ] `core/repo/importer.py`: import/export preservando os campos novos (hoje o export é lossy).
+
+### A7.2 — Agregação em runtime (P0)
+
+- [ ] `core/glossary/aggregate.py`: `aggregate_packages(packages, active_tracks)` → um
+  `DomainPackage` unificado (dedup por `canonical_en`, senses com ordinals finais únicos,
+  stoplist unificada) + `build_aggregate_from_repo` (modo offline/SQLite).
+
+### A7.3 — Runtime (P0)
+
+- [ ] `app/run.py`: `_load_active_package` → `_load_active_packages` (base + trilhas ativas).
+- [ ] `app/detection.py`: `_persist` busca o termo em todos os domínios ativos.
+- [ ] `Settings.active_tracks` (vazio = todas) e correção do `indicator_enabled` duplicado.
+- [ ] `core/stt/vocabulary.py`: hint aceita vários pacotes (base → trilhas ativas) no limite
+  de ~220 tokens.
+
+### A7.4 — UI (P1)
+
+- [ ] `GlossaryPage`: lista agrupada (domínio → trilhas) com checkbox por trilha.
+- [ ] `SettingsPage`: seletor de trilhas ativas; `FirstRunDialog`: checkboxes aninhados.
+
+### A7.5 — Curadoria (P1)
+
+- [ ] Redistribuir a base (201 termos) entre genérico e trilhas.
+- [ ] 5 trilhas × 60–90 termos (programação, data science, devops, frontend, backend).
+- [ ] `sopro-validate-glossary` sem erros em todos os pacotes.
+
+### A7.6 — Testes, docs e release (P0)
+
+- [ ] Testes: agregação, migração v6, round-trip import/export, matcher sobre o agregado,
+  hint priorizando trilha, UI agrupada.
+- [ ] `docs/02 §7/§9`, `docs/07 §7`, README, CHANGELOG; `pytest`; rebuild portátil +
+  instalador + `SHA256SUMS.txt`.
 
 ## Fase 5 — Escala e portabilidade
 

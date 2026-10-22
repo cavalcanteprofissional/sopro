@@ -11,7 +11,7 @@
 [![Python](https://img.shields.io/badge/python-3.11%20%7C%203.12-3776AB?logo=python&logoColor=white)](pyproject.toml)
 [![Plataforma](https://img.shields.io/badge/plataforma-Windows%2010%2F11-0078D4?logo=windows&logoColor=white)](#instalação-windows)
 [![Testes](https://img.shields.io/badge/testes-403%20passando-success)](tests)
-[![Licença](https://img.shields.io/badge/licen%C3%A7a-a%20definir-lightgrey)](LICENSE)
+[![Licença](https://img.shields.io/badge/licen%C3%A7a-MIT-blue)](LICENSE)
 
 [Visão geral](#-por-que-o-sopro) ·
 [Como funciona](#-como-funciona) ·
@@ -284,8 +284,9 @@ consentimento dos participantes (LGPD — Lei 13.709/2018). Veja [SECURITY.md](S
 
 ## 📄 Licença
 
-A definir — pendente de revisão das licenças dos glossários e fontes. Veja
-[docs/06-referencias.md](docs/06-referencias.md) e [LICENSE](LICENSE).
+Este projeto está licenciado sob a [Licença MIT](LICENSE).
+
+Copyright (c) 2026 Lucas Cavalcante dos Santos.
 
 <div align="center">
 <sub>Feito com atenção à privacidade e à legibilidade. ✨</sub>

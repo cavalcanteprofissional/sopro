@@ -31,10 +31,12 @@ class Settings:
     """Preferências do usuário (valores validados na construção)."""
 
     audio_sources: tuple[str, ...] = ("system",)
+    mic_device_id: str | None = None
+    system_device_id: str | None = None
     active_domains: tuple[str, ...] = ("tech-en-pt",)
     output_lang: str = "pt-BR"
     stt_provider: str = "local"
-    stt_model: str = "whisper-tiny-en"
+    stt_model: str = "whisper-small-en"
     groq_stt_model: str = "whisper-large-v3-turbo"
     llm_provider: str = "off"
     llm_model: str = ""
@@ -44,6 +46,8 @@ class Settings:
     popup_position: str = "bottom-right"
     popup_sound: bool = True
     """Toca um bipe curto quando um pop-up aparece."""
+    show_source: bool = True
+    """Mostra no cartão de onde veio a fala (microfone ou áudio do sistema)."""
     cooldown_s: float = 30.0
     budget_per_minute: int = 6
     theme: str = "system"
@@ -64,6 +68,22 @@ class Settings:
     indicator_x: int = -1
     indicator_y: int = -1
     """Posição salva do indicador flutuante (-1 = posição padrão)."""
+    matcher_fuzzy: bool = True
+    """Permite correspondência aproximada para erros de transcrição (STT)."""
+    hotword_enabled: bool = True
+    """Escuta por palavra-chave para ligar/desligar o Sopro."""
+    hotword_phrase: str = "sopro"
+    """Palavra-chave configurável para ativação."""
+    hotword_backend: str = "openwakeword"
+    """Backend do hotword (openwakeword ou stt_short)."""
+    hotword_sensitivity: float = 0.5
+    """Sensibilidade do detector de hotword (0-1)."""
+    hotword_listen_device: str | None = None
+    """Dispositivo de áudio prioritário para hotword (None = padrão)."""
+    hotword_volume: float = 0.4
+    """Volume do som ao ligar/desligar por hotword."""
+    popup_volume: float = 0.25
+    """Volume do som de popup (suavizado)."""
 
     def __post_init__(self) -> None:
         self.validate()

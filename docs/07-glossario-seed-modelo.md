@@ -136,3 +136,68 @@ Palavras que só devem disparar com contexto de domínio: `model, layer, kernel,
 - [ ] Prioridades cobrem os termos mais frequentes das aulas de teste
 - [ ] Manifesto com versão, idioma, licença e autores
 - [ ] Amostra de 20 termos revisada manualmente
+
+## 7. Nichos (trilhas) dentro de um domínio
+
+Um mesmo domínio lógico pode se dividir em **trilhas** (nichos) — por exemplo, a área de
+tecnologia (`tech`) pode ter trilhas de programação, ciência de dados, devops, frontend e
+backend. Todas as trilhas continuam pertencendo ao **mesmo domínio** (`domain_tag == "tech"`),
+então o matcher, o resolvedor e o validador funcionam sem tratamento especial.
+
+### 7.1 Convenção de slug e campos do manifesto
+
+Slug: `tech-<trilha>-en-pt` (o `domain_tag` é derivado do primeiro segmento: `tech`).
+
+```json
+{
+  "slug": "tech-devops-en-pt",
+  "name": "Tecnologia — Trilha DevOps",
+  "parent_slug": "tech-en-pt",
+  "track": "devops",
+  "track_label": "DevOps e Nuvem",
+  "track_order": 3,
+  "version": "0.1.0",
+  "source_lang": "en",
+  "output_langs": ["pt-BR"],
+  "license": "MIT",
+  "authors": ["Lucas Cavalcante dos Santos"],
+  "created_at": "2026-10-21",
+  "embedding_model": null
+}
+```
+
+| Campo | Regra |
+|---|---|
+| `parent_slug` | slug do pacote base do domínio (vazio no próprio pacote base) |
+| `track` | identificador da trilha (`devops`, `data-science`, …); vazio = pacote base |
+| `track_label` | rótulo curto exibido na interface |
+| `track_order` | ordem de exibição na interface (0 = base) |
+
+### 7.2 Metadados de trilha dentro dos termos
+
+- No **termo**: `"tracks": ["devops", "backend"]` — o termo pertence a essas trilhas
+  (usado para priorizar o *vocabulary hint* do STT e para filtrar a lista de termos).
+- Na **acepção**: `"track": "devops"` — a acepção é específica da trilha (o mesmo termo pode ter
+  sentidos diferentes em trilhas diferentes, ex.: *cache* em backend ≠ frontend).
+
+Acepções sem `track` são **genéricas** e valem para qualquer trilha. A ordem de preferência na
+resolução é: acepção da trilha ativa → acepção genérica → demais acepções.
+
+### 7.3 Regras de curadoria entre base e trilhas
+
+1. A **base** guarda os termos realmente genéricos (IA, ML, cloud, conceitos transversais).
+2. Termos **específicos** saem da base e vão para a trilha correspondente.
+3. Termos **compartilhados** ficam na base com o campo `tracks` listando as trilhas.
+4. Uma trilha pode ter termo próprio que também existe na base com acepção genérica: a
+   agregação mantém a acepção genérica e acrescenta a específica da trilha.
+5. Cada pacote de trilha segue o checklist de §6 (inclusive ≥20 termos revisados).
+
+### 7.4 Agregação em runtime
+
+O app carrega o pacote base + as trilhas ativas e produz um **pacote agregado**:
+
+- termos deduplicados por `canonical_en` (base tem precedência);
+- senses mescladas com **ordinals finais únicos** (a chave do resolvedor é
+  `(canonical_en, ordinal)`);
+- `stoplist` unificada;
+- a ordem das senses no agregado segue a preferência: trilha ativa → genérica → demais.

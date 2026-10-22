@@ -34,6 +34,7 @@ from sopro.core.hotkeys import HotkeyError, parse_hotkey
 from sopro.core.paths import data_path
 from sopro.core.rag import default_embedder
 from sopro.core.repo import Database, Repository, build_domain_package, import_package
+from sopro.core.audio.io_check import check_audio_io_conflict
 from sopro.platform.hotkey import create_listener
 
 DEMO_TICK_MS = 40
@@ -105,6 +106,7 @@ def _matcher_config(settings: Settings):
     return MatcherConfig(
         cooldown_s=settings.cooldown_s,
         max_popups_per_minute=settings.budget_per_minute,
+        fuzzy=getattr(settings, "matcher_fuzzy", True),
     )
 
 
@@ -208,7 +210,7 @@ def _build_provider(settings: Settings, home: Path, secret_store=None, on_progre
             "Groq indisponível (%s); usando transcrição local", exc
         )
         return faster_whisper(
-            model_id="whisper-tiny-en",
+            model_id="whisper-small-en",
             home=home / "models",
             language="en",
             progress=on_progress,
@@ -335,6 +337,11 @@ def _configure_app(app) -> None:
     """
     app.setApplicationName("Sopro")
     app.setQuitOnLastWindowClosed(False)
+    from sopro.platform.popup.tray import brand_icon
+
+    icon = brand_icon()
+    if not icon.isNull():
+        app.setWindowIcon(icon)
 
 
 def _run(args, home, repo, settings, domains_root, instance=None) -> int:
@@ -351,6 +358,10 @@ def _run(args, home, repo, settings, domains_root, instance=None) -> int:
     _configure_app(app)
 
     settings = _maybe_first_run(args, repo, settings, domains_root)
+
+    from sopro.platform.popup.theme import app_stylesheet
+
+    app.setStyleSheet(app_stylesheet(settings.theme))
 
     thread: threading.Thread | None = None
     stop = threading.Event()
@@ -522,7 +533,21 @@ def _run(args, home, repo, settings, domains_root, instance=None) -> int:
                     return
                 status_bridge.ready.emit()
                 source = _build_audio_source(settings)
-                capture = CaptureConfig(sources=settings.audio_sources)
+                capture = CaptureConfig(
+                    sources=settings.audio_sources,
+                    system_device_id=getattr(settings, "system_device_id", None),
+                    mic_device_id=getattr(settings, "mic_device_id", None),
+                )
+                # Check audio I/O conflict
+                try:
+                    conf = check_audio_io_conflict(
+                        getattr(settings, "mic_device_id", None),
+                        getattr(settings, "system_device_id", None),
+                    )
+                    if conf.has_conflict:
+                        _log.warning("Conflito I/O áudio: %s", conf.message)
+                except Exception:
+                    pass
                 source.start(capture)
                 try:
                     pipeline.run(
@@ -577,9 +602,18 @@ def _run(args, home, repo, settings, domains_root, instance=None) -> int:
 
     def on_toggle() -> None:
         state["paused"] = not state["paused"]
-        set_status(
-            IndicatorState.PAUSED if state["paused"] else IndicatorState.LISTENING
-        )
+        if state["paused"]:
+            try:
+                play_hotword_off(getattr(settings, "hotword_volume", 0.4))
+            except Exception:
+                pass
+            set_status(IndicatorState.PAUSED)
+        else:
+            try:
+                play_hotword_on(getattr(settings, "hotword_volume", 0.4))
+            except Exception:
+                pass
+            set_status(IndicatorState.LISTENING)
 
     def on_hub_settings(new_settings) -> None:
         save_settings(repo, new_settings)
@@ -676,6 +710,21 @@ def _run(args, home, repo, settings, domains_root, instance=None) -> int:
     tray.show()
 
     hotkey = _start_hotkey(settings, on_toggle)
+    hotword_detector = None
+    if getattr(settings, "hotword_enabled", False):
+        try:
+            hotword_detector = create_hotword_detector(
+                phrase=getattr(settings, "hotword_phrase", "sopro"),
+                backend=getattr(settings, "hotword_backend", "openwakeword"),
+                sensitivity=getattr(settings, "hotword_sensitivity", 0.5),
+                device=getattr(settings, "hotword_listen_device", None),
+            )
+            if hotword_detector is not None:
+                hotword_detector.register_callback(on_toggle)
+                hotword_detector.start()
+        except Exception:
+            hotword_detector = None
+
     hotkey_history = _start_hotkey_for(
         settings.shortcut_history, lambda: open_hub("Histórico")
     )

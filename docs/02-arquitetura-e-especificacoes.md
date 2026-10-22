@@ -74,9 +74,15 @@ Princípio central: **o LLM não participa de toda frase.** O caminho rápido é
 ## 5. Transcrição em tempo real (especificação)
 
 - Modelos de partida: Whisper **somente inglês** (`small.en` ou variante destilada), quantizado para CPU. Calibrar no benchmark.
+- **Revisão 6ª rodada:** o **modelo padrão** passa a ser `whisper-small-en` (mais preciso para
+  termos técnicos); `whisper-tiny-en` fica como opção leve. O campo de modelo deixa de ser texto
+  livre e vira **lista do catálogo** (`data/models.json`), evitando IDs inexistentes que
+  derrubam o pipeline.
 - **Engine e modelo** (faster-whisper vs whisper.cpp; `small.en` vs distilado) são escolhidos por **benchmark** na Fase 0/1. Os modelos são obtidos **sob demanda** na primeira execução, com verificação de integridade (ver `08-distribuicao-e-offline.md`).
 - Segmentação por VAD, com limite máximo de segmento (ex.: 8–12 s) e pequena sobreposição (ex.: 0,3–0,5 s) para não cortar palavras.
-- Dica de vocabulário: lista dos termos de maior prioridade do domínio, truncada ao tamanho permitido pelo modelo. Ver regra no `05-prompts.md`.
+- Dica de vocabulário: lista dos termos do domínio, truncada ao tamanho permitido pelo modelo
+  (**~224 tokens**; inclui todos os termos, não só os de maior prioridade — 6ª rodada). Ver regra
+  no `05-prompts.md`.
 - Provedor Groq: respeitar os limites do plano gratuito (ver `06-referencias.md`), enviar segmentos de **no mínimo ~10 s** devido à cobrança mínima por requisição, aceitando latência maior; reduzir requisições com VAD.
 - Duas fontes simultâneas: processar em filas separadas, com limite de concorrência para não saturar CPU.
 
@@ -115,6 +121,20 @@ Arquivo compactado contendo:
 
 Instalar um pacote = inserir nas tabelas acima e recalcular vetores se o modelo de embedding for diferente.
 
+### 7.1 Nichos (trilhas) do glossário
+
+Um domínio pode ter **trilhas** (nichos) — sub-pacotes do mesmo domínio lógico. O slug
+`tech-<trilha>-en-pt` mantém `domain_tag == "tech"`, então o matcher, o resolvedor e o
+validador não mudam de comportamento.
+
+- Manifesto: `parent_slug`, `track`, `track_label`, `track_order` (`docs/07 §7`).
+- Termo: `tracks` (trilhas a que pertence); acepção: `track` (sentido específico da trilha).
+- O app carrega **base + trilhas ativas** e monta um **pacote agregado**
+  (`core/glossary/aggregate.py`): dedup por `canonical_en`, senses com ordinals finais únicos,
+  stoplist unificada e preferência de resolução *trilha ativa → genérica → demais*.
+- Vários domínios/troncos podem coexistir; cada pacote vira uma linha em `domain`
+  (com `parent_slug`/`track`), e a detecção é persistida no domínio de origem do termo.
+
 ## 8. Especificação do pop-up
 
 ### Visual (referência: print de dicionário do projeto)
@@ -122,11 +142,21 @@ Instalar um pacote = inserir nas tabelas acima e recalcular vetores se o modelo 
 - Tamanho máximo configurável (ex.: 360×200 px), cantos arredondados, sombra leve.
 - Posição configurável (canto inferior direito por padrão), com margem da borda.
 - Modo claro/escuro.
+- **Revisão 5ª rodada:** tema **dark tecnológico** como padrão (fundo `#0B1120`/`#0F172A`,
+  accent ciano/violeta); *badge* de classe (pos) no cabeçalho; **chip de fonte** ("Áudio do
+  sistema" / "Microfone") a partir de `Detection.source` (setting `show_source`); sombra
+  adaptativa ao tema; hierarquia tipográfica reforçada. `theme="system"` passa a resolver o
+  modo escuro do SO de verdade.
+- **Ícone de marca** (`platform/popup/assets/sopro.ico`, gerado de `sopro.svg`): aplicado à
+  janela (`setWindowIcon`), à bandeja (marca + disco de estado) e ao executável/instalador
+  (`sopro.spec`, `installer.iss`). *Pendência futura:* o mantenedor criará o ícone definitivo
+  no Illustrator e a substituição será solicitada ao fim da rodada.
 
 ### Comportamento
 - Janela sem borda, **sempre no topo**, **sem receber foco** e **sem ativar** ao aparecer.
 - Opção de "transparente a cliques" enquanto não há hover.
-- Entrada/saída com animação curta (≤ 200 ms), desativável.
+- Entrada/saída com animação curta (≤ 200 ms), desativável. *(implementado na 5ª rodada via
+  `QPropertyAnimation`: fade + slide.)*
 - Tempo de exibição padrão 6–8 s; pausa no hover; clique fecha; ação "fixar".
 - Fila: no máximo N cartões simultâneos (padrão 3); novos substituem os mais antigos.
 - Respeitar múltiplos monitores e DPI.
@@ -143,9 +173,13 @@ Instalar um pacote = inserir nas tabelas acima e recalcular vetores se o modelo 
   `loading` (download/warmup, pulso pela fração), `listening`, `analyzing` (pulso em tempo
   real pelo nível de áudio), `paused` e `error`. Nunca rouba foco.
 - **Hub** (`platform/popup/hub.py` + `pages.py`): janela única com navegação entre Status,
-  Configurações, Glossários, Termos, Histórico e Demonstração. Configurações e Glossários são
-  páginas reutilizáveis, também hospedadas nos diálogos antigos (`PageHost`). Fechar qualquer
-  tela **não** encerra o app (ele vive na bandeja).
+  Configurações, Glossários, Termos, Histórico, Demonstração e **Sobre**. Configurações e
+  Glossários são páginas reutilizáveis, também hospedadas nos diálogos antigos (`PageHost`).
+  Fechar qualquer tela **não** encerra o app (ele vive na bandeja).
+- **Sobre / Licença** (6ª rodada, `pages.py::AboutPage`): página informativa com a licença do
+  software (**MIT**), avisos de licenças de terceiros (Whisper/faster-whisper MIT; PySide6
+  LGPL-3.0), o **aviso/consentimento** (LGPD — sem gravação de áudio, nuvem opt-in, sem
+  garantia) e os créditos do desenvolvedor com links. Não é editável (`Aplicar` desabilitado).
 - **Histórico** (RF-22): busca por texto, filtro por "aprendido" e por período, além de
   exportação CSV/Markdown. Segundo atalho global abre o hub direto no histórico (RF-25).
 - **Termos** (RF-23): busca, edição de canônico/classe/aliases/prioridade/ambíguo e tabela de
@@ -160,6 +194,8 @@ Instalar um pacote = inserir nas tabelas acima e recalcular vetores se o modelo 
 - Provedor de STT (local/Groq), modelo, chave Groq (armazenada localmente, de preferência no cofre de credenciais do SO).
 - Provedor de LLM (local/Groq/desligado), modelo e URL base (servidor OpenAI-compatível).
 - Domínios ativos, idioma de saída, cooldown, orçamento por minuto, duração, posição, tema.
+- Trilhas ativas (`active_tracks`): sub-nichos do domínio escolhido; lista vazia = todas as
+  trilhas do domínio. Várias trilhas podem ser ativas ao mesmo tempo.
 - Desambiguação: limiar do resolvedor (`resolution_threshold`) e janela de contexto
   (`resolution_window_s`).
 - Termos fora do glossário: ativar candidatos (`llm_candidates`) e limite de taxa próprio

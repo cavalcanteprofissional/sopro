@@ -13,13 +13,23 @@ from __future__ import annotations
 import time
 import html
 from dataclasses import dataclass
+from functools import partial
 from typing import Callable
 
-from PySide6.QtCore import QObject, Qt, QTimer, Signal
+from PySide6.QtCore import (
+    QEasingCurve,
+    QObject,
+    QPoint,
+    QPropertyAnimation,
+    Qt,
+    QTimer,
+    Signal,
+)
 from PySide6.QtGui import QColor, QCursor, QPainter, QPen
 from PySide6.QtWidgets import (
     QApplication,
     QFrame,
+    QGraphicsOpacityEffect,
     QHBoxLayout,
     QLabel,
     QToolButton,
@@ -27,6 +37,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from sopro.core.audio.contracts import source_label
 from sopro.platform.popup.queue import PopupDecision, PopupItem, PopupQueue
 from sopro.platform.popup.sound import play_popup_sound
 from sopro.platform.popup.theme import card_stylesheet, palette
@@ -63,6 +74,7 @@ class CardContent:
     definition: str
     register: str | None
     note: str | None
+    source: str = ""
 
 
 def card_content(detection) -> CardContent:
@@ -78,6 +90,7 @@ def card_content(detection) -> CardContent:
         definition=detection.definition,
         register=detection.register,
         note=note,
+        source=getattr(detection, "source", "") or "",
     )
 
 
@@ -169,6 +182,7 @@ class PopupCard(QFrame):
         *,
         theme: str = "light",
         duration_ms: int = 7000,
+        show_source: bool = False,
     ) -> None:
         flags = (
             Qt.WindowType.FramelessWindowHint
@@ -189,6 +203,7 @@ class PopupCard(QFrame):
         self._remaining = duration_ms
         self._pinned = False
         self._done = False
+        self._show_source = show_source
         self._timer = QTimer(self)
         self._timer.setSingleShot(True)
         self._timer.timeout.connect(self._on_timeout)
@@ -235,10 +250,19 @@ class PopupCard(QFrame):
         header.addWidget(self._close)
         body.addLayout(header)
 
-        if content.pos:
-            pos = QLabel(content.pos)
-            pos.setObjectName("SoproPos")
-            body.addWidget(pos)
+        if content.pos or (self._show_source and content.source):
+            meta = QHBoxLayout()
+            meta.setSpacing(6)
+            if content.pos:
+                pos = QLabel(content.pos)
+                pos.setObjectName("SoproPos")
+                meta.addWidget(pos)
+            meta.addStretch(1)
+            if self._show_source and content.source:
+                source = QLabel(source_label(content.source, short=True))
+                source.setObjectName("SoproSource")
+                meta.addWidget(source)
+            body.addLayout(meta)
         if content.translation:
             translation = QLabel(content.translation)
             translation.setObjectName("SoproTranslation")
@@ -268,14 +292,45 @@ class PopupCard(QFrame):
     # -- ciclo de vida ------------------------------------------------------
     def start(self) -> None:
         self.show()
+        self._animate_in()
         if not self._pinned:
             self._timer.start(self._remaining)
 
+    def _animate_in(self) -> None:
+        """Entrada suave: fade + leve deslize de baixo para cima (≤ 200 ms)."""
+        self._opacity = QGraphicsOpacityEffect(self)
+        self._opacity.setOpacity(0.0)
+        self.surface.setGraphicsEffect(self._opacity)
+        self._fade = QPropertyAnimation(self._opacity, b"opacity", self)
+        self._fade.setDuration(180)
+        self._fade.setStartValue(0.0)
+        self._fade.setEndValue(1.0)
+        self._fade.setEasingCurve(QEasingCurve.Type.OutCubic)
+        self._fade.start()
+        self._slide = QPropertyAnimation(self, b"pos", self)
+        self._slide.setDuration(180)
+        self._slide.setStartValue(self.pos() + QPoint(0, 12))
+        self._slide.setEndValue(self.pos())
+        self._slide.setEasingCurve(QEasingCurve.Type.OutCubic)
+        self._slide.start()
+
     def dismiss(self) -> None:
+        if self._done:
+            return
         self._done = True
         self._timer.stop()
         self.closed.emit(self._key)
-        self.hide()
+        opacity = QGraphicsOpacityEffect(self)
+        opacity.setOpacity(1.0)
+        self.surface.setGraphicsEffect(opacity)
+        self._fade_out = QPropertyAnimation(opacity, b"opacity", self)
+        self._fade_out.setDuration(140)
+        self._fade_out.setStartValue(1.0)
+        self._fade_out.setEndValue(0.0)
+        self._fade_out.setEasingCurve(QEasingCurve.Type.InCubic)
+        self._fade_out.finished.connect(self.hide)
+        self._fade_out.finished.connect(self._fade_out.deleteLater)
+        self._fade_out.start()
 
     # -- eventos ------------------------------------------------------------
     def enterEvent(self, event) -> None:  # noqa: N802 (API Qt)
@@ -320,10 +375,14 @@ class OverlayController(QObject):
         self._duration_ms = int(settings.popup_duration_s * 1000)
         self._theme = settings.theme
         self._position = settings.popup_position
+        self._show_source = getattr(settings, "show_source", False)
         self._screen_rect = screen_rect or _primary_screen_rect
         self._clock = clock or time.monotonic
         plays = getattr(settings, "popup_sound", True)
-        self._sound = (sound or play_popup_sound) if plays else None
+        volume = float(getattr(settings, "popup_volume", 0.25) or 0.25)
+        self._sound = (
+            (sound or partial(play_popup_sound, volume=volume)) if plays else None
+        )
 
     @property
     def queue(self) -> PopupQueue:
@@ -342,7 +401,12 @@ class OverlayController(QObject):
             return
         if result.evicted is not None:
             self._discard(result.evicted.key)
-        card = PopupCard(detection, theme=self._theme, duration_ms=self._duration_ms)
+        card = PopupCard(
+            detection,
+            theme=self._theme,
+            duration_ms=self._duration_ms,
+            show_source=self._show_source,
+        )
         card.closed.connect(self._on_closed)
         self._cards[detection.term] = card
         self._relayout()
