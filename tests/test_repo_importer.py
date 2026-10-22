@@ -97,3 +97,73 @@ def test_build_domain_package_rebuilds_terms():
     assert {t.canonical_en for t in package.terms} == {t.canonical_en for t in source.terms}
     assert package.manifest.slug == "tech-en-pt"
     assert sorted(package.stoplist) == sorted(source.stoplist)
+
+
+def test_track_metadata_round_trip(tmp_path):
+    import json
+
+    package_dir = tmp_path / "tech-devops-en-pt"
+    package_dir.mkdir()
+    (package_dir / "manifest.json").write_text(
+        json.dumps(
+            {
+                "slug": "tech-devops-en-pt",
+                "name": "Tecnologia — DevOps",
+                "version": "0.1.0",
+                "source_lang": "en",
+                "output_langs": ["pt-BR"],
+                "license": "MIT",
+                "authors": ["Lucas"],
+                "created_at": "2026-10-21",
+                "parent_slug": "tech-en-pt",
+                "track": "devops",
+                "track_label": "DevOps e Nuvem",
+                "track_order": 3,
+            }
+        ),
+        encoding="utf-8",
+    )
+    (package_dir / "terms.json").write_text(
+        json.dumps(
+            [
+                {
+                    "canonical_en": "container",
+                    "pos": "noun",
+                    "tracks": ["devops", "backend"],
+                    "senses": [
+                        {
+                            "ordinal": 1,
+                            "domain_tag": "tech",
+                            "translation_pt": "contêiner",
+                            "definition_pt": "Unidade isolada de software.",
+                            "track": "devops",
+                        }
+                    ],
+                }
+            ]
+        ),
+        encoding="utf-8",
+    )
+
+    repo = _repo()
+    import_package(repo, package_dir)
+    domain = repo.get_domain("tech-devops-en-pt")
+    term = repo.get_term_by_canonical(domain.id, "container")
+    assert domain.parent_slug == "tech-en-pt"
+    assert domain.track == "devops"
+    assert domain.track_label == "DevOps e Nuvem"
+    assert domain.track_order == 3
+    assert term.tracks == ("devops", "backend")
+
+    rebuilt = build_domain_package(repo, "tech-devops-en-pt")
+    assert rebuilt.manifest.parent_slug == "tech-en-pt"
+    assert rebuilt.manifest.track == "devops"
+    assert rebuilt.terms[0].tracks == ("devops", "backend")
+    assert rebuilt.terms[0].senses[0].track == "devops"
+
+    out = export_package_json(repo, "tech-devops-en-pt", tmp_path / "out")
+    exported = load_package(out)
+    assert exported.manifest.parent_slug == "tech-en-pt"
+    assert exported.manifest.track_label == "DevOps e Nuvem"
+    assert exported.terms[0].tracks == ("devops", "backend")
+    assert exported.terms[0].senses[0].track == "devops"

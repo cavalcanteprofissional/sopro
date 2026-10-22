@@ -21,7 +21,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "CI/CD",
@@ -45,7 +45,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "DevOps",
@@ -66,7 +66,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "IDE",
@@ -89,7 +89,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "RAG",
@@ -113,7 +113,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "SDK",
@@ -136,7 +136,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "activation function",
@@ -161,7 +161,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "agile",
@@ -196,7 +196,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "algorithm",
@@ -219,7 +219,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "attention",
@@ -255,7 +255,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "backlog",
@@ -278,7 +278,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "backpropagation",
@@ -302,7 +302,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "batch",
@@ -339,7 +339,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "branch",
@@ -366,7 +366,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "bug",
@@ -401,7 +401,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "cache",
@@ -424,7 +424,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "callback",
@@ -447,7 +447,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "classification",
@@ -483,7 +483,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "client",
@@ -510,7 +510,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "cloud",
@@ -545,7 +545,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "clustering",
@@ -569,7 +569,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "code review",
@@ -593,7 +593,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "commit",
@@ -629,7 +629,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "compiler",
@@ -652,7 +652,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "concurrency",
@@ -673,7 +673,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "confusion matrix",
@@ -696,7 +696,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "container",
@@ -724,7 +724,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "database",
@@ -747,7 +747,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "dataset",
@@ -771,7 +771,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "debug",
@@ -795,7 +795,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "deep learning",
@@ -816,7 +816,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "deployment",
@@ -840,7 +840,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "downtime",
@@ -861,7 +861,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "dropout",
@@ -882,7 +882,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "embedding",
@@ -906,7 +906,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "epoch",
@@ -929,7 +929,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "feature",
@@ -964,7 +964,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "few-shot learning",
@@ -988,7 +988,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "fine-tuning",
@@ -1013,7 +1013,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "framework",
@@ -1036,7 +1036,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "gateway",
@@ -1059,7 +1059,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "generalization",
@@ -1083,7 +1083,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "gradient",
@@ -1106,7 +1106,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "gradient descent",
@@ -1130,7 +1130,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "hallucination",
@@ -1154,7 +1154,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "hyperparameter",
@@ -1178,7 +1178,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "index",
@@ -1207,7 +1207,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "inference",
@@ -1243,7 +1243,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "interpreter",
@@ -1266,7 +1266,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "kernel",
@@ -1301,7 +1301,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "label",
@@ -1338,7 +1338,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "latency",
@@ -1361,7 +1361,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "layer",
@@ -1396,7 +1396,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "learning rate",
@@ -1419,7 +1419,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "library",
@@ -1447,7 +1447,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "load balancer",
@@ -1470,7 +1470,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "loss function",
@@ -1495,7 +1495,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "machine learning",
@@ -1518,7 +1518,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "merge",
@@ -1554,7 +1554,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "microservice",
@@ -1577,7 +1577,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "middleware",
@@ -1598,7 +1598,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "model",
@@ -1634,7 +1634,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "neural network",
@@ -1658,7 +1658,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "open source",
@@ -1682,7 +1682,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "overfitting",
@@ -1707,7 +1707,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "perceptron",
@@ -1730,7 +1730,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "pipeline",
@@ -1765,7 +1765,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "precision",
@@ -1800,7 +1800,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "prompt",
@@ -1836,7 +1836,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "protocol",
@@ -1864,7 +1864,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "pull request",
@@ -1889,7 +1889,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "query",
@@ -1917,7 +1917,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "recall",
@@ -1953,7 +1953,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "refactor",
@@ -1977,7 +1977,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "refactoring",
@@ -2001,7 +2001,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "regression",
@@ -2037,7 +2037,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "regularization",
@@ -2061,7 +2061,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "reinforcement learning",
@@ -2084,7 +2084,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "repository",
@@ -2120,7 +2120,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "runtime",
@@ -2143,7 +2143,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "scalability",
@@ -2166,7 +2166,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "schema",
@@ -2189,7 +2189,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "scrum",
@@ -2212,7 +2212,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "server",
@@ -2240,7 +2240,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "sprint",
@@ -2275,7 +2275,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "supervised learning",
@@ -2298,7 +2298,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "support vector machine",
@@ -2321,7 +2321,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "thread",
@@ -2349,7 +2349,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "throughput",
@@ -2370,7 +2370,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "token",
@@ -2414,7 +2414,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "tokenization",
@@ -2438,7 +2438,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "training",
@@ -2474,7 +2474,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "transfer learning",
@@ -2497,7 +2497,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "transformer",
@@ -2533,7 +2533,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "underfitting",
@@ -2557,7 +2557,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "unit test",
@@ -2581,7 +2581,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "unsupervised learning",
@@ -2604,7 +2604,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "websocket",
@@ -2627,7 +2627,7 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   },
   {
     "canonical_en": "zero-shot learning",
@@ -2651,6 +2651,6 @@
       }
     ],
     "source": "popular",
-    "needs_review": false
+    "needs_review": true
   }
 ]

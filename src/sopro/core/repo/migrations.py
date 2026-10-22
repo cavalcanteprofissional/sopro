@@ -127,12 +127,24 @@ SCHEMA_V5 = """
 ALTER TABLE term ADD COLUMN context_hints TEXT NOT NULL DEFAULT '[]';
 """
 
+SCHEMA_V6 = """
+ALTER TABLE domain ADD COLUMN parent_slug TEXT NOT NULL DEFAULT '';
+ALTER TABLE domain ADD COLUMN track TEXT NOT NULL DEFAULT '';
+ALTER TABLE domain ADD COLUMN track_label TEXT NOT NULL DEFAULT '';
+ALTER TABLE domain ADD COLUMN track_order INTEGER;
+ALTER TABLE term ADD COLUMN tracks TEXT NOT NULL DEFAULT '[]';
+ALTER TABLE sense ADD COLUMN track TEXT;
+CREATE INDEX idx_domain_parent ON domain(parent_slug);
+CREATE INDEX idx_domain_track ON domain(track);
+"""
+
 MIGRATIONS: tuple[tuple[int, str], ...] = (
     (1, SCHEMA_V1),
     (2, SCHEMA_V2),
     (3, SCHEMA_V3),
     (4, SCHEMA_V4),
     (5, SCHEMA_V5),
+    (6, SCHEMA_V6),
 )
 
 LATEST_VERSION = MIGRATIONS[-1][0]

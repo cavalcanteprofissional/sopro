@@ -230,3 +230,50 @@ def test_settings_crud():
 
     repo.delete_setting("theme")
     assert repo.get_setting("theme") is None
+
+
+def test_domain_and_term_track_round_trip():
+    repo = _repo()
+    base_id = repo.upsert_domain("tech-en-pt", track_order=0)
+    track_id = repo.upsert_domain(
+        "tech-devops-en-pt",
+        parent_slug="tech-en-pt",
+        track="devops",
+        track_label="DevOps e Nuvem",
+        track_order=3,
+    )
+
+    term_id = repo.add_term(
+        track_id,
+        "container",
+        tracks=("devops", "backend"),
+        senses=[SenseInput(1, translation_pt="contêiner", track="devops")],
+    )
+
+    base = repo.get_domain("tech-en-pt")
+    track = repo.get_domain("tech-devops-en-pt")
+    term = repo.get_term(term_id)
+    sense = repo.list_senses(term_id)[0]
+
+    assert base.parent_slug == "" and base.track == ""
+    assert track.parent_slug == "tech-en-pt"
+    assert track.track == "devops"
+    assert track.track_label == "DevOps e Nuvem"
+    assert track.track_order == 3
+    assert term.tracks == ("devops", "backend")
+    assert sense.track == "devops"
+    assert base_id != track_id
+
+
+def test_find_term_in_domains_prefers_first_active_domain():
+    repo = _repo()
+    base_id = repo.upsert_domain("tech-en-pt")
+    track_id = repo.upsert_domain(
+        "tech-backend-en-pt", parent_slug="tech-en-pt", track="backend"
+    )
+    term_id = repo.add_term(track_id, "queue")
+
+    found = repo.find_term_in_domains("queue", [base_id, track_id])
+
+    assert found is not None and found.id == term_id
+    assert repo.find_term_in_domains("queue", [base_id]) is None

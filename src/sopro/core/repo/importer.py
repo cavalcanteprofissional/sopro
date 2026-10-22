@@ -37,6 +37,10 @@ def import_package(repo: Repository, package_path: str | Path) -> int:
         version=manifest.version,
         license=manifest.license,
         active=True,
+        parent_slug=manifest.parent_slug or "",
+        track=manifest.track or "",
+        track_label=manifest.track_label or "",
+        track_order=manifest.track_order,
     )
     repo.set_stoplist(domain_id, package.stoplist)
     for term in package.terms:
@@ -48,6 +52,7 @@ def import_package(repo: Repository, package_path: str | Path) -> int:
                 definition_pt=sense.definition_pt,
                 register=sense.register,
                 example_en=sense.example_en,
+                track=sense.track,
             )
             for sense in term.senses
         ]
@@ -61,6 +66,7 @@ def import_package(repo: Repository, package_path: str | Path) -> int:
             aliases=term.aliases,
             senses=senses,
             context_hints=term.context_hints,
+            tracks=term.tracks,
         )
     return domain_id
 
@@ -85,6 +91,7 @@ def export_package_json(
                 "is_ambiguous": term.is_ambiguous,
                 "stoplisted": term.stoplisted,
                 "context_hints": list(term.context_hints),
+                "tracks": list(term.tracks),
                 "senses": [
                     {
                         "ordinal": sense.ordinal,
@@ -93,6 +100,7 @@ def export_package_json(
                         "definition_pt": sense.definition_pt,
                         "register": sense.register,
                         "example_en": sense.example_en,
+                        "track": sense.track,
                     }
                     for sense in senses
                 ],
@@ -109,6 +117,10 @@ def export_package_json(
         "output_langs": [output_lang],
         "authors": [],
         "created_at": "",
+        "parent_slug": domain.parent_slug or None,
+        "track": domain.track or None,
+        "track_label": domain.track_label or None,
+        "track_order": domain.track_order,
     }
 
     out = Path(output_dir)
@@ -143,6 +155,10 @@ def build_domain_package(repo: Repository, slug: str) -> DomainPackage:
         license=domain.license,
         authors=(),
         created_at="",
+        parent_slug=domain.parent_slug or None,
+        track=domain.track or None,
+        track_label=domain.track_label or None,
+        track_order=domain.track_order,
     )
 
     terms = []
@@ -165,11 +181,13 @@ def build_domain_package(repo: Repository, slug: str) -> DomainPackage:
                         definition_pt=sense.definition_pt,
                         register=sense.register,
                         example_en=sense.example_en,
+                        track=sense.track,
                     )
                     for sense in senses
                 ),
                 source="sqlite",
                 needs_review=False,
+                tracks=term.tracks,
             )
         )
 

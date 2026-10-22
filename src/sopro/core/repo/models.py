@@ -13,6 +13,10 @@ class DomainRecord:
     version: str = ""
     license: str = ""
     active: bool = True
+    parent_slug: str = ""
+    track: str = ""
+    track_label: str = ""
+    track_order: int | None = None
 
 
 @dataclass(frozen=True)
@@ -25,6 +29,7 @@ class SenseInput:
     definition_pt: str = ""
     register: str | None = None
     example_en: str | None = None
+    track: str | None = None
 
 
 @dataclass(frozen=True)
@@ -37,6 +42,7 @@ class SenseRecord:
     definition_pt: str
     register: str | None = None
     example_en: str | None = None
+    track: str | None = None
 
 
 @dataclass(frozen=True)
@@ -50,6 +56,7 @@ class TermRecord:
     stoplisted: bool = False
     aliases: tuple[str, ...] = field(default_factory=tuple)
     context_hints: tuple[str, ...] = field(default_factory=tuple)
+    tracks: tuple[str, ...] = field(default_factory=tuple)
 
 
 @dataclass(frozen=True)

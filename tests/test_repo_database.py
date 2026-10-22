@@ -110,3 +110,39 @@ def test_file_database_can_be_used_from_another_thread(tmp_path):
     session_id = result["session"]
     assert session_id is not None
     assert repo.start_session("principal", ("system",)) != session_id
+
+
+def test_migrate_v5_to_v6_adds_track_columns(tmp_path):
+    path = tmp_path / "v5.db"
+    connection = sqlite3.connect(path)
+    connection.executescript(
+        """
+        CREATE TABLE domain (id INTEGER PRIMARY KEY, slug TEXT NOT NULL UNIQUE,
+            name TEXT NOT NULL DEFAULT '', version TEXT NOT NULL DEFAULT '',
+            license TEXT NOT NULL DEFAULT '', active INTEGER NOT NULL DEFAULT 1);
+        CREATE TABLE term (id INTEGER PRIMARY KEY, domain_id INTEGER NOT NULL,
+            canonical_en TEXT NOT NULL, pos TEXT NOT NULL DEFAULT '',
+            priority INTEGER NOT NULL DEFAULT 3, is_ambiguous INTEGER NOT NULL DEFAULT 0,
+            stoplisted INTEGER NOT NULL DEFAULT 0, context_hints TEXT NOT NULL DEFAULT '[]',
+            UNIQUE (domain_id, canonical_en));
+        CREATE TABLE sense (id INTEGER PRIMARY KEY, term_id INTEGER NOT NULL,
+            ordinal INTEGER NOT NULL, domain_tag TEXT NOT NULL DEFAULT 'general',
+            translation_pt TEXT NOT NULL DEFAULT '', definition_pt TEXT NOT NULL DEFAULT '',
+            register TEXT, example_en TEXT, UNIQUE (term_id, ordinal));
+        PRAGMA user_version = 5;
+        """
+    )
+    connection.execute("INSERT INTO domain(slug) VALUES('tech-en-pt')")
+    connection.commit()
+    connection.close()
+
+    db = Database(str(path))
+    assert db.migrate() == LATEST_VERSION
+
+    domain_cols = {row["name"] for row in db.connection.execute("PRAGMA table_info(domain)")}
+    term_cols = {row["name"] for row in db.connection.execute("PRAGMA table_info(term)")}
+    sense_cols = {row["name"] for row in db.connection.execute("PRAGMA table_info(sense)")}
+
+    assert {"parent_slug", "track", "track_label", "track_order"} <= domain_cols
+    assert "tracks" in term_cols
+    assert "track" in sense_cols

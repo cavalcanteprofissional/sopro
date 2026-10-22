@@ -28,7 +28,7 @@ def test_real_seed_package_reports_known_pending_items():
     warning_codes = codes(report.warnings)
 
     assert "W_REVIEW_PENDING" in warning_codes
-    assert "W_LICENSE_PLACEHOLDER" in warning_codes
+    assert "W_LICENSE_PLACEHOLDER" not in warning_codes
 
 
 def test_duplicate_canonical_en_is_error():

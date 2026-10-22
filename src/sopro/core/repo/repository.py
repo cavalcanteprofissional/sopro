@@ -56,15 +56,32 @@ class Repository:
         version: str = "",
         license: str = "",
         active: bool = True,
+        *,
+        parent_slug: str = "",
+        track: str = "",
+        track_label: str = "",
+        track_order: int | None = None,
     ) -> int:
         with self._db.transaction() as conn:
             conn.execute(
-                "INSERT INTO domain(slug, name, version, license, active) "
-                "VALUES(?, ?, ?, ?, ?) "
+                "INSERT INTO domain(slug, name, version, license, active, parent_slug, "
+                "track, track_label, track_order) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?) "
                 "ON CONFLICT(slug) DO UPDATE SET "
                 "name=excluded.name, version=excluded.version, "
-                "license=excluded.license, active=excluded.active",
-                (slug, name, version, license, int(active)),
+                "license=excluded.license, active=excluded.active, "
+                "parent_slug=excluded.parent_slug, track=excluded.track, "
+                "track_label=excluded.track_label, track_order=excluded.track_order",
+                (
+                    slug,
+                    name,
+                    version,
+                    license,
+                    int(active),
+                    parent_slug or "",
+                    track or "",
+                    track_label or "",
+                    track_order,
+                ),
             )
             row = conn.execute("SELECT id FROM domain WHERE slug = ?", (slug,)).fetchone()
         return int(row["id"])
@@ -119,15 +136,16 @@ class Repository:
         aliases: Sequence[str] = (),
         senses: Sequence[SenseInput] = (),
         context_hints: Sequence[str] = (),
+        tracks: Sequence[str] = (),
     ) -> int:
         with self._db.transaction() as conn:
             conn.execute(
-                "INSERT INTO term(domain_id, canonical_en, pos, priority, is_ambiguous, stoplisted, context_hints) "
-                "VALUES(?, ?, ?, ?, ?, ?, ?) "
+                "INSERT INTO term(domain_id, canonical_en, pos, priority, is_ambiguous, stoplisted, context_hints, tracks) "
+                "VALUES(?, ?, ?, ?, ?, ?, ?, ?) "
                 "ON CONFLICT(domain_id, canonical_en) DO UPDATE SET "
                 "pos=excluded.pos, priority=excluded.priority, "
                 "is_ambiguous=excluded.is_ambiguous, stoplisted=excluded.stoplisted, "
-                "context_hints=excluded.context_hints",
+                "context_hints=excluded.context_hints, tracks=excluded.tracks",
                 (
                     domain_id,
                     canonical_en,
@@ -136,6 +154,7 @@ class Repository:
                     int(is_ambiguous),
                     int(stoplisted),
                     json.dumps(list(context_hints)),
+                    json.dumps(list(tracks)),
                 ),
             )
             row = conn.execute(
@@ -155,7 +174,8 @@ class Repository:
             for sense in senses:
                 conn.execute(
                     "INSERT INTO sense(term_id, ordinal, domain_tag, translation_pt, "
-                    "definition_pt, register, example_en) VALUES(?, ?, ?, ?, ?, ?, ?)",
+                    "definition_pt, register, example_en, track) "
+                    "VALUES(?, ?, ?, ?, ?, ?, ?, ?)",
                     (
                         term_id,
                         sense.ordinal,
@@ -164,6 +184,7 @@ class Repository:
                         sense.definition_pt,
                         sense.register,
                         sense.example_en,
+                        sense.track,
                     ),
                 )
 
@@ -204,6 +225,20 @@ class Repository:
             ).fetchall()
         return [self._term(row) for row in rows]
 
+    def find_term_in_domains(
+        self, canonical_en: str, domain_ids: Sequence[int]
+    ) -> TermRecord | None:
+        """Procura um termo pelo canônico em vários domínios ativos."""
+        if not domain_ids:
+            return None
+        placeholders = ", ".join("?" for _ in domain_ids)
+        row = self._db.connection.execute(
+            f"SELECT * FROM term WHERE canonical_en = ? AND domain_id IN ({placeholders}) "
+            "ORDER BY domain_id LIMIT 1",
+            (canonical_en, *domain_ids),
+        ).fetchone()
+        return self._term(row) if row else None
+
     def list_senses(self, term_id: int) -> list[SenseRecord]:
         rows = self._db.connection.execute(
             "SELECT * FROM sense WHERE term_id = ? ORDER BY ordinal", (term_id,)
@@ -218,6 +253,7 @@ class Repository:
                 definition_pt=row["definition_pt"],
                 register=row["register"],
                 example_en=row["example_en"],
+                track=row["track"] if "track" in row.keys() else None,
             )
             for row in rows
         ]
@@ -272,21 +308,12 @@ class Repository:
             stoplisted=bool(row["stoplisted"]),
             aliases=tuple(alias["alias"] for alias in aliases),
             context_hints=self._hints(row),
+            tracks=_json_list(row, "tracks"),
         )
 
     @staticmethod
     def _hints(row) -> tuple[str, ...]:
-        keys = row.keys()
-        if "context_hints" not in keys:
-            return ()
-        raw = row["context_hints"] or "[]"
-        try:
-            values = json.loads(raw)
-        except (TypeError, ValueError):
-            return ()
-        if not isinstance(values, list):
-            return ()
-        return tuple(str(value) for value in values)
+        return _json_list(row, "context_hints")
 
     # -- embeddings das acepções (sense_vec) --------------------------------
 
@@ -600,7 +627,22 @@ class Repository:
         return target
 
 
+def _json_list(row, key: str) -> tuple[str, ...]:
+    keys = row.keys()
+    if key not in keys:
+        return ()
+    raw = row[key] or "[]"
+    try:
+        values = json.loads(raw)
+    except (TypeError, ValueError):
+        return ()
+    if not isinstance(values, list):
+        return ()
+    return tuple(str(value) for value in values)
+
+
 def _domain(row) -> DomainRecord:
+    keys = row.keys()
     return DomainRecord(
         id=row["id"],
         slug=row["slug"],
@@ -608,6 +650,14 @@ def _domain(row) -> DomainRecord:
         version=row["version"],
         license=row["license"],
         active=bool(row["active"]),
+        parent_slug=row["parent_slug"] if "parent_slug" in keys else "",
+        track=row["track"] if "track" in keys else "",
+        track_label=row["track_label"] if "track_label" in keys else "",
+        track_order=(
+            row["track_order"]
+            if "track_order" in keys and row["track_order"] is not None
+            else None
+        ),
     )
 
 

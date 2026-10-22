@@ -23,6 +23,7 @@ from sopro.core.glossary.package import (
     PackageError,
     Sense,
     Term,
+    list_package_slugs,
     load_package,
 )
 
@@ -136,9 +137,61 @@ def _check_manifest(package: DomainPackage, issues: list[Issue], stats: dict) ->
                 f"licença do pacote ainda não definida ('{m.license}').",
             )
         )
+    if m.is_track:
+        if not m.track:
+            issues.append(
+                Issue(
+                    ERROR,
+                    "E_TRACK_MISSING",
+                    "pacote com 'parent_slug' precisa de 'track'.",
+                )
+            )
+        if m.parent_slug == m.slug:
+            issues.append(
+                Issue(
+                    ERROR,
+                    "E_TRACK_PARENT_SELF",
+                    "'parent_slug' não pode ser igual ao próprio 'slug'.",
+                )
+            )
+        if m.track_order is None:
+            issues.append(
+                Issue(
+                    WARNING,
+                    "W_TRACK_ORDER_MISSING",
+                    "pacote de trilha sem 'track_order'; a ordem na UI fica indefinida.",
+                )
+            )
+        if not m.track_label:
+            issues.append(
+                Issue(
+                    WARNING,
+                    "W_TRACK_LABEL_MISSING",
+                    "pacote de trilha sem 'track_label'.",
+                )
+            )
+    else:
+        if m.track:
+            issues.append(
+                Issue(
+                    ERROR,
+                    "E_BASE_HAS_TRACK",
+                    "pacote base não deve declarar 'track'.",
+                )
+            )
+        if m.parent_slug:
+            issues.append(
+                Issue(
+                    ERROR,
+                    "E_BASE_HAS_PARENT",
+                    "pacote base não deve declarar 'parent_slug'.",
+                )
+            )
     stats["slug"] = m.slug
     stats["version"] = m.version
     stats["domain_tag"] = m.domain_tag
+    stats["parent_slug"] = m.parent_slug or ""
+    stats["track"] = m.track or ""
 
 
 def _check_term(term: Term, package: DomainPackage, issues: list[Issue], stats: dict) -> None:
@@ -304,10 +357,47 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--strict", action="store_true", help="trata avisos como falha."
     )
+    parser.add_argument(
+        "--all",
+        action="store_true",
+        help="valida todos os pacotes dentro do diretório informado.",
+    )
     args = parser.parse_args(argv)
 
+    root = _resolve_path(args.path)
+    if args.all:
+        slugs = list_package_slugs(root)
+        if not slugs:
+            print(f"erro: nenhum pacote encontrado em {root}", file=sys.stderr)
+            return 2
+        reports: list[tuple[str, Report]] = []
+        for slug in slugs:
+            try:
+                package = load_package(root / slug)
+            except PackageError as exc:
+                print(f"erro em {slug}: {exc}", file=sys.stderr)
+                return 2
+            reports.append((slug, validate_package(package)))
+        if args.json:
+            print(
+                json.dumps(
+                    {slug: report.to_dict() for slug, report in reports},
+                    ensure_ascii=False,
+                    indent=2,
+                )
+            )
+        else:
+            for _slug, report in reports:
+                print(report.format())
+                print()
+        failed = any(
+            bool(report.errors) or (args.strict and bool(report.warnings))
+            for _slug, report in reports
+        )
+        return 1 if failed else 0
+
     try:
-        package = load_package(_resolve_path(args.path))
+        package = load_package(root)
     except PackageError as exc:
         print(f"erro: {exc}", file=sys.stderr)
         return 2
