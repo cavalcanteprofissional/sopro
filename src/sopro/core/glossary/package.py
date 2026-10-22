@@ -39,6 +39,7 @@ class Sense:
     definition_pt: str
     register: str | None = None
     example_en: str | None = None
+    track: str | None = None
 
     @classmethod
     def from_dict(cls, data: dict) -> "Sense":
@@ -49,6 +50,7 @@ class Sense:
             definition_pt=str(data.get("definition_pt", "")),
             register=data.get("register"),
             example_en=data.get("example_en"),
+            track=data.get("track") or None,
         )
 
 
@@ -66,9 +68,13 @@ class Term:
     senses: tuple[Sense, ...] = ()
     source: str = "curado"
     needs_review: bool = True
+    tracks: tuple[str, ...] = ()
 
     @classmethod
     def from_dict(cls, data: dict) -> "Term":
+        tracks = data.get("tracks") or ()
+        if isinstance(tracks, str):
+            tracks = (tracks,)
         return cls(
             canonical_en=str(data["canonical_en"]),
             pos=str(data.get("pos", "")),
@@ -80,6 +86,7 @@ class Term:
             senses=tuple(Sense.from_dict(s) for s in (data.get("senses") or ())),
             source=str(data.get("source", "curado")),
             needs_review=bool(data.get("needs_review", True)),
+            tracks=tuple(str(t) for t in tracks if t),
         )
 
     def domain_senses(self, domain_tag: str) -> tuple[Sense, ...]:
@@ -100,11 +107,19 @@ class Manifest:
     authors: tuple[str, ...]
     created_at: str
     embedding_model: str | None = None
+    parent_slug: str | None = None
+    track: str | None = None
+    track_label: str | None = None
+    track_order: int | None = None
 
     @property
     def domain_tag(self) -> str:
         """Etiqueta de domínio derivada do slug (ex.: ``tech-en-pt`` → ``tech``)."""
         return self.slug.split("-", 1)[0]
+
+    @property
+    def is_track(self) -> bool:
+        return bool(self.parent_slug)
 
     @classmethod
     def from_dict(cls, data: dict) -> "Manifest":
@@ -118,6 +133,14 @@ class Manifest:
             authors=tuple(str(x) for x in (data.get("authors") or ())),
             created_at=str(data.get("created_at", "")),
             embedding_model=data.get("embedding_model"),
+            parent_slug=data.get("parent_slug") or None,
+            track=data.get("track") or None,
+            track_label=data.get("track_label") or None,
+            track_order=(
+                int(data["track_order"])
+                if data.get("track_order") is not None
+                else None
+            ),
         )
 
 
