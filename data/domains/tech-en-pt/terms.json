@@ -1,8 +1,11 @@
 [
   {
-    "canonical_en": "machine learning",
-    "pos": "phrase",
-    "aliases": ["ML"],
+    "canonical_en": "API",
+    "pos": "acronym",
+    "aliases": [
+      "apis",
+      "application programming interface"
+    ],
     "priority": 1,
     "is_ambiguous": false,
     "stoplisted": false,
@@ -11,14 +14,788 @@
       {
         "ordinal": 1,
         "domain_tag": "tech",
-        "translation_pt": "aprendizado de máquina",
-        "definition_pt": "Campo da IA em que algoritmos aprendem padrões a partir de dados para fazer previsões ou decisões.",
+        "translation_pt": "API (interface de programação)",
+        "definition_pt": "Conjunto de regras que permite um software conversar com outro.",
         "register": null,
-        "example_en": "Machine learning models improve with more data."
+        "example_en": "We called the API to fetch the data."
       }
     ],
-    "source": "curado",
-    "needs_review": true
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "CI/CD",
+    "pos": "noun",
+    "aliases": [
+      "continuous delivery",
+      "continuous integration"
+    ],
+    "priority": 3,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "CI/CD (integração e entrega contínuas)",
+        "definition_pt": "Práticas que automatizam testes e implantação a cada mudança de código.",
+        "register": null,
+        "example_en": "CI/CD runs tests on every push."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "DevOps",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 3,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "DevOps",
+        "definition_pt": "Cultura que aproxima desenvolvimento e operações pela automação.",
+        "register": null,
+        "example_en": "DevOps shortens release cycles."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "IDE",
+    "pos": "acronym",
+    "aliases": [
+      "integrated development environment"
+    ],
+    "priority": 3,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "IDE (ambiente de desenvolvimento)",
+        "definition_pt": "Aplicativo que integra editor, compilador e depurador para programar.",
+        "register": null,
+        "example_en": "She codes in a full IDE."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "RAG",
+    "pos": "acronym",
+    "aliases": [
+      "retrieval augmented generation",
+      "retrieval-augmented generation"
+    ],
+    "priority": 1,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "geração aumentada por recuperação",
+        "definition_pt": "Técnica que busca documentos relevantes e os fornece ao modelo antes de gerar a resposta.",
+        "register": null,
+        "example_en": "RAG grounds answers in retrieved documents."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "SDK",
+    "pos": "acronym",
+    "aliases": [
+      "software development kit"
+    ],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "SDK (kit de desenvolvimento)",
+        "definition_pt": "Conjunto de ferramentas e bibliotecas para desenvolver com uma plataforma.",
+        "register": null,
+        "example_en": "The SDK simplifies cloud calls."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "activation function",
+    "pos": "phrase",
+    "aliases": [
+      "ReLU",
+      "activation",
+      "sigmoid"
+    ],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "função de ativação",
+        "definition_pt": "Função que introduz não linearidade na saída de um neurônio.",
+        "register": null,
+        "example_en": "ReLU is a popular activation function."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "agile",
+    "pos": "adjective",
+    "aliases": [
+      "agility"
+    ],
+    "priority": 2,
+    "is_ambiguous": true,
+    "stoplisted": false,
+    "context_hints": [
+      "scrum",
+      "sprint",
+      "methodology"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "ágil (metodologia)",
+        "definition_pt": "Abordagem de desenvolvimento iterativa com entregas frequentes e adaptação a mudanças.",
+        "register": null,
+        "example_en": "The team follows an agile process."
+      },
+      {
+        "ordinal": 2,
+        "domain_tag": "general",
+        "translation_pt": "ágil, rápido",
+        "definition_pt": "Que se move com facilidade e rapidez.",
+        "register": null,
+        "example_en": null
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "algorithm",
+    "pos": "noun",
+    "aliases": [
+      "algorithms"
+    ],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "algoritmo",
+        "definition_pt": "Sequência finita de passos que resolve um problema ou executa um cálculo.",
+        "register": null,
+        "example_en": "This sorting algorithm runs in linear time."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "attention",
+    "pos": "noun",
+    "aliases": [
+      "attention mechanism",
+      "self-attention"
+    ],
+    "priority": 2,
+    "is_ambiguous": true,
+    "stoplisted": false,
+    "context_hints": [
+      "transformer",
+      "head",
+      "context"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "atenção (mecanismo)",
+        "definition_pt": "Mecanismo que permite ao modelo pesar a importância de cada parte da entrada.",
+        "register": null,
+        "example_en": "Self-attention relates every token to every other token."
+      },
+      {
+        "ordinal": 2,
+        "domain_tag": "general",
+        "translation_pt": "atenção, cuidado",
+        "definition_pt": "Capacidade de concentrar-se em algo.",
+        "register": null,
+        "example_en": null
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "backlog",
+    "pos": "noun",
+    "aliases": [
+      "product backlog"
+    ],
+    "priority": 1,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "backlog (lista de pendências)",
+        "definition_pt": "Lista priorizada de tarefas e requisitos a serem desenvolvidos pela equipe.",
+        "register": null,
+        "example_en": "The top item in the backlog is the login screen."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "backpropagation",
+    "pos": "noun",
+    "aliases": [
+      "back-propagation",
+      "backprop"
+    ],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "retropropagação",
+        "definition_pt": "Método que calcula gradientes camada a camada para treinar redes neurais.",
+        "register": null,
+        "example_en": "Backpropagation updates the weights using the gradient."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "batch",
+    "pos": "noun",
+    "aliases": [
+      "batches",
+      "mini-batch",
+      "mini-batches"
+    ],
+    "priority": 3,
+    "is_ambiguous": true,
+    "stoplisted": false,
+    "context_hints": [
+      "training",
+      "size",
+      "stochastic"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "lote",
+        "definition_pt": "Grupo de exemplos processados juntos em uma etapa de treino ou inferência.",
+        "register": null,
+        "example_en": "We use a batch size of thirty-two."
+      },
+      {
+        "ordinal": 2,
+        "domain_tag": "general",
+        "translation_pt": "lote, remessa",
+        "definition_pt": "Conjunto de itens produzidos ou processados de uma vez.",
+        "register": null,
+        "example_en": null
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "branch",
+    "pos": "noun",
+    "aliases": [
+      "branches"
+    ],
+    "priority": 2,
+    "is_ambiguous": true,
+    "stoplisted": true,
+    "context_hints": [
+      "git",
+      "merge",
+      "commit"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "ramificação",
+        "definition_pt": "Linha paralela de desenvolvimento dentro de um repositório.",
+        "register": null,
+        "example_en": "Create a branch for the fix."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "bug",
+    "pos": "noun",
+    "aliases": [
+      "bugs"
+    ],
+    "priority": 2,
+    "is_ambiguous": true,
+    "stoplisted": true,
+    "context_hints": [
+      "software",
+      "fix",
+      "error"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "bug (erro de software)",
+        "definition_pt": "Falha ou comportamento incorreto em um programa.",
+        "register": null,
+        "example_en": "We fixed the bug before the release."
+      },
+      {
+        "ordinal": 2,
+        "domain_tag": "general",
+        "translation_pt": "inseto",
+        "definition_pt": "Pequeno animal invertebrado.",
+        "register": null,
+        "example_en": null
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "cache",
+    "pos": "noun",
+    "aliases": [
+      "caches"
+    ],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "cache (memória de acesso rápido)",
+        "definition_pt": "Armazenamento temporário de dados para acelerar acessos futuros.",
+        "register": null,
+        "example_en": "The cache avoids repeated calls."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "callback",
+    "pos": "noun",
+    "aliases": [
+      "callbacks"
+    ],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "callback (função de retorno)",
+        "definition_pt": "Função passada a outra que a chama de volta quando um evento ocorre.",
+        "register": null,
+        "example_en": "The button takes a callback for clicks."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "classification",
+    "pos": "noun",
+    "aliases": [
+      "classifier",
+      "classify"
+    ],
+    "priority": 2,
+    "is_ambiguous": true,
+    "stoplisted": false,
+    "context_hints": [
+      "class",
+      "label",
+      "predict"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "classificação",
+        "definition_pt": "Tarefa de prever a categoria ou classe a que pertence um exemplo.",
+        "register": null,
+        "example_en": "Classification assigns one label per example."
+      },
+      {
+        "ordinal": 2,
+        "domain_tag": "general",
+        "translation_pt": "classificação, ordenação",
+        "definition_pt": "Ato de organizar ou separar em classes ou grupos.",
+        "register": null,
+        "example_en": null
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "client",
+    "pos": "noun",
+    "aliases": [
+      "clients"
+    ],
+    "priority": 3,
+    "is_ambiguous": true,
+    "stoplisted": true,
+    "context_hints": [
+      "server",
+      "request",
+      "network"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "cliente",
+        "definition_pt": "Programa que solicita recursos a um servidor.",
+        "register": null,
+        "example_en": "The client fetches data from the API."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "cloud",
+    "pos": "noun",
+    "aliases": [
+      "cloud computing"
+    ],
+    "priority": 2,
+    "is_ambiguous": true,
+    "stoplisted": true,
+    "context_hints": [
+      "server",
+      "AWS",
+      "hosting"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "nuvem (computação)",
+        "definition_pt": "Servidores remotos acessados pela internet para armazenar dados ou executar serviços.",
+        "register": null,
+        "example_en": "We moved the service to the cloud."
+      },
+      {
+        "ordinal": 2,
+        "domain_tag": "general",
+        "translation_pt": "nuvem",
+        "definition_pt": "Massa visível de vapor de água na atmosfera.",
+        "register": null,
+        "example_en": null
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "clustering",
+    "pos": "noun",
+    "aliases": [
+      "cluster",
+      "clusterization"
+    ],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "agrupamento (clustering)",
+        "definition_pt": "Técnica não supervisionada que agrupa exemplos semelhantes em conjuntos.",
+        "register": null,
+        "example_en": "Clustering grouped the customers by behavior."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "code review",
+    "pos": "noun",
+    "aliases": [
+      "code reviews",
+      "peer review"
+    ],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "revisão de código",
+        "definition_pt": "Análise do código por colegas antes de integrá-lo.",
+        "register": null,
+        "example_en": "The PR went through code review."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "commit",
+    "pos": "noun",
+    "aliases": [
+      "commits",
+      "committed"
+    ],
+    "priority": 2,
+    "is_ambiguous": true,
+    "stoplisted": false,
+    "context_hints": [
+      "git",
+      "repository",
+      "branch"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "commit (registro de alteração)",
+        "definition_pt": "Registro de um conjunto de mudanças salvo no histórico de um repositório.",
+        "register": null,
+        "example_en": "Each commit should have a clear message."
+      },
+      {
+        "ordinal": 2,
+        "domain_tag": "general",
+        "translation_pt": "cometer, comprometer-se",
+        "definition_pt": "Realizar um ato ou assumir um compromisso.",
+        "register": null,
+        "example_en": null
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "compiler",
+    "pos": "noun",
+    "aliases": [
+      "compilers"
+    ],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "compilador",
+        "definition_pt": "Programa que traduz código-fonte em código de máquina ou bytecode.",
+        "register": null,
+        "example_en": "The compiler flagged a type error."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "concurrency",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "concorrência",
+        "definition_pt": "Capacidade de executar várias tarefas ao mesmo tempo, com intercalação.",
+        "register": null,
+        "example_en": "Concurrency improves throughput."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "confusion matrix",
+    "pos": "phrase",
+    "aliases": [
+      "confusion matrices"
+    ],
+    "priority": 3,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "matriz de confusão",
+        "definition_pt": "Tabela que compara previsões e valores reais por classe.",
+        "register": null,
+        "example_en": "The confusion matrix shows the false positives."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "container",
+    "pos": "noun",
+    "aliases": [
+      "containers"
+    ],
+    "priority": 2,
+    "is_ambiguous": true,
+    "stoplisted": true,
+    "context_hints": [
+      "docker",
+      "image",
+      "kubernetes",
+      "isolated"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "contêiner",
+        "definition_pt": "Pacote isolado com aplicação e dependências para executar de forma portátil.",
+        "register": null,
+        "example_en": "Each service runs in its own container."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "database",
+    "pos": "noun",
+    "aliases": [
+      "databases"
+    ],
+    "priority": 1,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "banco de dados",
+        "definition_pt": "Sistema que armazena e consulta dados de forma estruturada.",
+        "register": null,
+        "example_en": "The database stores every order."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "dataset",
+    "pos": "noun",
+    "aliases": [
+      "data set",
+      "datasets"
+    ],
+    "priority": 1,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "conjunto de dados",
+        "definition_pt": "Coleção organizada de exemplos usada para treinar, validar ou testar um modelo.",
+        "register": null,
+        "example_en": "The dataset contains ten thousand labeled images."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "debug",
+    "pos": "verb",
+    "aliases": [
+      "debugged",
+      "debugging"
+    ],
+    "priority": 1,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "depurar",
+        "definition_pt": "Investigar e corrigir erros em um programa.",
+        "register": null,
+        "example_en": "We spent hours debugging the service."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
   },
   {
     "canonical_en": "deep learning",
@@ -38,171 +815,16 @@
         "example_en": "Deep learning powers modern image recognition."
       }
     ],
-    "source": "curado",
-    "needs_review": true
+    "source": "popular",
+    "needs_review": false
   },
   {
-    "canonical_en": "neural network",
-    "pos": "phrase",
-    "aliases": ["neural nets", "NN"],
-    "priority": 1,
-    "is_ambiguous": false,
-    "stoplisted": false,
-    "context_hints": [],
-    "senses": [
-      {
-        "ordinal": 1,
-        "domain_tag": "tech",
-        "translation_pt": "rede neural",
-        "definition_pt": "Modelo computacional inspirado em neurônios que aprende relações entre entradas e saídas.",
-        "register": null,
-        "example_en": "The neural network has three hidden layers."
-      }
-    ],
-    "source": "curado",
-    "needs_review": true
-  },
-  {
-    "canonical_en": "dataset",
+    "canonical_en": "deployment",
     "pos": "noun",
-    "aliases": ["data set", "datasets"],
-    "priority": 1,
-    "is_ambiguous": false,
-    "stoplisted": false,
-    "context_hints": [],
-    "senses": [
-      {
-        "ordinal": 1,
-        "domain_tag": "tech",
-        "translation_pt": "conjunto de dados",
-        "definition_pt": "Coleção organizada de exemplos usada para treinar, validar ou testar um modelo.",
-        "register": null,
-        "example_en": "The dataset contains ten thousand labeled images."
-      }
+    "aliases": [
+      "deploy",
+      "deployed"
     ],
-    "source": "curado",
-    "needs_review": true
-  },
-  {
-    "canonical_en": "training",
-    "pos": "noun",
-    "aliases": ["train", "trained"],
-    "priority": 1,
-    "is_ambiguous": true,
-    "stoplisted": false,
-    "context_hints": ["model", "data", "epoch"],
-    "senses": [
-      {
-        "ordinal": 1,
-        "domain_tag": "tech",
-        "translation_pt": "treinamento (de modelo)",
-        "definition_pt": "Processo de ajustar os parâmetros de um modelo usando dados para reduzir o erro.",
-        "register": null,
-        "example_en": "Training stopped once the validation loss plateaued."
-      },
-      {
-        "ordinal": 2,
-        "domain_tag": "general",
-        "translation_pt": "treinamento, capacitação",
-        "definition_pt": "Ato de ensinar ou preparar alguém para uma atividade.",
-        "register": null,
-        "example_en": null
-      }
-    ],
-    "source": "curado",
-    "needs_review": true
-  },
-  {
-    "canonical_en": "feature",
-    "pos": "noun",
-    "aliases": ["features"],
-    "priority": 2,
-    "is_ambiguous": true,
-    "stoplisted": false,
-    "context_hints": ["model", "vector", "input"],
-    "senses": [
-      {
-        "ordinal": 1,
-        "domain_tag": "tech",
-        "translation_pt": "atributo (feature)",
-        "definition_pt": "Variável de entrada que descreve um exemplo e ajuda o modelo a prever a saída.",
-        "register": null,
-        "example_en": "Each feature is normalized before training."
-      },
-      {
-        "ordinal": 2,
-        "domain_tag": "general",
-        "translation_pt": "característica, recurso",
-        "definition_pt": "Aspecto ou qualidade que distingue algo.",
-        "register": null,
-        "example_en": null
-      }
-    ],
-    "source": "curado",
-    "needs_review": true
-  },
-  {
-    "canonical_en": "label",
-    "pos": "noun",
-    "aliases": ["labels", "labelled", "labeled"],
-    "priority": 2,
-    "is_ambiguous": true,
-    "stoplisted": false,
-    "context_hints": ["class", "supervised", "target"],
-    "senses": [
-      {
-        "ordinal": 1,
-        "domain_tag": "tech",
-        "translation_pt": "rótulo",
-        "definition_pt": "Resposta correta associada a um exemplo, usada para treinar modelos supervisionados.",
-        "register": null,
-        "example_en": "Every image has a label for its category."
-      },
-      {
-        "ordinal": 2,
-        "domain_tag": "general",
-        "translation_pt": "etiqueta, rótulo",
-        "definition_pt": "Informação impressa que identifica ou descreve um objeto.",
-        "register": null,
-        "example_en": null
-      }
-    ],
-    "source": "curado",
-    "needs_review": true
-  },
-  {
-    "canonical_en": "model",
-    "pos": "noun",
-    "aliases": ["models"],
-    "priority": 1,
-    "is_ambiguous": true,
-    "stoplisted": true,
-    "context_hints": ["train", "predict", "neural", "dataset"],
-    "senses": [
-      {
-        "ordinal": 1,
-        "domain_tag": "tech",
-        "translation_pt": "modelo (de aprendizado)",
-        "definition_pt": "Representação treinada que mapeia entradas em saídas para fazer previsões.",
-        "register": null,
-        "example_en": "The model predicts the price from the features."
-      },
-      {
-        "ordinal": 2,
-        "domain_tag": "general",
-        "translation_pt": "modelo, padrão",
-        "definition_pt": "Exemplo ou referência a ser seguido ou imitado.",
-        "register": null,
-        "example_en": null
-      }
-    ],
-    "source": "curado",
-    "needs_review": true
-  },
-  {
-    "canonical_en": "algorithm",
-    "pos": "noun",
-    "aliases": ["algorithms"],
     "priority": 2,
     "is_ambiguous": false,
     "stoplisted": false,
@@ -211,103 +833,19 @@
       {
         "ordinal": 1,
         "domain_tag": "tech",
-        "translation_pt": "algoritmo",
-        "definition_pt": "Sequência finita de passos que resolve um problema ou executa um cálculo.",
+        "translation_pt": "implantação (deploy)",
+        "definition_pt": "Processo de colocar um modelo ou aplicação em produção para uso real.",
         "register": null,
-        "example_en": "This sorting algorithm runs in linear time."
+        "example_en": "Deployment happens after the tests pass."
       }
     ],
-    "source": "curado",
-    "needs_review": true
+    "source": "popular",
+    "needs_review": false
   },
   {
-    "canonical_en": "gradient",
+    "canonical_en": "downtime",
     "pos": "noun",
-    "aliases": ["gradients"],
-    "priority": 2,
-    "is_ambiguous": false,
-    "stoplisted": false,
-    "context_hints": [],
-    "senses": [
-      {
-        "ordinal": 1,
-        "domain_tag": "tech",
-        "translation_pt": "gradiente",
-        "definition_pt": "Vetor que indica a direção de maior crescimento de uma função, usado para otimizar modelos.",
-        "register": null,
-        "example_en": "The gradient points toward the steepest increase."
-      }
-    ],
-    "source": "curado",
-    "needs_review": true
-  },
-  {
-    "canonical_en": "gradient descent",
-    "pos": "phrase",
-    "aliases": ["SGD", "gradient descent algorithm"],
-    "priority": 1,
-    "is_ambiguous": false,
-    "stoplisted": false,
-    "context_hints": [],
-    "senses": [
-      {
-        "ordinal": 1,
-        "domain_tag": "tech",
-        "translation_pt": "descida do gradiente",
-        "definition_pt": "Algoritmo que ajusta parâmetros passo a passo na direção que reduz o erro.",
-        "register": null,
-        "example_en": "We trained the network with stochastic gradient descent."
-      }
-    ],
-    "source": "curado",
-    "needs_review": true
-  },
-  {
-    "canonical_en": "loss function",
-    "pos": "phrase",
-    "aliases": ["loss", "cost function", "objective function"],
-    "priority": 2,
-    "is_ambiguous": false,
-    "stoplisted": false,
-    "context_hints": [],
-    "senses": [
-      {
-        "ordinal": 1,
-        "domain_tag": "tech",
-        "translation_pt": "função de perda",
-        "definition_pt": "Medida que quantifica o erro do modelo e orienta o ajuste dos parâmetros.",
-        "register": null,
-        "example_en": "Cross-entropy is a common loss function."
-      }
-    ],
-    "source": "curado",
-    "needs_review": true
-  },
-  {
-    "canonical_en": "backpropagation",
-    "pos": "noun",
-    "aliases": ["back-propagation", "backprop"],
-    "priority": 2,
-    "is_ambiguous": false,
-    "stoplisted": false,
-    "context_hints": [],
-    "senses": [
-      {
-        "ordinal": 1,
-        "domain_tag": "tech",
-        "translation_pt": "retropropagação",
-        "definition_pt": "Método que calcula gradientes camada a camada para treinar redes neurais.",
-        "register": null,
-        "example_en": "Backpropagation updates the weights using the gradient."
-      }
-    ],
-    "source": "curado",
-    "needs_review": true
-  },
-  {
-    "canonical_en": "epoch",
-    "pos": "noun",
-    "aliases": ["epochs"],
+    "aliases": [],
     "priority": 3,
     "is_ambiguous": false,
     "stoplisted": false,
@@ -316,64 +854,14 @@
       {
         "ordinal": 1,
         "domain_tag": "tech",
-        "translation_pt": "época",
-        "definition_pt": "Uma passagem completa por todo o conjunto de treino durante o aprendizado.",
+        "translation_pt": "tempo de inatividade",
+        "definition_pt": "Período em que um serviço fica indisponível.",
         "register": null,
-        "example_en": "The model converged after twenty epochs."
+        "example_en": "The upgrade caused no downtime."
       }
     ],
-    "source": "curado",
-    "needs_review": true
-  },
-  {
-    "canonical_en": "batch",
-    "pos": "noun",
-    "aliases": ["batches", "mini-batch", "mini-batches"],
-    "priority": 3,
-    "is_ambiguous": true,
-    "stoplisted": false,
-    "context_hints": ["training", "size", "stochastic"],
-    "senses": [
-      {
-        "ordinal": 1,
-        "domain_tag": "tech",
-        "translation_pt": "lote",
-        "definition_pt": "Grupo de exemplos processados juntos em uma etapa de treino ou inferência.",
-        "register": null,
-        "example_en": "We use a batch size of thirty-two."
-      },
-      {
-        "ordinal": 2,
-        "domain_tag": "general",
-        "translation_pt": "lote, remessa",
-        "definition_pt": "Conjunto de itens produzidos ou processados de uma vez.",
-        "register": null,
-        "example_en": null
-      }
-    ],
-    "source": "curado",
-    "needs_review": true
-  },
-  {
-    "canonical_en": "regularization",
-    "pos": "noun",
-    "aliases": ["regularisation", "regularizer"],
-    "priority": 3,
-    "is_ambiguous": false,
-    "stoplisted": false,
-    "context_hints": [],
-    "senses": [
-      {
-        "ordinal": 1,
-        "domain_tag": "tech",
-        "translation_pt": "regularização",
-        "definition_pt": "Técnica que penaliza a complexidade do modelo para reduzir o sobreajuste.",
-        "register": null,
-        "example_en": "L2 regularization keeps the weights small."
-      }
-    ],
-    "source": "curado",
-    "needs_review": true
+    "source": "popular",
+    "needs_review": false
   },
   {
     "canonical_en": "dropout",
@@ -393,118 +881,16 @@
         "example_en": "Dropout reduces overfitting in deep networks."
       }
     ],
-    "source": "curado",
-    "needs_review": true
-  },
-  {
-    "canonical_en": "hyperparameter",
-    "pos": "noun",
-    "aliases": ["hyperparameters", "hyper-parameter"],
-    "priority": 3,
-    "is_ambiguous": false,
-    "stoplisted": false,
-    "context_hints": [],
-    "senses": [
-      {
-        "ordinal": 1,
-        "domain_tag": "tech",
-        "translation_pt": "hiperparâmetro",
-        "definition_pt": "Configuração definida antes do treino, como taxa de aprendizado ou número de camadas.",
-        "register": null,
-        "example_en": "We tuned the hyperparameters on a validation set."
-      }
-    ],
-    "source": "curado",
-    "needs_review": true
-  },
-  {
-    "canonical_en": "learning rate",
-    "pos": "phrase",
-    "aliases": ["LR"],
-    "priority": 2,
-    "is_ambiguous": false,
-    "stoplisted": false,
-    "context_hints": [],
-    "senses": [
-      {
-        "ordinal": 1,
-        "domain_tag": "tech",
-        "translation_pt": "taxa de aprendizado",
-        "definition_pt": "Fator que controla o tamanho de cada passo na atualização dos parâmetros.",
-        "register": null,
-        "example_en": "A high learning rate can make training diverge."
-      }
-    ],
-    "source": "curado",
-    "needs_review": true
-  },
-  {
-    "canonical_en": "overfitting",
-    "pos": "noun",
-    "aliases": ["overfit", "overfitted", "over-fitting"],
-    "priority": 1,
-    "is_ambiguous": false,
-    "stoplisted": false,
-    "context_hints": [],
-    "senses": [
-      {
-        "ordinal": 1,
-        "domain_tag": "tech",
-        "translation_pt": "sobreajuste",
-        "definition_pt": "Quando o modelo decora os dados de treino e generaliza mal para dados novos.",
-        "register": null,
-        "example_en": "More data usually reduces overfitting."
-      }
-    ],
-    "source": "curado",
-    "needs_review": true
-  },
-  {
-    "canonical_en": "underfitting",
-    "pos": "noun",
-    "aliases": ["underfit", "under-fitting"],
-    "priority": 2,
-    "is_ambiguous": false,
-    "stoplisted": false,
-    "context_hints": [],
-    "senses": [
-      {
-        "ordinal": 1,
-        "domain_tag": "tech",
-        "translation_pt": "subajuste",
-        "definition_pt": "Quando o modelo é simples demais e não captura os padrões dos dados.",
-        "register": null,
-        "example_en": "Underfitting shows up as high error on training data."
-      }
-    ],
-    "source": "curado",
-    "needs_review": true
-  },
-  {
-    "canonical_en": "generalization",
-    "pos": "noun",
-    "aliases": ["generalisation", "generalize"],
-    "priority": 2,
-    "is_ambiguous": false,
-    "stoplisted": false,
-    "context_hints": [],
-    "senses": [
-      {
-        "ordinal": 1,
-        "domain_tag": "tech",
-        "translation_pt": "generalização",
-        "definition_pt": "Capacidade do modelo de acertar em dados novos, não vistos no treino.",
-        "register": null,
-        "example_en": "Good generalization requires diverse training data."
-      }
-    ],
-    "source": "curado",
-    "needs_review": true
+    "source": "popular",
+    "needs_review": false
   },
   {
     "canonical_en": "embedding",
     "pos": "noun",
-    "aliases": ["embeddings", "embed"],
+    "aliases": [
+      "embed",
+      "embeddings"
+    ],
     "priority": 1,
     "is_ambiguous": false,
     "stoplisted": false,
@@ -519,17 +905,1488 @@
         "example_en": "Similar words have nearby embeddings."
       }
     ],
-    "source": "curado",
-    "needs_review": true
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "epoch",
+    "pos": "noun",
+    "aliases": [
+      "epochs"
+    ],
+    "priority": 3,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "época",
+        "definition_pt": "Uma passagem completa por todo o conjunto de treino durante o aprendizado.",
+        "register": null,
+        "example_en": "The model converged after twenty epochs."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "feature",
+    "pos": "noun",
+    "aliases": [
+      "features"
+    ],
+    "priority": 2,
+    "is_ambiguous": true,
+    "stoplisted": false,
+    "context_hints": [
+      "model",
+      "vector",
+      "input"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "atributo (feature)",
+        "definition_pt": "Variável de entrada que descreve um exemplo e ajuda o modelo a prever a saída.",
+        "register": null,
+        "example_en": "Each feature is normalized before training."
+      },
+      {
+        "ordinal": 2,
+        "domain_tag": "general",
+        "translation_pt": "característica, recurso",
+        "definition_pt": "Aspecto ou qualidade que distingue algo.",
+        "register": null,
+        "example_en": null
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "few-shot learning",
+    "pos": "phrase",
+    "aliases": [
+      "few shot",
+      "few-shot"
+    ],
+    "priority": 3,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "aprendizado few-shot",
+        "definition_pt": "Capacidade de aprender uma tarefa a partir de poucos exemplos.",
+        "register": null,
+        "example_en": "Few-shot learning needs only a handful of examples."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "fine-tuning",
+    "pos": "noun",
+    "aliases": [
+      "fine tune",
+      "fine-tune",
+      "finetuning"
+    ],
+    "priority": 1,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "ajuste fino",
+        "definition_pt": "Treinar novamente um modelo já treinado com dados específicos para uma tarefa.",
+        "register": null,
+        "example_en": "We did fine-tuning on a small domain dataset."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "framework",
+    "pos": "noun",
+    "aliases": [
+      "frameworks"
+    ],
+    "priority": 1,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "framework (arcabouço)",
+        "definition_pt": "Estrutura de código reutilizável que padroniza a construção de aplicações.",
+        "register": null,
+        "example_en": "The team adopted a new web framework."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "gateway",
+    "pos": "noun",
+    "aliases": [
+      "gateways"
+    ],
+    "priority": 3,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "gateway (porta de entrada)",
+        "definition_pt": "Componente que encaminha requisições entre redes ou serviços.",
+        "register": null,
+        "example_en": "The API gateway routes traffic."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "generalization",
+    "pos": "noun",
+    "aliases": [
+      "generalisation",
+      "generalize"
+    ],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "generalização",
+        "definition_pt": "Capacidade do modelo de acertar em dados novos, não vistos no treino.",
+        "register": null,
+        "example_en": "Good generalization requires diverse training data."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "gradient",
+    "pos": "noun",
+    "aliases": [
+      "gradients"
+    ],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "gradiente",
+        "definition_pt": "Vetor que indica a direção de maior crescimento de uma função, usado para otimizar modelos.",
+        "register": null,
+        "example_en": "The gradient points toward the steepest increase."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "gradient descent",
+    "pos": "phrase",
+    "aliases": [
+      "SGD",
+      "gradient descent algorithm"
+    ],
+    "priority": 1,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "descida do gradiente",
+        "definition_pt": "Algoritmo que ajusta parâmetros passo a passo na direção que reduz o erro.",
+        "register": null,
+        "example_en": "We trained the network with stochastic gradient descent."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "hallucination",
+    "pos": "noun",
+    "aliases": [
+      "hallucinate",
+      "hallucinations"
+    ],
+    "priority": 1,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "alucinação",
+        "definition_pt": "Quando um modelo gera informação plausível, porém falsa ou sem base.",
+        "register": null,
+        "example_en": "The assistant hallucinated a citation."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "hyperparameter",
+    "pos": "noun",
+    "aliases": [
+      "hyper-parameter",
+      "hyperparameters"
+    ],
+    "priority": 3,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "hiperparâmetro",
+        "definition_pt": "Configuração definida antes do treino, como taxa de aprendizado ou número de camadas.",
+        "register": null,
+        "example_en": "We tuned the hyperparameters on a validation set."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "index",
+    "pos": "noun",
+    "aliases": [
+      "indexes",
+      "indices"
+    ],
+    "priority": 2,
+    "is_ambiguous": true,
+    "stoplisted": true,
+    "context_hints": [
+      "database",
+      "search",
+      "table",
+      "query"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "índice",
+        "definition_pt": "Estrutura que acelera buscas em uma tabela ou coleção de dados.",
+        "register": null,
+        "example_en": "An index speeds up the lookup."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "inference",
+    "pos": "noun",
+    "aliases": [
+      "infer",
+      "inferences"
+    ],
+    "priority": 1,
+    "is_ambiguous": true,
+    "stoplisted": false,
+    "context_hints": [
+      "model",
+      "prediction",
+      "deploy"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "inferência",
+        "definition_pt": "Uso de um modelo treinado para produzir previsões ou respostas com novos dados.",
+        "register": null,
+        "example_en": "Inference is much faster than training."
+      },
+      {
+        "ordinal": 2,
+        "domain_tag": "general",
+        "translation_pt": "inferência, dedução",
+        "definition_pt": "Conclusão obtida a partir de indícios ou raciocínio.",
+        "register": null,
+        "example_en": null
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "interpreter",
+    "pos": "noun",
+    "aliases": [
+      "interpreters"
+    ],
+    "priority": 3,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "interpretador",
+        "definition_pt": "Programa que executa código-fonte linha a linha, sem gerar binário.",
+        "register": null,
+        "example_en": "Python uses an interpreter."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "kernel",
+    "pos": "noun",
+    "aliases": [
+      "kernels"
+    ],
+    "priority": 3,
+    "is_ambiguous": true,
+    "stoplisted": true,
+    "context_hints": [
+      "SVM",
+      "convolution",
+      "function"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "kernel (núcleo)",
+        "definition_pt": "Função que mede similaridade entre dados ou o núcleo de um sistema operacional.",
+        "register": null,
+        "example_en": "The kernel trick avoids explicit high-dimensional mapping."
+      },
+      {
+        "ordinal": 2,
+        "domain_tag": "general",
+        "translation_pt": "núcleo, caroço",
+        "definition_pt": "Parte central de algo, como o caroço de um fruto.",
+        "register": null,
+        "example_en": null
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "label",
+    "pos": "noun",
+    "aliases": [
+      "labeled",
+      "labelled",
+      "labels"
+    ],
+    "priority": 2,
+    "is_ambiguous": true,
+    "stoplisted": false,
+    "context_hints": [
+      "class",
+      "supervised",
+      "target"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "rótulo",
+        "definition_pt": "Resposta correta associada a um exemplo, usada para treinar modelos supervisionados.",
+        "register": null,
+        "example_en": "Every image has a label for its category."
+      },
+      {
+        "ordinal": 2,
+        "domain_tag": "general",
+        "translation_pt": "etiqueta, rótulo",
+        "definition_pt": "Informação impressa que identifica ou descreve um objeto.",
+        "register": null,
+        "example_en": null
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "latency",
+    "pos": "noun",
+    "aliases": [
+      "latencies"
+    ],
+    "priority": 1,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "latência",
+        "definition_pt": "Tempo entre uma solicitação e o início ou fim da resposta.",
+        "register": null,
+        "example_en": "Low latency is critical for real-time apps."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "layer",
+    "pos": "noun",
+    "aliases": [
+      "layers"
+    ],
+    "priority": 2,
+    "is_ambiguous": true,
+    "stoplisted": true,
+    "context_hints": [
+      "neural",
+      "network",
+      "hidden"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "camada",
+        "definition_pt": "Conjunto de neurônios que processa a entrada em um nível da rede neural.",
+        "register": null,
+        "example_en": "The output layer has one neuron per class."
+      },
+      {
+        "ordinal": 2,
+        "domain_tag": "general",
+        "translation_pt": "camada, extrato",
+        "definition_pt": "Porção que cobre ou reveste uma superfície.",
+        "register": null,
+        "example_en": null
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "learning rate",
+    "pos": "phrase",
+    "aliases": [
+      "LR"
+    ],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "taxa de aprendizado",
+        "definition_pt": "Fator que controla o tamanho de cada passo na atualização dos parâmetros.",
+        "register": null,
+        "example_en": "A high learning rate can make training diverge."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "library",
+    "pos": "noun",
+    "aliases": [
+      "lib",
+      "libraries"
+    ],
+    "priority": 2,
+    "is_ambiguous": true,
+    "stoplisted": true,
+    "context_hints": [
+      "import",
+      "code",
+      "function"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "biblioteca",
+        "definition_pt": "Conjunto de código pronto que pode ser chamado por outros programas.",
+        "register": null,
+        "example_en": "This library handles date parsing."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "load balancer",
+    "pos": "noun",
+    "aliases": [
+      "load balancing"
+    ],
+    "priority": 3,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "balanceador de carga",
+        "definition_pt": "Componente que distribui requisições entre vários servidores.",
+        "register": null,
+        "example_en": "The load balancer spread the traffic."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "loss function",
+    "pos": "phrase",
+    "aliases": [
+      "cost function",
+      "loss",
+      "objective function"
+    ],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "função de perda",
+        "definition_pt": "Medida que quantifica o erro do modelo e orienta o ajuste dos parâmetros.",
+        "register": null,
+        "example_en": "Cross-entropy is a common loss function."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "machine learning",
+    "pos": "phrase",
+    "aliases": [
+      "ML"
+    ],
+    "priority": 1,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "aprendizado de máquina",
+        "definition_pt": "Campo da IA em que algoritmos aprendem padrões a partir de dados para fazer previsões ou decisões.",
+        "register": null,
+        "example_en": "Machine learning models improve with more data."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "merge",
+    "pos": "verb",
+    "aliases": [
+      "merged",
+      "merging"
+    ],
+    "priority": 2,
+    "is_ambiguous": true,
+    "stoplisted": false,
+    "context_hints": [
+      "git",
+      "branch",
+      "conflict"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "mesclar (código)",
+        "definition_pt": "Combinar mudanças de diferentes branches em uma única linha de histórico.",
+        "register": null,
+        "example_en": "We merged the feature branch into main."
+      },
+      {
+        "ordinal": 2,
+        "domain_tag": "general",
+        "translation_pt": "fundir, mesclar",
+        "definition_pt": "Unir duas ou mais coisas em uma só.",
+        "register": null,
+        "example_en": null
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "microservice",
+    "pos": "noun",
+    "aliases": [
+      "microservices"
+    ],
+    "priority": 3,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "microsserviço",
+        "definition_pt": "Serviço pequeno e independente que compõe uma aplicação maior.",
+        "register": null,
+        "example_en": "The app was split into microservices."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "middleware",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 3,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "middleware",
+        "definition_pt": "Camada que liga aplicações e serviços, tratando requisições entre eles.",
+        "register": null,
+        "example_en": "The middleware authenticates each request."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "model",
+    "pos": "noun",
+    "aliases": [
+      "models"
+    ],
+    "priority": 1,
+    "is_ambiguous": true,
+    "stoplisted": true,
+    "context_hints": [
+      "train",
+      "predict",
+      "neural",
+      "dataset"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "modelo (de aprendizado)",
+        "definition_pt": "Representação treinada que mapeia entradas em saídas para fazer previsões.",
+        "register": null,
+        "example_en": "The model predicts the price from the features."
+      },
+      {
+        "ordinal": 2,
+        "domain_tag": "general",
+        "translation_pt": "modelo, padrão",
+        "definition_pt": "Exemplo ou referência a ser seguido ou imitado.",
+        "register": null,
+        "example_en": null
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "neural network",
+    "pos": "phrase",
+    "aliases": [
+      "NN",
+      "neural nets"
+    ],
+    "priority": 1,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "rede neural",
+        "definition_pt": "Modelo computacional inspirado em neurônios que aprende relações entre entradas e saídas.",
+        "register": null,
+        "example_en": "The neural network has three hidden layers."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "open source",
+    "pos": "phrase",
+    "aliases": [
+      "open-source",
+      "opensource"
+    ],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "código aberto",
+        "definition_pt": "Software cujo código-fonte é público e pode ser usado, alterado e distribuído.",
+        "register": null,
+        "example_en": "The project is open source and community driven."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "overfitting",
+    "pos": "noun",
+    "aliases": [
+      "over-fitting",
+      "overfit",
+      "overfitted"
+    ],
+    "priority": 1,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "sobreajuste",
+        "definition_pt": "Quando o modelo decora os dados de treino e generaliza mal para dados novos.",
+        "register": null,
+        "example_en": "More data usually reduces overfitting."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "perceptron",
+    "pos": "noun",
+    "aliases": [
+      "perceptrons"
+    ],
+    "priority": 3,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "perceptron",
+        "definition_pt": "Modelo simples de neurônio artificial que classifica entradas com uma combinação linear.",
+        "register": null,
+        "example_en": "A perceptron is the building block of larger networks."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "pipeline",
+    "pos": "noun",
+    "aliases": [
+      "pipelines"
+    ],
+    "priority": 2,
+    "is_ambiguous": true,
+    "stoplisted": true,
+    "context_hints": [
+      "data",
+      "process",
+      "stage"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "pipeline (fluxo de processamento)",
+        "definition_pt": "Sequência de etapas encadeadas que transformam dados até o resultado final.",
+        "register": null,
+        "example_en": "The data pipeline cleans and loads the records."
+      },
+      {
+        "ordinal": 2,
+        "domain_tag": "general",
+        "translation_pt": "duto, encanamento",
+        "definition_pt": "Tubulação que transporta fluidos.",
+        "register": null,
+        "example_en": null
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "precision",
+    "pos": "noun",
+    "aliases": [
+      "precision metric"
+    ],
+    "priority": 2,
+    "is_ambiguous": true,
+    "stoplisted": false,
+    "context_hints": [
+      "recall",
+      "metric",
+      "classification"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "precisão (métrica)",
+        "definition_pt": "Proporção de positivos previstos que estão realmente corretos.",
+        "register": null,
+        "example_en": "High precision means few false positives."
+      },
+      {
+        "ordinal": 2,
+        "domain_tag": "general",
+        "translation_pt": "precisão, exatidão",
+        "definition_pt": "Qualidade de ser exato ou minucioso.",
+        "register": null,
+        "example_en": null
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "prompt",
+    "pos": "noun",
+    "aliases": [
+      "prompting",
+      "prompts"
+    ],
+    "priority": 1,
+    "is_ambiguous": true,
+    "stoplisted": false,
+    "context_hints": [
+      "LLM",
+      "text",
+      "response"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "prompt (comando de entrada)",
+        "definition_pt": "Instrução ou texto de entrada fornecido a um modelo para obter uma resposta.",
+        "register": null,
+        "example_en": "A clear prompt improves the model's answer."
+      },
+      {
+        "ordinal": 2,
+        "domain_tag": "general",
+        "translation_pt": "pronto, rápido",
+        "definition_pt": "Que age sem demora.",
+        "register": null,
+        "example_en": null
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "protocol",
+    "pos": "noun",
+    "aliases": [
+      "protocols"
+    ],
+    "priority": 2,
+    "is_ambiguous": true,
+    "stoplisted": true,
+    "context_hints": [
+      "http",
+      "network",
+      "tcp",
+      "communication"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "protocolo",
+        "definition_pt": "Conjunto de regras que define como sistemas trocam informações.",
+        "register": null,
+        "example_en": "HTTP is a request-response protocol."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "pull request",
+    "pos": "phrase",
+    "aliases": [
+      "PR",
+      "merge request",
+      "pull requests"
+    ],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "pull request (proposta de alteração)",
+        "definition_pt": "Pedido para revisar e integrar mudanças de uma branch em outra.",
+        "register": null,
+        "example_en": "Please review my pull request."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "query",
+    "pos": "noun",
+    "aliases": [
+      "queries"
+    ],
+    "priority": 2,
+    "is_ambiguous": true,
+    "stoplisted": true,
+    "context_hints": [
+      "sql",
+      "database",
+      "select",
+      "search"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "consulta",
+        "definition_pt": "Solicitação de dados ou operação feita a um banco ou serviço.",
+        "register": null,
+        "example_en": "The query returned ten rows."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "recall",
+    "pos": "noun",
+    "aliases": [
+      "recall metric",
+      "sensitivity"
+    ],
+    "priority": 2,
+    "is_ambiguous": true,
+    "stoplisted": false,
+    "context_hints": [
+      "precision",
+      "metric",
+      "classification"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "revocação (recall)",
+        "definition_pt": "Proporção de positivos reais que o modelo conseguiu identificar.",
+        "register": null,
+        "example_en": "High recall means few false negatives."
+      },
+      {
+        "ordinal": 2,
+        "domain_tag": "general",
+        "translation_pt": "recordação, lembrança",
+        "definition_pt": "Ato de trazer algo à memória.",
+        "register": null,
+        "example_en": null
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "refactor",
+    "pos": "verb",
+    "aliases": [
+      "refactored",
+      "refactoring"
+    ],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "refatorar",
+        "definition_pt": "Reorganizar o código sem alterar seu comportamento externo.",
+        "register": null,
+        "example_en": "We refactored the module."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "refactoring",
+    "pos": "noun",
+    "aliases": [
+      "refactor",
+      "refactored"
+    ],
+    "priority": 3,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "refatoração",
+        "definition_pt": "Reestruturar código sem mudar seu comportamento, para torná-lo mais claro.",
+        "register": null,
+        "example_en": "Refactoring improved the readability of the module."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "regression",
+    "pos": "noun",
+    "aliases": [
+      "regress",
+      "regressor"
+    ],
+    "priority": 2,
+    "is_ambiguous": true,
+    "stoplisted": false,
+    "context_hints": [
+      "continuous",
+      "target",
+      "predict"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "regressão",
+        "definition_pt": "Tarefa de prever um valor numérico contínuo a partir das entradas.",
+        "register": null,
+        "example_en": "Regression predicts house prices from features."
+      },
+      {
+        "ordinal": 2,
+        "domain_tag": "general",
+        "translation_pt": "regressão, retrocesso",
+        "definition_pt": "Retorno a um estado anterior ou pior.",
+        "register": null,
+        "example_en": null
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "regularization",
+    "pos": "noun",
+    "aliases": [
+      "regularisation",
+      "regularizer"
+    ],
+    "priority": 3,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "regularização",
+        "definition_pt": "Técnica que penaliza a complexidade do modelo para reduzir o sobreajuste.",
+        "register": null,
+        "example_en": "L2 regularization keeps the weights small."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "reinforcement learning",
+    "pos": "phrase",
+    "aliases": [
+      "RL"
+    ],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "aprendizado por reforço",
+        "definition_pt": "Aprendizado em que um agente recebe recompensas por ações em um ambiente.",
+        "register": null,
+        "example_en": "Reinforcement learning trained the agent to play the game."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "repository",
+    "pos": "noun",
+    "aliases": [
+      "repo",
+      "repositories"
+    ],
+    "priority": 2,
+    "is_ambiguous": true,
+    "stoplisted": false,
+    "context_hints": [
+      "git",
+      "commit",
+      "branch"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "repositório (de código)",
+        "definition_pt": "Local que armazena e versiona arquivos e o histórico de um projeto.",
+        "register": null,
+        "example_en": "Clone the repository to start contributing."
+      },
+      {
+        "ordinal": 2,
+        "domain_tag": "general",
+        "translation_pt": "repositório, depósito",
+        "definition_pt": "Local onde se guardam coisas.",
+        "register": null,
+        "example_en": null
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "runtime",
+    "pos": "noun",
+    "aliases": [
+      "runtimes"
+    ],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "runtime (tempo de execução)",
+        "definition_pt": "Ambiente que executa um programa e provê seus recursos enquanto roda.",
+        "register": null,
+        "example_en": "The runtime manages memory and threads."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "scalability",
+    "pos": "noun",
+    "aliases": [
+      "scalable"
+    ],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "escalabilidade",
+        "definition_pt": "Capacidade de um sistema crescer em carga sem perder desempenho.",
+        "register": null,
+        "example_en": "Scalability matters for growing apps."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "schema",
+    "pos": "noun",
+    "aliases": [
+      "schemas"
+    ],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "esquema",
+        "definition_pt": "Definição estrutural de tabelas, campos e relações de um banco.",
+        "register": null,
+        "example_en": "We migrated the database schema."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "scrum",
+    "pos": "noun",
+    "aliases": [
+      "scrum master"
+    ],
+    "priority": 3,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "scrum",
+        "definition_pt": "Framework ágil para gerenciar projetos em ciclos curtos chamados sprints.",
+        "register": null,
+        "example_en": "Scrum defines roles, events and artifacts."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "server",
+    "pos": "noun",
+    "aliases": [
+      "servers"
+    ],
+    "priority": 2,
+    "is_ambiguous": true,
+    "stoplisted": true,
+    "context_hints": [
+      "client",
+      "request",
+      "http",
+      "network"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "servidor",
+        "definition_pt": "Programa ou máquina que fornece recursos a clientes pela rede.",
+        "register": null,
+        "example_en": "The server handles the requests."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "sprint",
+    "pos": "noun",
+    "aliases": [
+      "sprints"
+    ],
+    "priority": 3,
+    "is_ambiguous": true,
+    "stoplisted": false,
+    "context_hints": [
+      "scrum",
+      "agile",
+      "backlog"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "sprint (ciclo ágil)",
+        "definition_pt": "Período curto e fixo em que uma equipe ágil conclui um conjunto de tarefas.",
+        "register": null,
+        "example_en": "The sprint lasts two weeks."
+      },
+      {
+        "ordinal": 2,
+        "domain_tag": "general",
+        "translation_pt": "corrida rápida",
+        "definition_pt": "Corrida em velocidade máxima por curta distância.",
+        "register": null,
+        "example_en": null
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "supervised learning",
+    "pos": "phrase",
+    "aliases": [
+      "supervised"
+    ],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "aprendizado supervisionado",
+        "definition_pt": "Aprendizado com dados rotulados, no qual o modelo aprende a partir de respostas corretas.",
+        "register": null,
+        "example_en": "Supervised learning requires labeled examples."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "support vector machine",
+    "pos": "phrase",
+    "aliases": [
+      "SVM"
+    ],
+    "priority": 3,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "máquina de vetores de suporte",
+        "definition_pt": "Modelo de classificação que separa dados com a margem máxima entre classes.",
+        "register": null,
+        "example_en": "The SVM found a clean separating boundary."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "thread",
+    "pos": "noun",
+    "aliases": [
+      "threads"
+    ],
+    "priority": 2,
+    "is_ambiguous": true,
+    "stoplisted": true,
+    "context_hints": [
+      "concurrent",
+      "parallel",
+      "process",
+      "execution"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "thread (linha de execução)",
+        "definition_pt": "Unidade de execução dentro de um processo, que compartilha a memória.",
+        "register": null,
+        "example_en": "Worker threads process the queue."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "throughput",
+    "pos": "noun",
+    "aliases": [],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "vazão (throughput)",
+        "definition_pt": "Quantidade de dados ou requisições processados por unidade de tempo.",
+        "register": null,
+        "example_en": "The service handles high throughput."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
   },
   {
     "canonical_en": "token",
     "pos": "noun",
-    "aliases": ["tokens"],
+    "aliases": [
+      "tokens"
+    ],
     "priority": 1,
     "is_ambiguous": true,
     "stoplisted": true,
-    "context_hints": ["model", "text", "vocabulary", "GPT"],
+    "context_hints": [
+      "model",
+      "text",
+      "vocabulary",
+      "GPT"
+    ],
     "senses": [
       {
         "ordinal": 1,
@@ -556,13 +2413,16 @@
         "example_en": null
       }
     ],
-    "source": "curado",
-    "needs_review": true
+    "source": "popular",
+    "needs_review": false
   },
   {
     "canonical_en": "tokenization",
     "pos": "noun",
-    "aliases": ["tokenisation", "tokenize"],
+    "aliases": [
+      "tokenisation",
+      "tokenize"
+    ],
     "priority": 2,
     "is_ambiguous": false,
     "stoplisted": false,
@@ -577,17 +2437,83 @@
         "example_en": "Tokenization happens before the text reaches the model."
       }
     ],
-    "source": "curado",
-    "needs_review": true
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "training",
+    "pos": "noun",
+    "aliases": [
+      "train",
+      "trained"
+    ],
+    "priority": 1,
+    "is_ambiguous": true,
+    "stoplisted": false,
+    "context_hints": [
+      "model",
+      "data",
+      "epoch"
+    ],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "treinamento (de modelo)",
+        "definition_pt": "Processo de ajustar os parâmetros de um modelo usando dados para reduzir o erro.",
+        "register": null,
+        "example_en": "Training stopped once the validation loss plateaued."
+      },
+      {
+        "ordinal": 2,
+        "domain_tag": "general",
+        "translation_pt": "treinamento, capacitação",
+        "definition_pt": "Ato de ensinar ou preparar alguém para uma atividade.",
+        "register": null,
+        "example_en": null
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
+  },
+  {
+    "canonical_en": "transfer learning",
+    "pos": "phrase",
+    "aliases": [
+      "transfer"
+    ],
+    "priority": 2,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "aprendizado por transferência",
+        "definition_pt": "Reutilizar o conhecimento de um modelo treinado em outra tarefa para uma nova tarefa.",
+        "register": null,
+        "example_en": "Transfer learning helps when labeled data is scarce."
+      }
+    ],
+    "source": "popular",
+    "needs_review": false
   },
   {
     "canonical_en": "transformer",
     "pos": "noun",
-    "aliases": ["transformers"],
+    "aliases": [
+      "transformers"
+    ],
     "priority": 1,
     "is_ambiguous": true,
     "stoplisted": false,
-    "context_hints": ["attention", "encoder", "BERT", "GPT"],
+    "context_hints": [
+      "attention",
+      "encoder",
+      "BERT",
+      "GPT"
+    ],
     "senses": [
       {
         "ordinal": 1,
@@ -606,63 +2532,16 @@
         "example_en": null
       }
     ],
-    "source": "curado",
-    "needs_review": true
+    "source": "popular",
+    "needs_review": false
   },
   {
-    "canonical_en": "attention",
+    "canonical_en": "underfitting",
     "pos": "noun",
-    "aliases": ["attention mechanism", "self-attention"],
-    "priority": 2,
-    "is_ambiguous": true,
-    "stoplisted": false,
-    "context_hints": ["transformer", "head", "context"],
-    "senses": [
-      {
-        "ordinal": 1,
-        "domain_tag": "tech",
-        "translation_pt": "atenção (mecanismo)",
-        "definition_pt": "Mecanismo que permite ao modelo pesar a importância de cada parte da entrada.",
-        "register": null,
-        "example_en": "Self-attention relates every token to every other token."
-      },
-      {
-        "ordinal": 2,
-        "domain_tag": "general",
-        "translation_pt": "atenção, cuidado",
-        "definition_pt": "Capacidade de concentrar-se em algo.",
-        "register": null,
-        "example_en": null
-      }
+    "aliases": [
+      "under-fitting",
+      "underfit"
     ],
-    "source": "curado",
-    "needs_review": true
-  },
-  {
-    "canonical_en": "perceptron",
-    "pos": "noun",
-    "aliases": ["perceptrons"],
-    "priority": 3,
-    "is_ambiguous": false,
-    "stoplisted": false,
-    "context_hints": [],
-    "senses": [
-      {
-        "ordinal": 1,
-        "domain_tag": "tech",
-        "translation_pt": "perceptron",
-        "definition_pt": "Modelo simples de neurônio artificial que classifica entradas com uma combinação linear.",
-        "register": null,
-        "example_en": "A perceptron is the building block of larger networks."
-      }
-    ],
-    "source": "curado",
-    "needs_review": true
-  },
-  {
-    "canonical_en": "activation function",
-    "pos": "phrase",
-    "aliases": ["activation", "ReLU", "sigmoid"],
     "priority": 2,
     "is_ambiguous": false,
     "stoplisted": false,
@@ -671,69 +2550,22 @@
       {
         "ordinal": 1,
         "domain_tag": "tech",
-        "translation_pt": "função de ativação",
-        "definition_pt": "Função que introduz não linearidade na saída de um neurônio.",
+        "translation_pt": "subajuste",
+        "definition_pt": "Quando o modelo é simples demais e não captura os padrões dos dados.",
         "register": null,
-        "example_en": "ReLU is a popular activation function."
+        "example_en": "Underfitting shows up as high error on training data."
       }
     ],
-    "source": "curado",
-    "needs_review": true
+    "source": "popular",
+    "needs_review": false
   },
   {
-    "canonical_en": "inference",
+    "canonical_en": "unit test",
     "pos": "noun",
-    "aliases": ["infer", "inferences"],
-    "priority": 1,
-    "is_ambiguous": true,
-    "stoplisted": false,
-    "context_hints": ["model", "prediction", "deploy"],
-    "senses": [
-      {
-        "ordinal": 1,
-        "domain_tag": "tech",
-        "translation_pt": "inferência",
-        "definition_pt": "Uso de um modelo treinado para produzir previsões ou respostas com novos dados.",
-        "register": null,
-        "example_en": "Inference is much faster than training."
-      },
-      {
-        "ordinal": 2,
-        "domain_tag": "general",
-        "translation_pt": "inferência, dedução",
-        "definition_pt": "Conclusão obtida a partir de indícios ou raciocínio.",
-        "register": null,
-        "example_en": null
-      }
+    "aliases": [
+      "unit testing",
+      "unit tests"
     ],
-    "source": "curado",
-    "needs_review": true
-  },
-  {
-    "canonical_en": "fine-tuning",
-    "pos": "noun",
-    "aliases": ["fine-tune", "finetuning", "fine tune"],
-    "priority": 1,
-    "is_ambiguous": false,
-    "stoplisted": false,
-    "context_hints": [],
-    "senses": [
-      {
-        "ordinal": 1,
-        "domain_tag": "tech",
-        "translation_pt": "ajuste fino",
-        "definition_pt": "Treinar novamente um modelo já treinado com dados específicos para uma tarefa.",
-        "register": null,
-        "example_en": "We did fine-tuning on a small domain dataset."
-      }
-    ],
-    "source": "curado",
-    "needs_review": true
-  },
-  {
-    "canonical_en": "transfer learning",
-    "pos": "phrase",
-    "aliases": ["transfer"],
     "priority": 2,
     "is_ambiguous": false,
     "stoplisted": false,
@@ -742,132 +2574,21 @@
       {
         "ordinal": 1,
         "domain_tag": "tech",
-        "translation_pt": "aprendizado por transferência",
-        "definition_pt": "Reutilizar o conhecimento de um modelo treinado em outra tarefa para uma nova tarefa.",
+        "translation_pt": "teste de unidade",
+        "definition_pt": "Teste que verifica uma pequena parte isolada do código.",
         "register": null,
-        "example_en": "Transfer learning helps when labeled data is scarce."
+        "example_en": "Each function has a unit test."
       }
     ],
-    "source": "curado",
-    "needs_review": true
-  },
-  {
-    "canonical_en": "prompt",
-    "pos": "noun",
-    "aliases": ["prompts", "prompting"],
-    "priority": 1,
-    "is_ambiguous": true,
-    "stoplisted": false,
-    "context_hints": ["LLM", "text", "response"],
-    "senses": [
-      {
-        "ordinal": 1,
-        "domain_tag": "tech",
-        "translation_pt": "prompt (comando de entrada)",
-        "definition_pt": "Instrução ou texto de entrada fornecido a um modelo para obter uma resposta.",
-        "register": null,
-        "example_en": "A clear prompt improves the model's answer."
-      },
-      {
-        "ordinal": 2,
-        "domain_tag": "general",
-        "translation_pt": "pronto, rápido",
-        "definition_pt": "Que age sem demora.",
-        "register": null,
-        "example_en": null
-      }
-    ],
-    "source": "curado",
-    "needs_review": true
-  },
-  {
-    "canonical_en": "zero-shot learning",
-    "pos": "phrase",
-    "aliases": ["zero-shot", "zero shot"],
-    "priority": 3,
-    "is_ambiguous": false,
-    "stoplisted": false,
-    "context_hints": [],
-    "senses": [
-      {
-        "ordinal": 1,
-        "domain_tag": "tech",
-        "translation_pt": "aprendizado zero-shot",
-        "definition_pt": "Capacidade de resolver uma tarefa sem exemplos de treino específicos para ela.",
-        "register": null,
-        "example_en": "The model handles new labels in a zero-shot setting."
-      }
-    ],
-    "source": "curado",
-    "needs_review": true
-  },
-  {
-    "canonical_en": "few-shot learning",
-    "pos": "phrase",
-    "aliases": ["few-shot", "few shot"],
-    "priority": 3,
-    "is_ambiguous": false,
-    "stoplisted": false,
-    "context_hints": [],
-    "senses": [
-      {
-        "ordinal": 1,
-        "domain_tag": "tech",
-        "translation_pt": "aprendizado few-shot",
-        "definition_pt": "Capacidade de aprender uma tarefa a partir de poucos exemplos.",
-        "register": null,
-        "example_en": "Few-shot learning needs only a handful of examples."
-      }
-    ],
-    "source": "curado",
-    "needs_review": true
-  },
-  {
-    "canonical_en": "reinforcement learning",
-    "pos": "phrase",
-    "aliases": ["RL"],
-    "priority": 2,
-    "is_ambiguous": false,
-    "stoplisted": false,
-    "context_hints": [],
-    "senses": [
-      {
-        "ordinal": 1,
-        "domain_tag": "tech",
-        "translation_pt": "aprendizado por reforço",
-        "definition_pt": "Aprendizado em que um agente recebe recompensas por ações em um ambiente.",
-        "register": null,
-        "example_en": "Reinforcement learning trained the agent to play the game."
-      }
-    ],
-    "source": "curado",
-    "needs_review": true
-  },
-  {
-    "canonical_en": "supervised learning",
-    "pos": "phrase",
-    "aliases": ["supervised"],
-    "priority": 2,
-    "is_ambiguous": false,
-    "stoplisted": false,
-    "context_hints": [],
-    "senses": [
-      {
-        "ordinal": 1,
-        "domain_tag": "tech",
-        "translation_pt": "aprendizado supervisionado",
-        "definition_pt": "Aprendizado com dados rotulados, no qual o modelo aprende a partir de respostas corretas.",
-        "register": null,
-        "example_en": "Supervised learning requires labeled examples."
-      }
-    ],
-    "source": "curado",
-    "needs_review": true
+    "source": "popular",
+    "needs_review": false
   },
   {
     "canonical_en": "unsupervised learning",
     "pos": "phrase",
-    "aliases": ["unsupervised"],
+    "aliases": [
+      "unsupervised"
+    ],
     "priority": 2,
     "is_ambiguous": false,
     "stoplisted": false,
@@ -882,72 +2603,16 @@
         "example_en": "Unsupervised learning can reveal natural groups."
       }
     ],
-    "source": "curado",
-    "needs_review": true
+    "source": "popular",
+    "needs_review": false
   },
   {
-    "canonical_en": "classification",
+    "canonical_en": "websocket",
     "pos": "noun",
-    "aliases": ["classifier", "classify"],
-    "priority": 2,
-    "is_ambiguous": true,
-    "stoplisted": false,
-    "context_hints": ["class", "label", "predict"],
-    "senses": [
-      {
-        "ordinal": 1,
-        "domain_tag": "tech",
-        "translation_pt": "classificação",
-        "definition_pt": "Tarefa de prever a categoria ou classe a que pertence um exemplo.",
-        "register": null,
-        "example_en": "Classification assigns one label per example."
-      },
-      {
-        "ordinal": 2,
-        "domain_tag": "general",
-        "translation_pt": "classificação, ordenação",
-        "definition_pt": "Ato de organizar ou separar em classes ou grupos.",
-        "register": null,
-        "example_en": null
-      }
+    "aliases": [
+      "web socket"
     ],
-    "source": "curado",
-    "needs_review": true
-  },
-  {
-    "canonical_en": "regression",
-    "pos": "noun",
-    "aliases": ["regressor", "regress"],
-    "priority": 2,
-    "is_ambiguous": true,
-    "stoplisted": false,
-    "context_hints": ["continuous", "target", "predict"],
-    "senses": [
-      {
-        "ordinal": 1,
-        "domain_tag": "tech",
-        "translation_pt": "regressão",
-        "definition_pt": "Tarefa de prever um valor numérico contínuo a partir das entradas.",
-        "register": null,
-        "example_en": "Regression predicts house prices from features."
-      },
-      {
-        "ordinal": 2,
-        "domain_tag": "general",
-        "translation_pt": "regressão, retrocesso",
-        "definition_pt": "Retorno a um estado anterior ou pior.",
-        "register": null,
-        "example_en": null
-      }
-    ],
-    "source": "curado",
-    "needs_review": true
-  },
-  {
-    "canonical_en": "clustering",
-    "pos": "noun",
-    "aliases": ["cluster", "clusterization"],
-    "priority": 2,
+    "priority": 3,
     "is_ambiguous": false,
     "stoplisted": false,
     "context_hints": [],
@@ -955,19 +2620,22 @@
       {
         "ordinal": 1,
         "domain_tag": "tech",
-        "translation_pt": "agrupamento (clustering)",
-        "definition_pt": "Técnica não supervisionada que agrupa exemplos semelhantes em conjuntos.",
+        "translation_pt": "websocket",
+        "definition_pt": "Canal de comunicação bidirecional e persistente sobre TCP.",
         "register": null,
-        "example_en": "Clustering grouped the customers by behavior."
+        "example_en": "Chats often use a websocket."
       }
     ],
-    "source": "curado",
-    "needs_review": true
+    "source": "popular",
+    "needs_review": false
   },
   {
-    "canonical_en": "confusion matrix",
+    "canonical_en": "zero-shot learning",
     "pos": "phrase",
-    "aliases": ["confusion matrices"],
+    "aliases": [
+      "zero shot",
+      "zero-shot"
+    ],
     "priority": 3,
     "is_ambiguous": false,
     "stoplisted": false,
@@ -976,613 +2644,13 @@
       {
         "ordinal": 1,
         "domain_tag": "tech",
-        "translation_pt": "matriz de confusão",
-        "definition_pt": "Tabela que compara previsões e valores reais por classe.",
+        "translation_pt": "aprendizado zero-shot",
+        "definition_pt": "Capacidade de resolver uma tarefa sem exemplos de treino específicos para ela.",
         "register": null,
-        "example_en": "The confusion matrix shows the false positives."
+        "example_en": "The model handles new labels in a zero-shot setting."
       }
     ],
-    "source": "curado",
-    "needs_review": true
-  },
-  {
-    "canonical_en": "precision",
-    "pos": "noun",
-    "aliases": ["precision metric"],
-    "priority": 2,
-    "is_ambiguous": true,
-    "stoplisted": false,
-    "context_hints": ["recall", "metric", "classification"],
-    "senses": [
-      {
-        "ordinal": 1,
-        "domain_tag": "tech",
-        "translation_pt": "precisão (métrica)",
-        "definition_pt": "Proporção de positivos previstos que estão realmente corretos.",
-        "register": null,
-        "example_en": "High precision means few false positives."
-      },
-      {
-        "ordinal": 2,
-        "domain_tag": "general",
-        "translation_pt": "precisão, exatidão",
-        "definition_pt": "Qualidade de ser exato ou minucioso.",
-        "register": null,
-        "example_en": null
-      }
-    ],
-    "source": "curado",
-    "needs_review": true
-  },
-  {
-    "canonical_en": "recall",
-    "pos": "noun",
-    "aliases": ["recall metric", "sensitivity"],
-    "priority": 2,
-    "is_ambiguous": true,
-    "stoplisted": false,
-    "context_hints": ["precision", "metric", "classification"],
-    "senses": [
-      {
-        "ordinal": 1,
-        "domain_tag": "tech",
-        "translation_pt": "revocação (recall)",
-        "definition_pt": "Proporção de positivos reais que o modelo conseguiu identificar.",
-        "register": null,
-        "example_en": "High recall means few false negatives."
-      },
-      {
-        "ordinal": 2,
-        "domain_tag": "general",
-        "translation_pt": "recordação, lembrança",
-        "definition_pt": "Ato de trazer algo à memória.",
-        "register": null,
-        "example_en": null
-      }
-    ],
-    "source": "curado",
-    "needs_review": true
-  },
-  {
-    "canonical_en": "RAG",
-    "pos": "acronym",
-    "aliases": ["retrieval-augmented generation", "retrieval augmented generation"],
-    "priority": 1,
-    "is_ambiguous": false,
-    "stoplisted": false,
-    "context_hints": [],
-    "senses": [
-      {
-        "ordinal": 1,
-        "domain_tag": "tech",
-        "translation_pt": "geração aumentada por recuperação",
-        "definition_pt": "Técnica que busca documentos relevantes e os fornece ao modelo antes de gerar a resposta.",
-        "register": null,
-        "example_en": "RAG grounds answers in retrieved documents."
-      }
-    ],
-    "source": "curado",
-    "needs_review": true
-  },
-  {
-    "canonical_en": "hallucination",
-    "pos": "noun",
-    "aliases": ["hallucinate", "hallucinations"],
-    "priority": 1,
-    "is_ambiguous": false,
-    "stoplisted": false,
-    "context_hints": [],
-    "senses": [
-      {
-        "ordinal": 1,
-        "domain_tag": "tech",
-        "translation_pt": "alucinação",
-        "definition_pt": "Quando um modelo gera informação plausível, porém falsa ou sem base.",
-        "register": null,
-        "example_en": "The assistant hallucinated a citation."
-      }
-    ],
-    "source": "curado",
-    "needs_review": true
-  },
-  {
-    "canonical_en": "latency",
-    "pos": "noun",
-    "aliases": ["latencies"],
-    "priority": 1,
-    "is_ambiguous": false,
-    "stoplisted": false,
-    "context_hints": [],
-    "senses": [
-      {
-        "ordinal": 1,
-        "domain_tag": "tech",
-        "translation_pt": "latência",
-        "definition_pt": "Tempo entre uma solicitação e o início ou fim da resposta.",
-        "register": null,
-        "example_en": "Low latency is critical for real-time apps."
-      }
-    ],
-    "source": "curado",
-    "needs_review": true
-  },
-  {
-    "canonical_en": "throughput",
-    "pos": "noun",
-    "aliases": [],
-    "priority": 2,
-    "is_ambiguous": false,
-    "stoplisted": false,
-    "context_hints": [],
-    "senses": [
-      {
-        "ordinal": 1,
-        "domain_tag": "tech",
-        "translation_pt": "vazão (throughput)",
-        "definition_pt": "Quantidade de dados ou requisições processados por unidade de tempo.",
-        "register": null,
-        "example_en": "The service handles high throughput."
-      }
-    ],
-    "source": "curado",
-    "needs_review": true
-  },
-  {
-    "canonical_en": "pipeline",
-    "pos": "noun",
-    "aliases": ["pipelines"],
-    "priority": 2,
-    "is_ambiguous": true,
-    "stoplisted": true,
-    "context_hints": ["data", "process", "stage"],
-    "senses": [
-      {
-        "ordinal": 1,
-        "domain_tag": "tech",
-        "translation_pt": "pipeline (fluxo de processamento)",
-        "definition_pt": "Sequência de etapas encadeadas que transformam dados até o resultado final.",
-        "register": null,
-        "example_en": "The data pipeline cleans and loads the records."
-      },
-      {
-        "ordinal": 2,
-        "domain_tag": "general",
-        "translation_pt": "duto, encanamento",
-        "definition_pt": "Tubulação que transporta fluidos.",
-        "register": null,
-        "example_en": null
-      }
-    ],
-    "source": "curado",
-    "needs_review": true
-  },
-  {
-    "canonical_en": "layer",
-    "pos": "noun",
-    "aliases": ["layers"],
-    "priority": 2,
-    "is_ambiguous": true,
-    "stoplisted": true,
-    "context_hints": ["neural", "network", "hidden"],
-    "senses": [
-      {
-        "ordinal": 1,
-        "domain_tag": "tech",
-        "translation_pt": "camada",
-        "definition_pt": "Conjunto de neurônios que processa a entrada em um nível da rede neural.",
-        "register": null,
-        "example_en": "The output layer has one neuron per class."
-      },
-      {
-        "ordinal": 2,
-        "domain_tag": "general",
-        "translation_pt": "camada, extrato",
-        "definition_pt": "Porção que cobre ou reveste uma superfície.",
-        "register": null,
-        "example_en": null
-      }
-    ],
-    "source": "curado",
-    "needs_review": true
-  },
-  {
-    "canonical_en": "kernel",
-    "pos": "noun",
-    "aliases": ["kernels"],
-    "priority": 3,
-    "is_ambiguous": true,
-    "stoplisted": true,
-    "context_hints": ["SVM", "convolution", "function"],
-    "senses": [
-      {
-        "ordinal": 1,
-        "domain_tag": "tech",
-        "translation_pt": "kernel (núcleo)",
-        "definition_pt": "Função que mede similaridade entre dados ou o núcleo de um sistema operacional.",
-        "register": null,
-        "example_en": "The kernel trick avoids explicit high-dimensional mapping."
-      },
-      {
-        "ordinal": 2,
-        "domain_tag": "general",
-        "translation_pt": "núcleo, caroço",
-        "definition_pt": "Parte central de algo, como o caroço de um fruto.",
-        "register": null,
-        "example_en": null
-      }
-    ],
-    "source": "curado",
-    "needs_review": true
-  },
-  {
-    "canonical_en": "API",
-    "pos": "acronym",
-    "aliases": ["application programming interface", "apis"],
-    "priority": 1,
-    "is_ambiguous": false,
-    "stoplisted": false,
-    "context_hints": [],
-    "senses": [
-      {
-        "ordinal": 1,
-        "domain_tag": "tech",
-        "translation_pt": "API (interface de programação)",
-        "definition_pt": "Conjunto de regras que permite um software conversar com outro.",
-        "register": null,
-        "example_en": "We called the API to fetch the data."
-      }
-    ],
-    "source": "curado",
-    "needs_review": true
-  },
-  {
-    "canonical_en": "deployment",
-    "pos": "noun",
-    "aliases": ["deploy", "deployed"],
-    "priority": 2,
-    "is_ambiguous": false,
-    "stoplisted": false,
-    "context_hints": [],
-    "senses": [
-      {
-        "ordinal": 1,
-        "domain_tag": "tech",
-        "translation_pt": "implantação (deploy)",
-        "definition_pt": "Processo de colocar um modelo ou aplicação em produção para uso real.",
-        "register": null,
-        "example_en": "Deployment happens after the tests pass."
-      }
-    ],
-    "source": "curado",
-    "needs_review": true
-  },
-  {
-    "canonical_en": "open source",
-    "pos": "phrase",
-    "aliases": ["opensource", "open-source"],
-    "priority": 2,
-    "is_ambiguous": false,
-    "stoplisted": false,
-    "context_hints": [],
-    "senses": [
-      {
-        "ordinal": 1,
-        "domain_tag": "tech",
-        "translation_pt": "código aberto",
-        "definition_pt": "Software cujo código-fonte é público e pode ser usado, alterado e distribuído.",
-        "register": null,
-        "example_en": "The project is open source and community driven."
-      }
-    ],
-    "source": "curado",
-    "needs_review": true
-  },
-  {
-    "canonical_en": "repository",
-    "pos": "noun",
-    "aliases": ["repositories", "repo"],
-    "priority": 2,
-    "is_ambiguous": true,
-    "stoplisted": false,
-    "context_hints": ["git", "commit", "branch"],
-    "senses": [
-      {
-        "ordinal": 1,
-        "domain_tag": "tech",
-        "translation_pt": "repositório (de código)",
-        "definition_pt": "Local que armazena e versiona arquivos e o histórico de um projeto.",
-        "register": null,
-        "example_en": "Clone the repository to start contributing."
-      },
-      {
-        "ordinal": 2,
-        "domain_tag": "general",
-        "translation_pt": "repositório, depósito",
-        "definition_pt": "Local onde se guardam coisas.",
-        "register": null,
-        "example_en": null
-      }
-    ],
-    "source": "curado",
-    "needs_review": true
-  },
-  {
-    "canonical_en": "commit",
-    "pos": "noun",
-    "aliases": ["commits", "committed"],
-    "priority": 2,
-    "is_ambiguous": true,
-    "stoplisted": false,
-    "context_hints": ["git", "repository", "branch"],
-    "senses": [
-      {
-        "ordinal": 1,
-        "domain_tag": "tech",
-        "translation_pt": "commit (registro de alteração)",
-        "definition_pt": "Registro de um conjunto de mudanças salvo no histórico de um repositório.",
-        "register": null,
-        "example_en": "Each commit should have a clear message."
-      },
-      {
-        "ordinal": 2,
-        "domain_tag": "general",
-        "translation_pt": "cometer, comprometer-se",
-        "definition_pt": "Realizar um ato ou assumir um compromisso.",
-        "register": null,
-        "example_en": null
-      }
-    ],
-    "source": "curado",
-    "needs_review": true
-  },
-  {
-    "canonical_en": "bug",
-    "pos": "noun",
-    "aliases": ["bugs"],
-    "priority": 2,
-    "is_ambiguous": true,
-    "stoplisted": true,
-    "context_hints": ["software", "fix", "error"],
-    "senses": [
-      {
-        "ordinal": 1,
-        "domain_tag": "tech",
-        "translation_pt": "bug (erro de software)",
-        "definition_pt": "Falha ou comportamento incorreto em um programa.",
-        "register": null,
-        "example_en": "We fixed the bug before the release."
-      },
-      {
-        "ordinal": 2,
-        "domain_tag": "general",
-        "translation_pt": "inseto",
-        "definition_pt": "Pequeno animal invertebrado.",
-        "register": null,
-        "example_en": null
-      }
-    ],
-    "source": "curado",
-    "needs_review": true
-  },
-  {
-    "canonical_en": "refactoring",
-    "pos": "noun",
-    "aliases": ["refactor", "refactored"],
-    "priority": 3,
-    "is_ambiguous": false,
-    "stoplisted": false,
-    "context_hints": [],
-    "senses": [
-      {
-        "ordinal": 1,
-        "domain_tag": "tech",
-        "translation_pt": "refatoração",
-        "definition_pt": "Reestruturar código sem mudar seu comportamento, para torná-lo mais claro.",
-        "register": null,
-        "example_en": "Refactoring improved the readability of the module."
-      }
-    ],
-    "source": "curado",
-    "needs_review": true
-  },
-  {
-    "canonical_en": "agile",
-    "pos": "adjective",
-    "aliases": ["agility"],
-    "priority": 2,
-    "is_ambiguous": true,
-    "stoplisted": false,
-    "context_hints": ["scrum", "sprint", "methodology"],
-    "senses": [
-      {
-        "ordinal": 1,
-        "domain_tag": "tech",
-        "translation_pt": "ágil (metodologia)",
-        "definition_pt": "Abordagem de desenvolvimento iterativa com entregas frequentes e adaptação a mudanças.",
-        "register": null,
-        "example_en": "The team follows an agile process."
-      },
-      {
-        "ordinal": 2,
-        "domain_tag": "general",
-        "translation_pt": "ágil, rápido",
-        "definition_pt": "Que se move com facilidade e rapidez.",
-        "register": null,
-        "example_en": null
-      }
-    ],
-    "source": "curado",
-    "needs_review": true
-  },
-  {
-    "canonical_en": "sprint",
-    "pos": "noun",
-    "aliases": ["sprints"],
-    "priority": 3,
-    "is_ambiguous": true,
-    "stoplisted": false,
-    "context_hints": ["scrum", "agile", "backlog"],
-    "senses": [
-      {
-        "ordinal": 1,
-        "domain_tag": "tech",
-        "translation_pt": "sprint (ciclo ágil)",
-        "definition_pt": "Período curto e fixo em que uma equipe ágil conclui um conjunto de tarefas.",
-        "register": null,
-        "example_en": "The sprint lasts two weeks."
-      },
-      {
-        "ordinal": 2,
-        "domain_tag": "general",
-        "translation_pt": "corrida rápida",
-        "definition_pt": "Corrida em velocidade máxima por curta distância.",
-        "register": null,
-        "example_en": null
-      }
-    ],
-    "source": "curado",
-    "needs_review": true
-  },
-  {
-    "canonical_en": "backlog",
-    "pos": "noun",
-    "aliases": ["product backlog"],
-    "priority": 1,
-    "is_ambiguous": false,
-    "stoplisted": false,
-    "context_hints": [],
-    "senses": [
-      {
-        "ordinal": 1,
-        "domain_tag": "tech",
-        "translation_pt": "backlog (lista de pendências)",
-        "definition_pt": "Lista priorizada de tarefas e requisitos a serem desenvolvidos pela equipe.",
-        "register": null,
-        "example_en": "The top item in the backlog is the login screen."
-      }
-    ],
-    "source": "curado",
-    "needs_review": true
-  },
-  {
-    "canonical_en": "scrum",
-    "pos": "noun",
-    "aliases": ["scrum master"],
-    "priority": 3,
-    "is_ambiguous": false,
-    "stoplisted": false,
-    "context_hints": [],
-    "senses": [
-      {
-        "ordinal": 1,
-        "domain_tag": "tech",
-        "translation_pt": "scrum",
-        "definition_pt": "Framework ágil para gerenciar projetos em ciclos curtos chamados sprints.",
-        "register": null,
-        "example_en": "Scrum defines roles, events and artifacts."
-      }
-    ],
-    "source": "curado",
-    "needs_review": true
-  },
-  {
-    "canonical_en": "pull request",
-    "pos": "phrase",
-    "aliases": ["PR", "merge request", "pull requests"],
-    "priority": 2,
-    "is_ambiguous": false,
-    "stoplisted": false,
-    "context_hints": [],
-    "senses": [
-      {
-        "ordinal": 1,
-        "domain_tag": "tech",
-        "translation_pt": "pull request (proposta de alteração)",
-        "definition_pt": "Pedido para revisar e integrar mudanças de uma branch em outra.",
-        "register": null,
-        "example_en": "Please review my pull request."
-      }
-    ],
-    "source": "curado",
-    "needs_review": true
-  },
-  {
-    "canonical_en": "merge",
-    "pos": "verb",
-    "aliases": ["merging", "merged"],
-    "priority": 2,
-    "is_ambiguous": true,
-    "stoplisted": false,
-    "context_hints": ["git", "branch", "conflict"],
-    "senses": [
-      {
-        "ordinal": 1,
-        "domain_tag": "tech",
-        "translation_pt": "mesclar (código)",
-        "definition_pt": "Combinar mudanças de diferentes branches em uma única linha de histórico.",
-        "register": null,
-        "example_en": "We merged the feature branch into main."
-      },
-      {
-        "ordinal": 2,
-        "domain_tag": "general",
-        "translation_pt": "fundir, mesclar",
-        "definition_pt": "Unir duas ou mais coisas em uma só.",
-        "register": null,
-        "example_en": null
-      }
-    ],
-    "source": "curado",
-    "needs_review": true
-  },
-  {
-    "canonical_en": "cloud",
-    "pos": "noun",
-    "aliases": ["cloud computing"],
-    "priority": 2,
-    "is_ambiguous": true,
-    "stoplisted": true,
-    "context_hints": ["server", "AWS", "hosting"],
-    "senses": [
-      {
-        "ordinal": 1,
-        "domain_tag": "tech",
-        "translation_pt": "nuvem (computação)",
-        "definition_pt": "Servidores remotos acessados pela internet para armazenar dados ou executar serviços.",
-        "register": null,
-        "example_en": "We moved the service to the cloud."
-      },
-      {
-        "ordinal": 2,
-        "domain_tag": "general",
-        "translation_pt": "nuvem",
-        "definition_pt": "Massa visível de vapor de água na atmosfera.",
-        "register": null,
-        "example_en": null
-      }
-    ],
-    "source": "curado",
-    "needs_review": true
-  },
-  {
-    "canonical_en": "support vector machine",
-    "pos": "phrase",
-    "aliases": ["SVM"],
-    "priority": 3,
-    "is_ambiguous": false,
-    "stoplisted": false,
-    "context_hints": [],
-    "senses": [
-      {
-        "ordinal": 1,
-        "domain_tag": "tech",
-        "translation_pt": "máquina de vetores de suporte",
-        "definition_pt": "Modelo de classificação que separa dados com a margem máxima entre classes.",
-        "register": null,
-        "example_en": "The SVM found a clean separating boundary."
-      }
-    ],
-    "source": "curado",
-    "needs_review": true
+    "source": "popular",
+    "needs_review": false
   }
 ]
