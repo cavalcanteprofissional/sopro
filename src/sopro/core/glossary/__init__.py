@@ -1,5 +1,9 @@
 """Carregamento, validação e gestão de pacotes de domínio (glossários)."""
 
+from sopro.core.glossary.aggregate import (
+    aggregate_packages,
+    build_aggregate_from_repo,
+)
 from sopro.core.glossary.package import (
     DomainPackage,
     Manifest,
@@ -14,6 +18,8 @@ __all__ = [
     "Manifest",
     "Sense",
     "Term",
+    "aggregate_packages",
+    "build_aggregate_from_repo",
     "list_package_slugs",
     "load_package",
 ]
