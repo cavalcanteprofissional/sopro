@@ -8,6 +8,10 @@ adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 ## [Unreleased]
 
 ### Added
+- Planejamento da **Fase 7 — conta, dados em nuvem e backup**: Clerk (GitHub ativo, demais
+  provedores desabilitados), Neon Postgres, Cloudflare R2, Worker e GitHub Actions para
+  backup diário de 30 dias. Inclui isolamento por `user_id`, sync/outbox offline, migração
+  idempotente do SQLite e áudio sempre local. Detalhes em `TODO.md`.
 - Mapa de fluxos em `docs/roadmap/`: 14 documentos com diagramas Mermaid para usuário,
   sistema, glossários/trilhas, dados, modelos, build e qualidade, complementando o roadmap
   cronológico de `docs/04-roadmap.md`.

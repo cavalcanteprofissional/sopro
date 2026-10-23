@@ -63,8 +63,9 @@ documentos próprios ou seções novas:
    com histórico de autoria.
 3. **Curadoria por IA com proveniência**: livros e artigos viram candidatos, clusters e
    rótulos, sempre com fonte registrada e revisão humana.
-4. **Sincronização opcional de preferências**: hoje tudo é local; qualquer sincronização
-   futura precisa de consentimento explícito e criptografia.
+4. **Conta, sincronização e backup em nuvem**: planejado na Fase 7 com Clerk/Neon/R2,
+   isolamento por usuário, cache/outbox offline e backup de 30 dias. O recorte está em
+   [TODO.md](../../TODO.md#fase-7--conta-dados-em-nuvem-e-backup-planejada).
 5. **Portabilidade Linux/macOS**: mesma arquitetura, outra implementação de `AudioSource`.
 6. **Feedback do usuário**: botão "irrelevante" alimentando stoplist e ranking por domínio.
 

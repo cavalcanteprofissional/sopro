@@ -89,11 +89,32 @@
 - Notas de pesquisa de IA em sala de aula: https://hackmd.io/@ll-24-25/ByBXvT0R1x
 - Limites de Whisper na Groq: https://eesel.ai/blog/groq-pricing · https://toolfreebie.com/?p=237 · https://spokenly.app/blog/free-speech-to-text-apis
 
-## 9. Plano de leitura sugerido
+## 9. Conta, dados em nuvem e backup (Fase 7)
+
+| Recurso | Para quê | Link |
+|---|---|---|
+| Clerk — preços | MRU, conexões sociais e magic link no Hobby | https://clerk.com/pricing |
+| Clerk — auth para CLI | OAuth 2.0 + PKCE, loopback e cofre do SO | https://clerk.com/blog/adding-clerk-auth-to-your-cli |
+| RFC 8252 | OAuth para apps nativos (loopback e PKCE) | https://www.rfc-editor.org/rfc/rfc8252 |
+| Neon — preços | 1 GB, 100 CU-hours, 5 GB de egress e scale-to-zero | https://neon.com/pricing |
+| Neon — limites do Free | quotas oficiais e comportamento ao atingir o limite | https://neon.com/faqs/free-plan-limits-and-quotas |
+| PostgreSQL — RLS | isolamento por `user_id` como defesa em profundidade | https://www.postgresql.org/docs/current/ddl-rowsecurity.html |
+| Cloudflare R2 — preços | 10 GB, Class A/B e egress grátis | https://developers.cloudflare.com/r2/pricing/ |
+| Cloudflare Workers — preços | 100 mil req/dia e 10 ms de CPU no free tier | https://developers.cloudflare.com/workers/platform/pricing/ |
+| Cloudflare Workers — limites | limites de CPU, memória e subrequests | https://developers.cloudflare.com/workers/platform/limits/ |
+| GitHub Actions — billing | minutos gratuitos para o backup diário | https://docs.github.com/en/billing/managing-billing-for-your-products/managing-billing-for-github-actions/about-billing-for-github-actions |
+
+**Limites verificados em 2026-10-22:** Clerk Hobby 50 mil MRU e até 3 conexões sociais; Neon
+Free 1 GB/projeto, 100 CU-hours e 5 GB de egress; R2 Free 10 GB/mês, 1 milhão de Class A e
+10 milhões de Class B; Workers Free 100 mil requisições/dia e 10 ms de CPU por invocação.
+Revalidar antes de implementar ou de cada release.
+
+## 10. Plano de leitura sugerido
 
 1. Documentação do Whisper e do faster-whisper (modelos, quantização, prompt).
 2. Silero VAD e loopback no Windows (entender frames, taxa de amostragem, latência).
 3. SQLite FTS5 e sqlite-vec (modelagem do glossário).
 4. Documentação de janelas sem foco no framework de UI escolhido.
 5. Limites e termos de uso da Groq.
-6. Pesquisa complementar das "perguntas de pesquisa" em `03-estado-da-arte.md`.
+6. Para a Fase 7: Clerk (PKCE/loopback), Neon, RLS, R2 e limites do Workers.
+7. Pesquisa complementar das "perguntas de pesquisa" em `03-estado-da-arte.md`.

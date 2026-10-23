@@ -19,7 +19,7 @@
 [Stack](#-stack) ·
 [Instalação](#-instalação-windows) ·
 [Desenvolvimento](#-uso-a-partir-do-fonte) ·
-[Roadmap](#-roadmap-em-5-fases) ·
+[Roadmap](#-roadmap) ·
 [Changelog](#-versões-e-changelog)
 
 </div>
@@ -37,20 +37,23 @@ interromper a aula e sem roubar o foco da janela.
 > **Status:** protótipo funcional — Fases 0–4 concluídas. O pipeline completo
 > (captura → VAD → transcrição → matcher → pop-up → histórico) roda de ponta a ponta, com
 > instalador Windows, assistente de primeira execução, logs sem conteúdo de fala e gestão de
-> glossários. A próxima etapa é a **Fase 5** (escala e portabilidade). **416 testes
+> glossários. A **Fase 5** (escala e portabilidade) está em andamento; a **Fase 6** (curadoria
+> assistida) e a **Fase 7** (conta, dados em nuvem e backup) estão planejadas. **416 testes
 > automatizados** passando.
 
 ## ✨ Por que o Sopro
 
 - **Pop-up por termo, não legenda corrida** — um cartão temporário, sempre no topo, sem roubar
   o foco do Teams/Meet/Zoom.
-- **Local primeiro** — funciona 100% offline por padrão. A nuvem (Groq) é opcional e só com
-  aviso explícito.
+- **Local primeiro** — captura, transcrição e matcher funcionam offline; a nuvem de IA
+  (Groq) é opcional e só com aviso explícito. A Fase 7 planeja conta e dados em nuvem,
+  mantendo cache offline.
 - **A definição certa para a área** — recuperação semântica escolhe a acepção correta
   (ex.: *fairness* = “equidade” em IA, não “justiça” genérica).
-- **Privacidade por padrão** — o áudio não é gravado em disco, não há telemetria e seus dados
-  não saem do computador.
-- **Somente free tier** — Whisper local, SQLite e ferramentas open source.
+- **Privacidade por padrão** — o áudio não é gravado nem enviado; hoje os dados ficam locais
+  e, na Fase 7 planejada, vão apenas para a conta do usuário (Clerk/Neon/R2).
+- **Somente free tier** — Whisper local, SQLite e, na Fase 7, Clerk/Neon/R2/Workers no plano
+  gratuito.
 - **Escalável por domínio** — glossários de tecnologia hoje; direito, saúde e finanças depois.
 
 ## 🔍 Como funciona
@@ -62,20 +65,22 @@ flowchart LR
     C --> D["Matcher\nglossário do domínio"]
     D --> E["RAG\ndesambiguação"]
     E --> F["💬 Pop-up\ntermo · tradução · definição"]
-    E --> G["💾 Histórico\nSQLite local"]
+    E --> G["💾 Histórico\nSQLite hoje"]
     E -.->|opcional| H["☁️ Groq\n(opt-in)"]
 ```
 
 O LLM **não** processa toda frase: o caminho rápido é a busca no glossário local. RAG/LLM só
 entram para resolver ambiguidade ou termos fora do glossário — o que mantém latência, CPU e
-custo baixos.
+custo baixos. Na Fase 7 planejada, o histórico passa a ter a nuvem como fonte da verdade e o
+SQLite vira cache/outbox offline.
 
 ## Arquitetura
 
 O Sopro separa três camadas com uma regra rígida: **`core` não conhece sistema operacional,
 Qt nem rede**. `platform` isola tudo que depende do ambiente; `app` compõe o pipeline e o
-ciclo de vida. Áudio, transcrição e SQLite são locais por padrão; nuvem é uma exceção
-explícita.
+ciclo de vida. Áudio e transcrição são locais; hoje o histórico também é local. A Fase 7
+planeja tornar a conta/nuvem a fonte da verdade dos dados do usuário, mantendo SQLite como
+cache/outbox offline.
 
 ```mermaid
 flowchart TB
@@ -300,7 +305,7 @@ fixtures/                     Dados de apoio (ex.: template do conjunto de teste
 **Regra de arquitetura:** `core` não depende de SO nem de UI; `platform` isola essas
 dependências. É isso que permite portar para Linux, macOS e mobile sem reescrever o núcleo.
 
-## 🗺️ Roadmap em 5 fases
+## 🗺️ Roadmap
 
 | Fase | Foco | Estado |
 |---|---|---|
@@ -309,8 +314,11 @@ dependências. É isso que permite portar para Linux, macOS e mobile sem reescre
 | **3. RAG e desambiguação** | Acepção contextual e provedor Groq opcional | ✅ |
 | **4. Empacotamento** | Instalador Windows, primeira execução, logs, glossários e hub | ✅ |
 | **5. Escala e portabilidade** | Linux/macOS, novos domínios e feedback do usuário | ⏳ |
+| **6. Curadoria assistida** | Livros e artigos viram candidatos com proveniência e revisão humana | planejada |
+| **7. Conta e nuvem** | OAuth, Neon, R2, sync offline e backup de 30 dias | planejada |
 
-Detalhes e definições de pronto em [docs/04-roadmap.md](docs/04-roadmap.md).
+Detalhes e definições de pronto em [docs/04-roadmap.md](docs/04-roadmap.md). O recorte
+operacional da Fase 7 está em [TODO.md](TODO.md#fase-7--conta-dados-em-nuvem-e-backup-planejada).
 
 ## 🏷️ Versões e changelog
 
@@ -359,7 +367,7 @@ metas numéricas são **hipóteses iniciais** a calibrar no protótipo.
 | Transcrição | Híbrida: **local por padrão** (Whisper), Groq **opcional** |
 | Área inicial | Tecnologia, com arquitetura de “pacotes de domínio” para outras áreas |
 | Custo | Somente free tier / open source |
-| Dados | Tudo local (SQLite); áudio não é gravado por padrão |
+| Dados | Hoje locais (SQLite); Fase 7 planeja conta + Neon/R2 com cache offline. Áudio nunca sai |
 | Distribuição de modelos | **On-demand**: instalador enxuto; download na 1ª execução com sha256 |
 | Motor de STT local | Decidido por **benchmark**, isolado pela interface `STTProvider` |
 
@@ -375,8 +383,10 @@ pytest -q
 
 ## 🔒 Segurança e privacidade
 
-Processamento local por padrão; o áudio fica em memória e é descartado. Provedor em nuvem só
-com opt-in, aviso e indicador permanente. Gravar ou transcrever reuniões pode exigir
+Processamento local por padrão; o áudio fica em memória e é descartado. Provedor de IA em
+nuvem só com opt-in, aviso e indicador permanente. Na Fase 7 planejada, histórico e
+glossários do usuário passam a ser sincronizados via Clerk/Neon/R2, com backup de 30 dias;
+áudio continua **nunca** saindo do computador. Gravar ou transcrever reuniões pode exigir
 consentimento dos participantes (LGPD — Lei 13.709/2018). Veja [SECURITY.md](SECURITY.md).
 
 ## 📄 Licença

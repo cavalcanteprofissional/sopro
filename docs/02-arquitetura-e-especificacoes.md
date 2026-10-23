@@ -209,10 +209,13 @@ validador não mudam de comportamento.
 ## 10. Privacidade e segurança
 
 - Processamento local por padrão; áudio mantido em memória e descartado após uso.
-- Provedor em nuvem **opt-in**, com aviso, indicador permanente e possibilidade de revogar a qualquer momento.
+- Provedor de IA em nuvem **opt-in**, com aviso, indicador permanente e possibilidade de
+  revogar a qualquer momento.
 - Chaves de API nunca em texto puro nos logs; logs sem conteúdo de fala por padrão.
 - Aviso de consentimento na primeira execução (LGPD/uso em reuniões).
-- Dados do usuário não saem do computador, salvo o que o provedor escolhido receber.
+- Hoje os dados do usuário ficam no SQLite local. A **Fase 7 planejada** move histórico,
+  configurações e glossários para Clerk/Neon/R2, com isolamento por `user_id`, cache/outbox
+  offline e backup de 30 dias no R2. Áudio continua **nunca** saindo do computador.
 
 ## 11. Portabilidade
 

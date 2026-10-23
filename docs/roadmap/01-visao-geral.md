@@ -1,11 +1,12 @@
 # 01 — Visão geral do sistema
 
-**Estado:** implementado.
+**Estado:** implementado no modo local; a Fase 7 planeja conta e dados em nuvem.
 
 O Sopro é um aplicativo local-first. O caminho principal transforma áudio em um cartão
 curto com termo, tradução e definição. O glossário local é o caminho rápido; embeddings,
-LLM e nuvem são **exceções opcionais**, usadas apenas para desambiguar ou explicar um termo
-que não está no glossário.
+LLM e provedores de IA em nuvem são **exceções opcionais**, usadas apenas para desambiguar
+ou explicar um termo que não está no glossário. A Fase 7 planeja mover histórico e
+glossários do usuário para Clerk/Neon/R2, mantendo cache/outbox offline e áudio sempre local.
 
 ## Diagrama geral
 

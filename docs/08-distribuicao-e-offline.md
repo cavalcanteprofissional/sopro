@@ -10,8 +10,10 @@ modelos), RNF-09 (áudio não gravado) e RNF-10 (degradação graciosa), e o pro
   offline** no modo local (STT Whisper, glossário em SQLite, embeddings locais).
 - **Instalador enxuto.** Os modelos **não** são embutidos no instalador; são baixados **sob
   demanda** na primeira execução (RNF-08).
-- **Nuvem é opcional.** Groq (STT/LLM) continua opt-in, com aviso, indicador permanente e
-  possibilidade de revogação (RN-04).
+- **Nuvem de IA é opcional.** Groq (STT/LLM) continua opt-in, com aviso, indicador permanente
+  e possibilidade de revogação (RN-04).
+- **Conta em nuvem (Fase 7 planejada).** Histórico e glossários terão a nuvem como fonte da
+  verdade, com cache/outbox local para uso offline; áudio continua fora de qualquer upload.
 - **Sem gravação de áudio.** O áudio fica em memória e é descartado (RNF-09).
 - **Só free tier / open source.** Todo modelo distribuído precisa ter licença compatível
   com RNF-12; a licença é registrada por modelo (ver §3).
@@ -27,6 +29,7 @@ modelos), RNF-09 (áudio não gravado) e RNF-10 (degradação graciosa), e o pro
 | Escolha de acepção (vetorial) | sim (embeddings locais) | — |
 | LLM local para exceções | sim (se instalado/baixado) | apenas o download inicial |
 | Provedor Groq (STT/LLM) | não | sim (opt-in) |
+| Histórico/glossários da conta | sim, via cache local | sincronização quando online (Fase 7) |
 
 ## 3. Registro de modelos (catálogo)
 

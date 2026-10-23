@@ -82,14 +82,18 @@ Um companheiro discreto que, **no momento em que o termo é falado**, mostra um 
 - **RN-02** O mesmo termo não reaparece dentro do cooldown (padrão 120 s), salvo se o usuário desativar.
 - **RN-03** Entradas geradas por LLM são visualmente distinguíveis das curadas.
 - **RN-04** Se o provedor em nuvem estiver ativo, mostrar indicador permanente na bandeja.
-- **RN-05** Dados de uso nunca são enviados a terceiros; apenas o áudio/texto estritamente necessário ao provedor escolhido pelo usuário.
+- **RN-05** No modo local, dados de uso não saem do computador; apenas o áudio/texto
+  estritamente necessário vai ao provedor de IA escolhido pelo usuário. Na Fase 7 planejada,
+  histórico e glossários vão apenas para a conta do usuário (Clerk/Neon/R2); áudio continua
+  **nunca** sendo enviado.
 
 ## 7. Fora de escopo (protótipo)
 
 - Versões macOS, Linux e mobile (apenas preparar a arquitetura).
 - Diarização de falantes, resumos de aula, geração de notas.
 - Transcrição de idiomas diferentes de inglês.
-- Sincronização na nuvem e contas de usuário.
+- Sincronização na nuvem e contas de usuário no protótipo local; a **Fase 7** planeja
+  OAuth, dados em nuvem e backup sem alterar o áudio local.
 - Tradução da fala inteira (o foco é o termo, não a legenda).
 
 ## 8. Critérios de aceite do protótipo

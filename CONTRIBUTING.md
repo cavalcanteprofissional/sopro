@@ -160,6 +160,18 @@ proveniência, sem publicar automaticamente. O pipeline planejado é:
 Até essa fase existir, contribuições manuais seguem o fluxo acima. Não use LLM para marcar
 termos como revisados.
 
+### Conta e dados em nuvem — fase futura
+
+A **Fase 7** planeja mover histórico, configurações e glossários do usuário para uma conta
+(Clerk + Neon + Cloudflare R2), mantendo SQLite apenas como cache/outbox offline. Regras para
+contribuições futuras:
+
+- Nenhuma credencial de banco, bucket ou Clerk fica no cliente; o desktop fala com o Worker.
+- Toda consulta e objeto deve ser escopado por `user_id`, com RLS como defesa em profundidade.
+- Áudio continua **nunca** sendo enviado; transcrições/contexto só com opt-in.
+- Testes de sync usam API/fake, não serviços reais; segredos nunca entram em fixtures.
+- Detalhes e critérios de aceite: [TODO.md](TODO.md#fase-7--conta-dados-em-nuvem-e-backup-planejada).
+
 ### Quando o código precisa mudar
 
 Só quando o **formato** muda. Nesse caso, a alteração deve tocar, no mínimo:

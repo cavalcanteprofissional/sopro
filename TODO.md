@@ -22,27 +22,24 @@ de fala, erros amigáveis e tela de gerenciamento de glossários (importar/expor
 - **Instância única**: segunda execução ativa o hub existente e encerra (`--demo` tem trava
   separada).
 
-**Estado:** código, testes e documentação prontos — **410 testes passando**, validador sem
-erros (2 avisos: licença do pacote e 0 termos revisados), `--demo` smoke OK (fonte e
-portátil). **Reempacotado em 2026-10-20** com as correções da quinta rodada:
-`dist/Sopro-0.1.0-portable.zip` e `dist/Sopro-Setup-0.1.0.exe` (+ `SHA256SUMS.txt` com os dois).
+**Estado (2026-10-22):** código, testes e documentação prontos — **416 testes passando**,
+validador sem erros (avisos de revisão humana pendentes), `--demo` smoke OK (fonte e
+portátil). O portátil foi reempacotado em 2026-10-22 com os seis pacotes de domínio
+(`tech-en-pt` + cinco trilhas): `dist/Sopro/`, `dist/Sopro-0.1.0-portable.zip` e
+`SHA256SUMS.txt`. O `dist/Sopro-Setup-0.1.0.exe` ainda é o antigo; o Setup e os hashes
+completos precisam ser refeitos.
 
 > **Reteste manual (4ª rodada):** o mantenedor validou o *demo* ("tudo ok") e pediu uma nova
-> rodada — ver a seção **"Quinta rodada — UI/UX, fonte de captura e glossário"** abaixo
-> (UI/pop-up mais tecnológico, registro da fonte de captura, diagnóstico do loopback e
-> ampliação do glossário). **A quinta rodada está concluída** (A5.0–A5.6 abaixo); falta apenas
-> a confirmação de campo do loopback/microfone com uma aula real. A Fase 5 (escala e
-> portabilidade) pode começar.
+> rodada — ver a seção **"Quinta rodada — UI/UX, fonte de captura e glossário"** abaixo.
+> **A quinta rodada está concluída** (A5.0–A5.6); falta apenas a confirmação de campo do
+> loopback/microfone com uma aula real.
 
 **Tarefa inicial da próxima sessão — revisar antes de avançar:**
 
-1. Confirmar em campo (aula real) a captura do loopback e o nível/fala do microfone (A5.1).
-2. Conferir este `TODO`, o checkpoint de release em `docs/09` §9 e os prompts `docs/05` A9/A10.
-3. Decidir as questões em aberto da seção "Decisões" (embedding, LLM local, UI, licença do
-   glossário) antes de fechar a v0.1.
-
-**Depois:** seguir para a **Fase 5 — Escala e portabilidade** (camadas Linux/macOS, outros
-pacotes de domínio, feedback "irrelevante").
+1. Fechar A7.4 (seletor visual de trilhas), criar `docs/trilhas/` e refazer Setup + hashes.
+2. Validar o portátil manualmente e confirmar em campo o loopback/microfone (A5.1).
+3. Iniciar a **Fase 7** pelo F7.0 (Clerk, Neon, R2 e Worker) após revisar o plano abaixo;
+   a Fase 6 (curadoria) continua planejada.
 
 ## Fase 0 — Validação
 
@@ -507,6 +504,167 @@ domínio lógico**, com seleção múltipla simultânea pelo usuário.
 - [ ] Exigir revisão humana antes de `needs_review=false`.
 - [ ] Publicar pacote com página de fontes e rastreabilidade.
 - [ ] Detalhar o fluxo em `docs/roadmap/` e no `CONTRIBUTING.md`.
+
+## Fase 7 — Conta, dados em nuvem e backup (PLANEJADA)
+
+**Objetivo:** substituir o SQLite local como fonte da verdade por uma conta de usuário e
+armazenamento em nuvem, mantendo cache/outbox local apenas para funcionar offline. Áudio
+continua **nunca** sendo gravado ou enviado.
+
+### Stack escolhida (free tier verificado em 2026-10-22)
+
+- **Neon Free** — Postgres: 1 GB por projeto, 100 CU-hours/mês, 5 GB de egress, scale-to-zero.
+- **Clerk Hobby** — até 50.000 MRU, magic link e até **3 conexões sociais** no plano free.
+- **Cloudflare R2** — 10 GB, 1 milhão de Class A e 10 milhões de Class B por mês, egress grátis.
+- **Cloudflare Workers** — API; 100 mil requisições/dia e 10 ms de CPU por invocação no free tier.
+- **GitHub Actions** — executor do backup diário (free), porque 10 ms de CPU no Worker não é
+  adequado para `pg_dump`/compactação.
+- **Sem credenciais de banco/bucket no cliente.** O desktop fala apenas com o Worker, que
+  valida o JWT do Clerk e aplica o escopo do usuário.
+
+O Clerk free atende a opção 2 (Neon + Clerk + R2); só o GitHub fica ativo agora. Google,
+Microsoft, Discord e magic link ficam na UI como opções desabilitadas. **Quatro conexões
+sociais simultâneas exigiriam plano pago**, então a ativação futura deve respeitar o limite de
+3 ou revisar o provedor.
+
+### Arquitetura alvo
+
+```mermaid
+flowchart LR
+    APP["Sopro desktop"] -->|PKCE + loopback 127.0.0.1| CLERK["Clerk\nlogin e JWT"]
+    APP -->|token no cofre do SO| APP
+    APP -->|HTTPS + Bearer JWT| API["Cloudflare Worker\nAPI e validação do JWT"]
+    API -->|SQL parametrizado\nuser_id obrigatório| NEON[("Neon Postgres\ndados relacionais do usuário")]
+    API -->|objetos privados\nusers/{user_id}/...| R2[("Cloudflare R2\nglossários, snapshots e backups")]
+    GHA["GitHub Actions\ncron diário"] -->|pg_dump comprimido| R2
+    CATALOG["Catálogo oficial\nglossários versionados"] -->|download + SHA-256| APP
+```
+
+### Segregação por usuário
+
+- Um único bucket privado no R2, com prefixos imutáveis por `clerk_user_id`:
+  `users/{user_id}/glossaries/` e `users/{user_id}/exports/`.
+- Backups: `backups/database/YYYY-MM-DD/` para o dump completo e
+  `backups/users/{user_id}/YYYY-MM-DD/` para exportações pontuais.
+- Glossários oficiais em prefixo separado e somente leitura; não contêm dados de usuário.
+- No Neon, todas as tabelas de dados do usuário recebem `user_id` e são filtradas no Worker.
+  RLS no Postgres entra como defesa em profundidade, com `app.user_id` definido pelo Worker.
+- Nenhum objeto é público. Downloads usam URL assinada de curta duração via Worker.
+- Teste obrigatório: usuário A não consegue ler, alterar, listar ou restaurar dados do B.
+
+### Conta e autenticação
+
+- Fluxo OAuth 2.0 Authorization Code + PKCE (RFC 8252), navegador do sistema e callback
+  efêmero em `http://127.0.0.1:{porta}/callback`; validar `state`.
+- Tokens no cofre do SO via `core/config/secrets.py` (keyring); nunca em JSON ou SQLite.
+- Logout limpa tokens, cache local e dados sensíveis em memória.
+- UI: tela de conta, “Entrar com GitHub”, status conectado/offline, “Sair”, “Excluir conta”.
+- Provedores futuros: Google, Microsoft e Discord desabilitados com tooltip “em breve”;
+  magic link desabilitado pelo mesmo mecanismo. O registry de provedores deve ligar/desligar
+  sem recompilar o app.
+
+### O que vai para a nuvem
+
+| Dado | Destino | Observação |
+|---|---|---|
+| Histórico e detecções | Neon | Fonte da verdade; necessário para sync |
+| Configurações | Neon | Inclui trilhas ativas, fontes e preferências |
+| Glossários próprios | Neon + R2 | Metadados relacionais e pacote JSON versionado |
+| Termos gerados/candidatos | Neon + R2 | Fila de aprovação e proveniência |
+| Transcrições e contexto | Neon/R2 | Só se `save_transcript`/`save_context`; retenção padrão 30 dias |
+| Áudio | Nunca | Permanece em memória e é descartado |
+| Glossários oficiais | R2 | Versionados por manifesto + SHA-256; cacheados localmente |
+
+### Offline, cache e sincronização
+
+- A nuvem é a **fonte da verdade**. O SQLite local passa a ser cache + outbox, nunca o banco
+  definitivo do usuário.
+- Ao abrir: carrega cache, tenta `GET /sync/pull?cursor=...`; se falhar, continua offline com
+  aviso visível.
+- Escritas offline entram em `outbox` com UUID/ULID, `idempotency_key`, `created_at` e
+  `updated_at`; upload em lote com retry exponencial.
+- Conflitos: last-write-wins por registro, com `updated_at` do servidor e tombstones para
+  exclusões. Glossários publicados são versionados e imutáveis; edição cria nova versão.
+- Após sync confirmado, o cache é compactado; “limpar cache local” remove cópias sem apagar a
+  nuvem. Migração inicial não mantém o banco antigo como fonte concorrente.
+- Pull delta por cursor, sem polling agressivo; backoff e sincronização ao voltar a conexão.
+
+### Migração no primeiro login
+
+1. Detectar dados locais e mostrar resumo (domínios, termos, histórico, configurações).
+2. Migrar automaticamente com chaves estáveis e `idempotency_key` para evitar duplicatas.
+3. Enviar primeiro glossários/configurações, depois histórico e transcrições autorizadas.
+4. Só marcar `migrated_at` após confirmação do servidor; então o SQLite vira cache/outbox.
+5. Oferecer exportação local antes da migração e “tentar de novo” em caso de falha.
+
+### Backup e restauração
+
+- GitHub Actions diário às 03:00 UTC executa `pg_dump` comprimido e envia para
+  `backups/database/YYYY-MM-DD/sopro.dump.gz` + `manifest.json` com tamanho, SHA-256 e versão
+  do schema. O dump não fica no repositório nem em artifacts públicos.
+- Exportação por usuário (`backups/users/{user_id}/`) é gerada sob demanda para portabilidade,
+  exclusão de conta e restauração pontual.
+- Retenção de **30 dias** via lifecycle rule do R2; backups não contam como cache local.
+- Neon mantém o instant restore/point-in-time do free tier como segunda camada (6 horas).
+- Restauração total: baixar o dump, restaurar em uma branch Neon isolada, validar e promover.
+  Restauração de um usuário: extrair do dump/exportação por `user_id` para uma branch temporária.
+- Monitorar o tamanho: 30 dumps precisam caber nos 10 GB do R2. Se chegar a 70%, reduzir
+  retenção ou implementar dump incremental, sem apagar o histórico do usuário.
+- Teste de restauração pelo menos uma vez por release; backup não testado não conta como
+  entregue.
+
+### Free tier e limites
+
+- Orçamento inicial: 1 GB no Neon, 10 GB no R2, 100 mil requisições/dia e 10 ms de CPU por
+  invocação no Worker, 50 mil MRU no Clerk. Monitorar tamanho por usuário e alertar antes do
+  limite.
+- Compactar JSONL, usar deltas, evitar indexar transcrição completa e limitar anexos.
+- Backup não roda no Worker: GitHub Actions faz o dump, e o R2 guarda o resultado.
+- Se o Neon ou R2 atingir o limite: modo somente leitura/offline com fila, **nunca** apagar
+  dados do usuário para “liberar espaço”.
+- Transcrições/contexto são o maior risco de custo e privacidade; manter compressão,
+  retenção curta e opção de desligar.
+
+### Entregáveis
+
+- [ ] **F7.0** Criar app OAuth no Clerk, projeto Neon, bucket R2 privado, Worker e secrets.
+- [ ] **F7.1** Login GitHub com PKCE/loopback, cofre do SO, tela de conta e logout.
+- [ ] **F7.2** Schema Neon com `user_id`, RLS, índices, migrações e Worker com JWT/escopo.
+- [ ] **F7.3** Sync pull/push, outbox, idempotência, conflitos e indicador online/offline.
+- [ ] **F7.4** Glossários oficiais na nuvem + cache local com SHA-256 e catálogo de versões.
+- [ ] **F7.5** Glossários próprios e pacotes do usuário no R2, com versionamento e exportação.
+- [ ] **F7.6** Migração automática do SQLite local no primeiro login, com deduplicação.
+- [ ] **F7.7** Backup diário via GitHub Actions no R2, lifecycle de 30 dias, restauração e
+  teste de restore.
+- [ ] **F7.8** Exclusão de conta, exportação LGPD, rate limit, logs sem conteúdo e testes A/B.
+- [ ] **F7.9** Documentar fluxo em `docs/roadmap/`, README, CONTRIBUTING, CHANGELOG e build.
+
+### Critérios de aceite
+
+- [ ] Login GitHub funciona no executável congelado e sobrevive a reinício.
+- [ ] Usuário A não acessa dados de B por API, R2 ou URL assinada.
+- [ ] Histórico e glossários sobrevivem a limpar cache e reinstalar o app.
+- [ ] Sem internet, o app abre com cache e enfileira escritas; ao voltar, sincroniza.
+- [ ] Migração local → nuvem não duplica registros e pode ser repetida com segurança.
+- [ ] Backup diário é criado, retido por 30 dias e restaurável em conta limpa.
+- [ ] Nenhum token, credencial de banco ou áudio aparece em logs, SQLite ou R2.
+- [ ] Uso cabe no free tier com os limites e alertas documentados.
+
+### Riscos e decisões em aberto
+
+- **Clerk free:** 3 conexões sociais; ativar Google/Microsoft/Discord exigirá escolher até 3
+  ou migrar de plano.
+- **Neon free:** scale-to-zero e 1 GB; sincronização precisa tolerar cold start e volume.
+- **Workers free:** 10 ms de CPU por invocação; processamento pesado fica no GitHub Actions,
+  e a API deve usar consultas curtas.
+- **Backup no R2:** 30 dumps precisam caber em 10 GB; medir compressão e planejar retenção
+  antes do primeiro release em produção.
+- **Transcrições:** maior custo/risco; decidir retenção final e se haverá criptografia
+  adicional no cliente antes do upload.
+- **Multi-dispositivo:** LWW por registro é o padrão; colaboração em tempo real fica fora do
+  escopo desta fase.
+- **Custo:** se o free tier deixar de bastar, priorizar exportação/portabilidade e degradação
+  graciosa antes de qualquer cobrança.
 
 ## DX — execução local e modo demo (implementar no final, após as fases)
 

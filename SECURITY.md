@@ -9,9 +9,14 @@ compromissos e como reportar problemas.
   100% offline após o download dos modelos (RNF-07).
 - **Áudio não é gravado em disco por padrão:** os frames ficam em memória e são descartados
   após a transcrição (RNF-09).
-- **Sem telemetria:** dados de uso não são enviados a terceiros (RN-05).
-- **Nuvem é opcional:** provedores em nuvem (ex.: Groq) exigem opt-in explícito, com aviso,
-  indicador permanente na bandeja e possibilidade de revogar a qualquer momento (RN-04).
+- **Sem telemetria:** dados de uso não são enviados para analytics ou terceiros não
+  relacionados à conta (RN-05).
+- **Nuvem de IA é opcional:** provedores em nuvem (ex.: Groq) exigem opt-in explícito, com
+  aviso, indicador permanente na bandeja e possibilidade de revogar a qualquer momento
+  (RN-04).
+- **Conta e dados em nuvem (Fase 7 planejada):** histórico, configurações e glossários vão
+  para Clerk/Neon/R2, isolados por `user_id`. Tokens ficam no cofre do SO. Áudio continua
+  **nunca** sendo enviado.
 - **Logs sem conteúdo de fala:** as chaves de API nunca aparecem em texto puro nos logs.
 - **Contexto opcional:** o `context_snippet` das detecções fica desligado por padrão.
 
@@ -22,7 +27,9 @@ compromissos e como reportar problemas.
 - Captura de áudio de saída (loopback) e de microfone no Windows.
 - Armazenamento local de configurações e chaves (preferencialmente no cofre de credenciais
   do SO).
-- Comunicação com provedores em nuvem quando ativados explicitamente.
+- Comunicação com provedores de IA em nuvem quando ativados explicitamente.
+- Fase 7 planejada: autenticação Clerk, API Worker, Neon e R2; isolamento por usuário,
+  validação de JWT, URLs assinadas e backup de 30 dias.
 - Importação de pacotes de domínio (JSON/CSV) de terceiros.
 
 ## Versões suportadas

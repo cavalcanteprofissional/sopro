@@ -83,6 +83,37 @@ gerado automaticamente**. A curadoria humana continua sendo o portão de entrada
 
 O detalhamento operacional fica em [CONTRIBUTING.md](../CONTRIBUTING.md#curadoria-assistida-por-ia--fase-futura).
 
+## Fase 7 — Conta, dados em nuvem e backup (planejada)
+
+Objetivo: substituir o SQLite local como fonte da verdade por uma conta de usuário e
+armazenamento em nuvem, mantendo cache/outbox local para funcionar offline. **Áudio nunca é
+gravado nem enviado.**
+
+1. **Conta e OAuth:** Clerk Hobby com GitHub ativo; Google, Microsoft, Discord e magic link
+   presentes na UI, porém desabilitados. Login OAuth 2.0 + PKCE com callback de loopback e
+   tokens no cofre do SO.
+2. **Dados:** Neon Postgres para histórico, configurações, glossários próprios, candidatos,
+   transcrições/contexto autorizados; Cloudflare R2 privado para pacotes, exportações e
+   backups. Todas as linhas e objetos isolados por `user_id`.
+3. **API:** Cloudflare Worker valida o JWT do Clerk, aplica o escopo do usuário e assina
+   acessos curtos ao R2. Nenhuma credencial de banco ou bucket fica no cliente.
+4. **Offline e sync:** cache local + outbox com idempotência, pull por cursor, resolução de
+   conflitos por `updated_at` e tombstones. Glossários oficiais são versionados no R2 e
+   cacheados com SHA-256.
+5. **Migração:** no primeiro login, exportar o SQLite, deduplicar e enviar; só depois marcar
+   `migrated_at` e rebaixar o banco local a cache.
+6. **Backup:** GitHub Actions diário gera dump comprimido no R2; lifecycle de **30 dias**,
+   restauração testada e exportação por usuário sob demanda.
+7. **Free tier:** Neon 1 GB/100 CU-hours, R2 10 GB, Worker 100 mil req/dia (10 ms CPU),
+   Clerk 50 mil MRU e 3 conexões sociais. Monitorar e degradar para offline antes de cobrar.
+
+**DoD:** login GitHub no executável congelado; usuário A não acessa dados de B; histórico e
+glossários sobrevivem à reinstalação; offline enfileira e sincroniza; migração idempotente;
+backup de 30 dias restaurável; nenhum token ou áudio em logs/SQLite/R2.
+
+O recorte operacional, critérios de aceite e riscos estão em
+[TODO.md](../TODO.md#fase-7--conta-dados-em-nuvem-e-backup-planejada).
+
 ## Métricas de acompanhamento
 
 | Métrica | Como medir | Meta inicial |
@@ -113,6 +144,9 @@ O detalhamento operacional fica em [CONTRIBUTING.md](../CONTRIBUTING.md#curadori
 | Licença de glossários externos | Média | Médio | Curadoria própria, registrar licença por pacote |
 | Instalador grande | Média | Médio | Modelos sob demanda, componentes opcionais |
 | Pop-up rouba foco em reuniões | Baixa | Alto | Flags de janela sem ativação e teste dedicado |
+| Dados do usuário em nuvem / LGPD | Média | Alto | Isolamento por `user_id`, RLS, R2 privado, consentimento, exportação e exclusão |
+| Lock-in ou limite de free tier | Média | Alto | Portabilidade, exportação, cache offline e degradação graciosa |
+| Backup maior que o R2 free | Média | Médio | Compressão, monitoramento em 70% e dump incremental se necessário |
 
 ## Marcos
 
@@ -121,3 +155,6 @@ O detalhamento operacional fica em [CONTRIBUTING.md](../CONTRIBUTING.md#curadori
 3. **M2** protótipo usável em aula real (Fase 2).
 4. **M3** pop-ups com acepção contextual (Fase 3).
 5. **M4** versão instalável 0.1 (Fase 4).
+6. **M5** escala e portabilidade (Fase 5).
+7. **M6** curadoria assistida com revisão humana (Fase 6).
+8. **M7** conta, dados em nuvem e backup free tier (Fase 7).

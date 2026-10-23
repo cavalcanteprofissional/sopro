@@ -1,10 +1,14 @@
 # 12 — Dados, SQLite e ciclo de vida
 
-**Estado:** implementado.
+**Estado:** implementado no modo local; a Fase 7 planeja nuvem.
 
-Todo o estado persistente do Sopro fica na pasta de dados do usuário. O banco é SQLite com
-WAL e uma conexão por thread; migrações versionadas garantem compatibilidade entre versões.
-Áudio não é persistido.
+Hoje todo o estado persistente do Sopro fica na pasta de dados do usuário. O banco é SQLite
+com WAL e uma conexão por thread; migrações versionadas garantem compatibilidade entre
+versões. Áudio não é persistido.
+
+Na **Fase 7 planejada**, a nuvem (Neon + R2) passa a ser a fonte da verdade do histórico,
+configurações e glossários do usuário; o SQLite vira cache + outbox offline. O áudio continua
+fora de qualquer upload.
 
 ## Onde ficam os dados
 
@@ -70,7 +74,9 @@ para consulta por pai e por trilha. Uma migração nova deve:
 - `context_snippet` é opcional e desligado por padrão.
 - Logs não incluem fala.
 - Nenhuma telemetria.
-- Provedor remoto só recebe dados com consentimento persistido.
+- Provedor de IA remoto só recebe dados com consentimento persistido.
+- Fase 7 planejada: dados de conta isolados por `user_id`, R2 privado, tokens no cofre do SO e
+  exportação/exclusão sob demanda; áudio fora do escopo.
 
 ## Backup, exportação e recuperação
 
@@ -79,6 +85,8 @@ para consulta por pai e por trilha. Uma migração nova deve:
 - Para backup manual, copie `sopro.db` com o app fechado ou use o backup do SQLite.
 - Em caso de corrupção, não sobrescreva o banco: preserve o arquivo e tente recuperação
   antes de recriar.
+- Fase 7 planejada: backup diário no R2 com retenção de 30 dias, restauração testada e
+  exportação por usuário; o banco local deixa de ser a cópia definitiva.
 
 ## Ligações
 
