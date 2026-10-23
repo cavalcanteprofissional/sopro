@@ -36,9 +36,11 @@ completos precisam ser refeitos.
 
 **Tarefa inicial da próxima sessão — revisar antes de avançar:**
 
-1. Fechar A7.4 (seletor visual de trilhas), criar `docs/trilhas/` e refazer Setup + hashes.
-2. Validar o portátil manualmente e confirmar em campo o loopback/microfone (A5.1).
-3. Iniciar a **Fase 7** pelo F7.0 (Clerk, Neon, R2 e Worker) após revisar o plano abaixo;
+1. Executar o **backlog de campo B1–B5** (seção própria após a Fase 7), começando por
+   B1/B2/B4 (P0); B3/B5 ficam em seguida.
+2. Fechar A7.4 (seletor visual de trilhas), criar `docs/trilhas/` e refazer Setup + hashes.
+3. Validar o portátil manualmente e confirmar em campo o loopback/microfone (A5.1).
+4. Iniciar a **Fase 7** pelo F7.0 (Clerk, Neon, R2 e Worker) após revisar o plano abaixo;
    a Fase 6 (curadoria) continua planejada.
 
 ## Fase 0 — Validação
@@ -397,11 +399,15 @@ com licença do software + "about me" do dev (analisado o GitHub `cavalcanteprof
 - [x] Subir o limite do `vocabulary_hint` (todos os termos, truncando por tokens ~224) e
   incluir siglas/aliases curtos.
 
-### A6.3 — Matcher tolerante (P0)
+### A6.3 — Matcher tolerante (P0) · REABERTO em 2026-10-22
 
-- [x] Gerar variantes `-ing/-ed/-er` além do plural.
-- [x] Fuzzy opt-in (`MatcherConfig.fuzzy`, limiar alto + comprimento mínimo; setting + checkbox).
-- [x] Testes: `deployed`→`deploy`; typo `transfomer`→`transformer` (fuzzy); termo curto não
+> Reaberto na auditoria do backlog de campo. O código atual não tem `MatcherConfig.fuzzy`,
+> `_term_keys` só gera plural (não gera `-ing/-ed/-er`) e `Settings.matcher_fuzzy` não tem
+> efeito. Ver **B1**.
+
+- [ ] Gerar variantes `-ing/-ed/-er` além do plural.
+- [ ] Fuzzy opt-in (`MatcherConfig.fuzzy`, limiar alto + comprimento mínimo; setting + checkbox).
+- [ ] Testes: `deployed`→`deploy`; typo `transfomer`→`transformer` (fuzzy); termo curto não
   casa por fuzzy.
 
 ### A6.4 — Glossário (P1)
@@ -423,6 +429,9 @@ com licença do software + "about me" do dev (analisado o GitHub `cavalcanteprof
     com flexões + fuzzy opt-in, modelo padrão `whisper-small-en`, aba "Sobre" com MIT e
     créditos; **rodada extra**: hotword (openWakeWord) com palavra configurável, indicador
     clicável, sons distintos e verificação de conflito I/O de áudio.
+- [ ] **Reabertura parcial A6.6 (2026-10-22):** validar no código atual o que foi anunciado
+  na rodada extra. O hotword não está garantido no executável e o indicador só arrasta, sem
+  alternar por clique; rastrear em **B2** e **B4**.
 
 ## Sétima rodada — Nichos/trilhas do glossário `tech` (EM ANDAMENTO)
 
@@ -665,6 +674,214 @@ flowchart LR
   escopo desta fase.
 - **Custo:** se o free tier deixar de bastar, priorizar exportação/portabilidade e degradação
   graciosa antes de qualquer cobrança.
+
+## Backlog de campo — melhorias e correções (pós-Fase 7)
+
+Itens levantados no reteste do mantenedor em **2026-10-22**. Não são uma fase nova: entram
+antes ou junto da Fase 7 conforme a prioridade. Ordem sugerida: **B1 → B2 → B4 → B3 → B5**.
+Cada item deve sair com teste automatizado, atualização do CHANGELOG e, quando aplicável,
+rebuild do portátil/Setup. Nada aqui autoriza gravar ou enviar áudio.
+
+> **Auditoria:** esta seção reabre A6.3 (fuzzy/inflexões não existem no código atual) e
+> A6.6 (hotword não garantido no executável e indicador sem clique). Os itens antigos foram
+> anotados; a correção real é rastreada em B1/B2/B4.
+
+### B1 — STT: fonética pt-BR, siglas e alucinações (P0)
+
+**Sintoma de campo**
+- Inglês técnico falado com sotaque brasileiro é transcrito de forma fonética e erra termos.
+- Às vezes aparecem palavras que não foram ditas; outras vezes a palavra só coincide na
+  pronúncia.
+- Siglas faladas como letras se perdem: “API” pode chegar como “A P I” em português ou
+  “ai pi ai” em inglês; “AI” e “API” não podem ser confundidos.
+
+**Evidência no código atual**
+- `core/text/normalize.py` apenas normaliza caixa/pontuação e tokeniza; não expande letras
+  faladas nem variantes fonéticas.
+- `core/matcher/matcher.py:_term_keys` casa canônica + aliases + plural; não há `-ing/-ed/-er`
+  nem fuzzy. `MatcherConfig` não tem `fuzzy`.
+- `Settings.matcher_fuzzy=True` existe, mas é inerte: não há checkbox nem uso no matcher.
+- `core/stt/vocabulary.py` já monta um hint de ~220 tokens para o Whisper; é o ponto natural
+  para incluir formas faladas de siglas e termos difíceis.
+
+**Direção**
+- Criar um conjunto de fixtures com inglês técnico falado por brasileiro (áudio ou transcrição
+  anotada) e uma lista de erros esperados/observados.
+- Normalizar siglas faladas por letra: `A P I`, `a-p-i`, `ai pi ai`, `A.I.` → `API`; criar
+  testes para não converter `AI` em `API`.
+- Adicionar aliases fonéticos/candidatos por termo (ex.: formas comuns geradas por pronúncia
+  brasileira) e/ou uma camada de similaridade fonética conservadora, sempre com limiar alto e
+  comprimento mínimo para não aumentar falsos positivos.
+- Melhorar o `initial_prompt` do STT com termos, siglas e formas faladas; manter o limite de
+  tokens e priorizar trilhas ativas.
+- Religar o fuzzy de verdade (`MatcherConfig.fuzzy` + setting + checkbox + testes) ou remover
+  `matcher_fuzzy`; não deixar opção sem efeito.
+- Para alucinações: usar confiança/segmento, stoplist/contexto e não casar termos curtos por
+  aproximação. Registrar os falsos positivos em teste de regressão.
+
+**Aceite**
+- “API” é reconhecida a partir de “A P I” e “ai pi ai”; “AI” continua distinto.
+- Um conjunto fixo de falas com sotaque melhora sem aumentar falsos positivos além do limite
+  acordado no teste.
+- `matcher_fuzzy` funciona de ponta a ponta ou deixa de existir.
+- Testes cobrem normalização de siglas, aliases fonéticos, fuzzy e falsos positivos.
+
+**Arquivos prováveis:** `core/text/normalize.py`, `core/stt/vocabulary.py`,
+`core/matcher/matcher.py`, `app/detection.py`, `platform/stt/faster_whisper_engine.py`,
+`platform/stt/groq_stt.py`, `tests/test_matcher.py`, `tests/test_text.py`.
+
+### B2 — Hotword “sopro”, ativação/desativação e sons (P0)
+
+**Sintoma de campo**
+- O comando por voz “sopro” deveria pausar/retomar o app, mas não foi observado funcionando.
+- Faltam sons suaves ao ativar/desativar (ou eles nunca são ouvidos porque o hotword não
+  dispara).
+
+**Evidência no código atual**
+- Existe `core/hotword/` com `OpenWakeWordDetector` e `SttShortHotwordDetector`; `app/run.py`
+  cria o detector, registra `on_toggle`, toca `play_hotword_on/off` e o mantém ativo enquanto o
+  app está pausado.
+- `openwakeword` não está declarado no `pyproject.toml` nem garantido no `sopro.spec`
+  (modelos/ONNX podem ficar fora do build). O fallback importa `sounddevice`, que não está
+  instalado nem declarado; `create_hotword_detector()` engole a exceção e devolve `None`.
+- No `.venv` há `openwakeword 0.6.0`, mas não há modelo customizado “sopro”. O código atual
+  dispara com **qualquer** modelo default quando `phrase == "sopro"`
+  (`self._phrase in name.lower() or self._phrase == "sopro"`), o que não é um hotword real.
+- Não há controles de hotword em `platform/popup/settings_window.py`: só pop-up e indicador.
+
+**Direção — registrar as duas opções (decisão do mantenedor)**
+- **Opção A (ideal):** modelo openWakeWord customizado para “sopro”, empacotado com o app e
+  versionado; se o modelo não existir, falhar de forma visível em vez de silenciosa.
+- **Opção B (contingência):** fallback STT curto usando a captura de áudio já existente
+  (evitar `sounddevice` se possível), com modelo carregado uma vez, VAD e limite de CPU;
+  detectar a palavra e alternar pausa/retomada.
+- Corrigir o matching para comparar com o modelo/frase correta e nunca disparar em qualquer
+  palavra; adicionar debounce e log de diagnóstico sem conteúdo de áudio.
+- Expor na UI: ativar/desativar, frase, backend, sensibilidade, dispositivo e botão “testar”.
+- Manter a escuta durante a pausa para permitir retomar por voz; não encerrar a thread ao
+  pausar.
+- Sons de ativação/desativação suaves e distintos; manter síntese atual como placeholder e
+  permitir substituir por WAV fornecido pelo mantenedor depois.
+- Empacotar dependências/modelos no `sopro.spec` e validar no executável congelado, não só no
+  ambiente de desenvolvimento.
+
+**Aceite**
+- Dizer “sopro” alterna pausa/retomada no executável congelado.
+- Nenhum disparo aleatório com fala comum ou com outros modelos default.
+- UI permite ligar/desligar, testar e ajustar sensibilidade/dispositivo.
+- Sons suaves são audíveis e diferentes do som do pop-up; ausência de áudio não derruba o app.
+- Teste de regressão cobre callback, debounce, pausa/retomada e ausência de dependência.
+
+**Arquivos prováveis:** `core/hotword/`, `app/run.py`, `core/config/settings.py`,
+`platform/popup/settings_window.py`, `platform/popup/sound.py`, `core/audio/chime.py`,
+`pyproject.toml`, `sopro.spec`, `scripts/build-windows.ps1`.
+
+### B3 — Som de bolha no pop-up (P1)
+
+**Sintoma de campo**
+- O pop-up usa hoje um chime sintetizado de duas notas; o mantenedor quer um som de bolha
+  estourando suavemente.
+
+**Evidência no código atual**
+- `core/audio/chime.py:chime_wav` gera o chime; `platform/popup/sound.py:play_popup_sound`
+  toca esse WAV via `winsound` e usa `QApplication.beep()` como fallback.
+
+**Direção**
+- Criar um WAV curto de bolha (ataque rápido, sweep suave e decaimento exponencial), sem
+  arquivos externos obrigatórios e sem clipping.
+- Manter volume configurável (`popup_volume`), fallback e reprodução assíncrona.
+- Usar placeholder sintetizado agora; se o mantenedor fornecer um WAV, permitir substituição
+  sem reescrever a lógica.
+- Não confundir com os sons de ativação/desativação do hotword.
+
+**Aceite**
+- WAV mono válido, curto e audível; teste de duração/energia/limite de amplitude.
+- `popup_sound=False` continua silenciando; falha de áudio não impede o pop-up.
+- Som percebido como bolha suave, não como chime de duas notas.
+
+**Arquivos prováveis:** `core/audio/chime.py`, `platform/popup/sound.py`,
+`tests/test_popup_sound.py`.
+
+### B4 — Indicador circular: clique para pausar e arraste para mover (P0)
+
+**Sintoma de campo**
+- O círculo colorido no canto superior esquerdo deve alternar ativar/desativar com **um
+  clique único**, como o comando de voz.
+- Ele também precisa continuar **arrastável** pela tela para o usuário posicionar onde quiser.
+
+**Evidência no código atual**
+- `platform/popup/status_indicator.py:StatusIndicator` só implementa arraste:
+  `mousePressEvent` guarda o offset, `mouseMoveEvent` move e `mouseReleaseEvent` salva a
+  posição via `on_moved`. Não existe callback de clique nem `on_toggle`.
+- Um clique hoje apenas salva a posição; não pausa/retoma.
+
+**Direção**
+- Adicionar `on_click` (ou sinal Qt) e ligar ao `on_toggle` em `app/run.py`.
+- Diferenciar clique de arraste por limiar de movimento (ex.: 4–6 px) e botão esquerdo:
+  - movimento abaixo do limiar no release → clique → alterna pausa/retomada;
+  - movimento acima do limiar → arraste → move e salva posição, sem alternar.
+- Preservar `on_moved` apenas quando houve arraste real.
+- Atualizar cursor/tooltip conforme o estado (ex.: “Clique para pausar” / “Clique para
+  retomar”; “Arraste para mover”) e garantir que o clique não abra o hub nem dispare duas
+  vezes.
+- Cobrir clique, arraste, clique sem movimento e arraste sem toggle nos testes.
+
+**Aceite**
+- Clique único pausa/retoma e altera o estado visual/som.
+- Arraste move o indicador e persiste a posição; soltar após arraste não pausa.
+- Testes existentes de movimento continuam passando; novos testes cobrem o clique.
+
+**Arquivos prováveis:** `platform/popup/status_indicator.py`, `app/run.py`,
+`tests/test_popup_status_indicator.py`, `core/config/settings.py`.
+
+### B5 — Glossário em árvore e ativação automática do pai (P1)
+
+**Sintoma de campo**
+- O glossário deve ser uma árvore hierárquica, tanto visualmente quanto na arquitetura.
+- Todas as trilhas de tecnologia devem ficar ligadas ao glossário pai `tech`, ativando-o
+  automaticamente ao serem marcadas.
+
+**Evidência no código atual**
+- O modelo já tem `parent_slug`, `track`, `track_label`, `track_order`, `Term.tracks`,
+  `Sense.track` e `aggregate_packages(base, tracks, active_tracks)`.
+- `_load_active_glossary` já carrega a base + trilhas e escolhe o pai quando só a trilha está
+  configurada, mas isso é implícito e não persistido como árvore.
+- `platform/popup/glossary_window.py:GlossaryPage` ainda usa `QListWidget` plano; não há
+  árvore, checkbox por trilha nem seletor de trilhas em `SettingsPage`/`FirstRunDialog`.
+- `active_tracks=()` significa “todas as trilhas”, então hoje não é possível representar
+  “somente a base” de forma explícita. Isso precisa ser corrigido antes da UI em árvore.
+
+**Decisões confirmadas**
+- Marcar qualquer trilha tech ativa automaticamente o glossário pai `tech`.
+- Desmarcar o glossário pai desmarca todas as trilhas filhas.
+- A ativação deve ser persistida de forma explícita, não inferida apenas em runtime.
+
+**Direção**
+- Criar uma representação explícita para “todas as trilhas” vs “nenhuma/seleção específica”
+  (ex.: `active_tracks: tuple[str, ...] | None`, com `None` = todas e `()` = nenhuma; ou um
+  `tracks_mode` equivalente), com migração de leitura e testes.
+- Centralizar a regra de fechamento pai/filhas no núcleo (ex.: `resolve_active_tree`) e usar
+  em `_load_active_glossary`, `GlossaryPage`, `SettingsPage` e `FirstRunDialog`; a UI não deve
+  ser a única dona da regra.
+- Trocar a lista plana por `QTreeWidget`: pai `tech` com filhos de trilha, checkbox e estado
+  consistente; marcar filha marca o pai; desmarcar o pai desmarca as filhas.
+- Exibir contagem de termos e estado de revisão por nó; manter importar/exportar.
+- Garantir que a agregação carregue base + trilhas selecionadas, sem duplicar termos, e que
+  somente a base não carregue todas as trilhas.
+- Atualizar `docs/02 §7/§9`, `docs/07 §7`, README e CONTRIBUTING quando a UI mudar.
+
+**Aceite**
+- Árvore consistente em Glossários, Configurações e primeira execução.
+- Marcar uma trilha marca o pai; desmarcar o pai desmarca as filhas.
+- “Somente base” não carrega trilhas; “todas” carrega todas; seleção explícita persiste após
+  reiniciar.
+- Agregação e matcher continuam funcionando; testes de árvore/fechamento e UI passam.
+
+**Arquivos prováveis:** `core/glossary/package.py`, `core/glossary/aggregate.py`,
+`app/run.py`, `core/config/settings.py`,
+`platform/popup/glossary_window.py`, `platform/popup/settings_window.py`,
+`platform/popup/first_run.py`, `tests/test_glossary_aggregate.py`,
+`tests/test_glossary_window.py`, `tests/test_run_glossary.py`.
 
 ## DX — execução local e modo demo (implementar no final, após as fases)
 
