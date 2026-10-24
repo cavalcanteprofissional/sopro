@@ -1,5 +1,5 @@
 ; installer.iss — instalador per-user do Sopro (docs/09 §5).
-; Compilar com: iscc /DVersion=0.1.0 installer.iss
+; Compilar com: iscc /DVersion=0.1.1 installer.iss
 
 #ifndef Version
 #define Version "0.0.0"

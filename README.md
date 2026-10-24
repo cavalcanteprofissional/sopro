@@ -7,7 +7,7 @@
 **Um companheiro discreto que explica termos técnicos em inglês no exato momento em que eles são falados.**
 
 [![Status](https://img.shields.io/badge/status-prot%C3%B3tipo%20funcional-blueviolet)](#roadmap-em-5-fases)
-[![Versão](https://img.shields.io/badge/vers%C3%A3o-0.1.0-blue)](CHANGELOG.md)
+[![Versão](https://img.shields.io/badge/vers%C3%A3o-0.1.1-blue)](CHANGELOG.md)
 [![Python](https://img.shields.io/badge/python-3.11%20%7C%203.12-3776AB?logo=python&logoColor=white)](pyproject.toml)
 [![Plataforma](https://img.shields.io/badge/plataforma-Windows%2010%2F11-0078D4?logo=windows&logoColor=white)](#instalação-windows)
 [![Testes](https://img.shields.io/badge/testes-416%20passando-success)](tests)

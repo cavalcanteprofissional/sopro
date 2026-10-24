@@ -7,6 +7,8 @@ adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-10-24
+
 ### Added
 - **Trilhas de glossário (A7.4)**: UI em árvore domínio → trilhas nos "Glossários", seletor de trilhas em Configurações e na primeira execução. Marcar uma trilha ativa o pai `tech` automaticamente; desmarcar o pai desmarca as filhas. Adicionado `docs/trilhas/README.md`. As regras de agregação já existentes (`active_tracks`) agora ficam expostas na UI.
 - **Sobre Nós (A6.5)**: nova aba no Hub com informações do projeto, desenvolvedor (Lucas Cavalcante dos Santos), links para repositório/perfil GitHub e privacidade/licença.
@@ -19,7 +21,7 @@ adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 - **Pop-up**: som padrão alterado para **bolha de sabão suave** (síntese em memória).
 - **Ativação/desativação**: sons de ligar/desligar mais simples e suaves (sweep curto).
 - **Indicador flutuante**: já suporta clique para ativar/desativar e arrastar com threshold (B4). Mantido e validado.
-- **Empacotamento (v0.1.0)**: portátil (`Sopro-0.1.0-portable.zip`) e instalador (`Sopro-Setup-0.1.0.exe`) refeitos com o código atual; `SHA256SUMS.txt` atualizado com ambos os artefatos.
+- **Empacotamento (v0.1.1)**: portátil (`Sopro-0.1.1-portable.zip`) e instalador (`Sopro-Setup-0.1.1.exe`) refeitos com o código atual; `SHA256SUMS.txt` atualizado com ambos os artefatos.
 - Confiança de transcrição no faster-whisper (`avg_logprob` + `no_speech_prob`); o serviço de
   detecção descarta transcrições abaixo de `0.25` antes de consultar o matcher.
 - Indicador circular: **clique único** pausa/retoma e **arraste** (acima de 5 px) move e

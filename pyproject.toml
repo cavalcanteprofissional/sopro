@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "sopro"
-version = "0.1.0"
+version = "0.1.1"
 description = "Companheiro discreto que explica termos técnicos em inglês no momento em que são falados."
 readme = "README.md"
 requires-python = ">=3.11"
