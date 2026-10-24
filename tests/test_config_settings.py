@@ -24,6 +24,7 @@ def test_defaults_are_valid():
     assert settings.save_context is False
     assert settings.remote_consent is False
     assert settings.first_run_done is False
+    assert settings.matcher_fuzzy is False
 
 
 def test_cloud_providers_lists_groq_only():

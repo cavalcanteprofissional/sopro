@@ -931,7 +931,9 @@
   {
     "canonical_en": "http",
     "pos": "noun",
-    "aliases": [],
+    "aliases": [
+      "h t t p"
+    ],
     "priority": 2,
     "is_ambiguous": false,
     "stoplisted": false,

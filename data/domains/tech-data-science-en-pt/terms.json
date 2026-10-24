@@ -1662,7 +1662,10 @@
   {
     "canonical_en": "sql",
     "pos": "noun",
-    "aliases": [],
+    "aliases": [
+      "s q l",
+      "sequel"
+    ],
     "priority": 2,
     "is_ambiguous": false,
     "stoplisted": false,

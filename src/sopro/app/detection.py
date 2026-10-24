@@ -9,6 +9,7 @@ Qt, captura de áudio) ficam em ``sopro.platform`` e são injetados pelo app.
 
 from __future__ import annotations
 
+import logging
 import time
 from collections.abc import Sequence
 from dataclasses import dataclass, replace
@@ -24,6 +25,10 @@ from sopro.core.stt.provider import AudioSegment, STTProvider
 from sopro.core.stt.vocabulary import vocabulary_hint
 from sopro.core.vad import SpeechSegment, VadConfig, segment
 from sopro.platform.popup import PopupItem, PopupQueue
+
+log = logging.getLogger("sopro")
+
+DEFAULT_MIN_CONFIDENCE = 0.25
 
 
 @dataclass(frozen=True)
@@ -77,6 +82,7 @@ class DetectionService:
         save_context: bool = False,
         language: str = "en",
         vocab_limit: int | None = None,
+        min_confidence: float = DEFAULT_MIN_CONFIDENCE,
         clock: Callable[[], float] | None = None,
     ) -> None:
         self._provider = provider
@@ -102,6 +108,7 @@ class DetectionService:
         self._context: list[tuple[int, str]] = []
         self._save_context = save_context
         self._language = language
+        self._min_confidence = max(0.0, min(1.0, min_confidence))
         self._hint = (
             vocabulary_hint(package, vocab_limit, active_tracks)
             if vocab_limit is not None
@@ -126,6 +133,15 @@ class DetectionService:
                 vocabulary_hint=self._hint,
             )
         )
+        if (
+            transcript.confidence is not None
+            and transcript.confidence < self._min_confidence
+        ):
+            log.info(
+                "transcrição descartada por baixa confiança (%.3f)",
+                transcript.confidence,
+            )
+            return []
         detections: list[Detection] = []
         context = self._context_text(speech.end_ms, transcript.text)
         for match in self._matcher.match(transcript.text):

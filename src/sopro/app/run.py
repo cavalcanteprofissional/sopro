@@ -166,6 +166,7 @@ def _matcher_config(settings: Settings):
     return MatcherConfig(
         cooldown_s=settings.cooldown_s,
         max_popups_per_minute=settings.budget_per_minute,
+        fuzzy=settings.matcher_fuzzy,
     )
 
 
@@ -453,7 +454,11 @@ def _run(args, home, repo, settings, domains_root, instance=None) -> int:
         save_settings(repo, replace(settings, indicator_x=x, indicator_y=y))
 
     indicator = (
-        StatusIndicator(size=48, on_moved=on_indicator_moved)
+        StatusIndicator(
+            size=48,
+            on_moved=on_indicator_moved,
+            on_click=lambda: on_toggle(),
+        )
         if settings.indicator_enabled
         else None
     )

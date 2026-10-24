@@ -1,5 +1,7 @@
 """Testes do binding faster-whisper (com engine simulada, sem a dependência)."""
 
+import math
+
 import pytest
 
 from sopro.core.stt import LocalWhisperProvider, STTUnavailable
@@ -7,8 +9,15 @@ from sopro.platform.stt import faster_whisper_engine as engine
 
 
 class FakeChunk:
-    def __init__(self, text: str) -> None:
+    def __init__(
+        self,
+        text: str,
+        avg_logprob: float | None = None,
+        no_speech_prob: float | None = None,
+    ) -> None:
         self.text = text
+        self.avg_logprob = avg_logprob
+        self.no_speech_prob = no_speech_prob
 
 
 class FakeModel:
@@ -60,6 +69,28 @@ def test_transcribe_joins_text_and_sets_timing(fake_engine):
     assert transcript.start_ms == 0
     assert transcript.end_ms == 500
     assert transcript.source == "system"
+    assert transcript.confidence is None
+
+
+def test_transcribe_combines_logprob_and_no_speech_confidence(monkeypatch, fake_engine):
+    class ScoredModel:
+        def transcribe(self, audio, **kwargs):
+            return [
+                FakeChunk("hello", avg_logprob=-0.1, no_speech_prob=0.1),
+                FakeChunk("world", avg_logprob=-0.2, no_speech_prob=0.2),
+            ], object()
+
+    monkeypatch.setattr(
+        engine, "_load_model", lambda path, device, compute_type: ScoredModel()
+    )
+    provider = engine.build_provider("caminho")
+
+    transcript = provider.transcribe(_segment(b"\x00\x00" * 160))
+
+    expected = round(
+        (math.exp(-0.1) + math.exp(-0.2)) / 2 * (1 - (0.1 + 0.2) / 2), 4
+    )
+    assert transcript.confidence == expected
 
 
 def test_transcribe_passes_language_and_prompt(fake_engine):

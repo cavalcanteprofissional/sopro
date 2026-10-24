@@ -9,6 +9,7 @@ para que trocá-lo não toque no núcleo.
 
 from __future__ import annotations
 
+import math
 from collections.abc import Sequence
 from pathlib import Path
 
@@ -45,6 +46,35 @@ def _to_audio(pcm: bytes):
 def _prompt(vocabulary_hint: Sequence[str]) -> str | None:
     terms = [term.strip() for term in vocabulary_hint if term.strip()]
     return ", ".join(terms) if terms else None
+
+
+def _confidence(chunks: Sequence[object]) -> float | None:
+    """Confiança média combinando logprob e probabilidade de não-fala."""
+    probs: list[float] = []
+    no_speech: list[float] = []
+    for chunk in chunks:
+        logprob = getattr(chunk, "avg_logprob", None)
+        if logprob is not None:
+            try:
+                probability = math.exp(float(logprob))
+            except (OverflowError, ValueError):
+                probability = None
+            if probability is not None and math.isfinite(probability):
+                probs.append(probability)
+        silent = getattr(chunk, "no_speech_prob", None)
+        if silent is not None:
+            try:
+                silent = float(silent)
+            except ValueError:
+                silent = None
+            if silent is not None and math.isfinite(silent):
+                no_speech.append(silent)
+    if not probs:
+        return None
+    confidence = sum(probs) / len(probs)
+    if no_speech:
+        confidence *= max(0.0, 1.0 - sum(no_speech) / len(no_speech))
+    return round(max(0.0, min(1.0, confidence)), 4)
 
 
 def build_provider(
@@ -84,10 +114,17 @@ def build_provider(
             initial_prompt=_prompt(hints),
             vad_filter=False,
         )
-        text = " ".join(chunk.text.strip() for chunk in segments).strip()
+        chunks = list(segments)
+        text = " ".join(chunk.text.strip() for chunk in chunks).strip()
         samples = len(segment.pcm) // 2
         end_ms = samples * 1000 // segment.sample_rate
-        return Transcript(text=text, start_ms=0, end_ms=end_ms, source=segment.source)
+        return Transcript(
+            text=text,
+            start_ms=0,
+            end_ms=end_ms,
+            source=segment.source,
+            confidence=_confidence(chunks),
+        )
 
     def close() -> None:
         state["model"] = None

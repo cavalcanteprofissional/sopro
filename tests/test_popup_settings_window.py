@@ -36,6 +36,7 @@ def test_dialog_edits_are_collected(qt_app):
     dialog._output_lang.setText("en")
     dialog._popup_max.setValue(5)
     dialog._theme.setCurrentText("dark")
+    dialog._matcher_fuzzy.setChecked(True)
     dialog._domain_checks["law-en-pt"].setChecked(True)
 
     result = dialog.current_settings()
@@ -43,6 +44,7 @@ def test_dialog_edits_are_collected(qt_app):
     assert result.output_lang == "en"
     assert result.popup_max == 5
     assert result.theme == "dark"
+    assert result.matcher_fuzzy is True
     assert set(result.active_domains) == {"tech-en-pt", "law-en-pt"}
 
 

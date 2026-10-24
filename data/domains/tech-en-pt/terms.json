@@ -4,7 +4,9 @@
     "pos": "acronym",
     "aliases": [
       "apis",
-      "application programming interface"
+      "application programming interface",
+      "a p i",
+      "ai pi ai"
     ],
     "priority": 1,
     "is_ambiguous": false,
@@ -18,6 +20,29 @@
         "definition_pt": "Conjunto de regras que permite um software conversar com outro.",
         "register": null,
         "example_en": "We called the API to fetch the data."
+      }
+    ],
+    "source": "popular",
+    "needs_review": true
+  },
+  {
+    "canonical_en": "AI",
+    "pos": "acronym",
+    "aliases": [
+      "artificial intelligence"
+    ],
+    "priority": 1,
+    "is_ambiguous": false,
+    "stoplisted": false,
+    "context_hints": [],
+    "senses": [
+      {
+        "ordinal": 1,
+        "domain_tag": "tech",
+        "translation_pt": "IA (inteligência artificial)",
+        "definition_pt": "Área da computação que cria sistemas capazes de aprender e tomar decisões.",
+        "register": null,
+        "example_en": "AI is changing how we work."
       }
     ],
     "source": "popular",
@@ -72,7 +97,8 @@
     "canonical_en": "IDE",
     "pos": "acronym",
     "aliases": [
-      "integrated development environment"
+      "integrated development environment",
+      "i d e"
     ],
     "priority": 3,
     "is_ambiguous": false,
@@ -96,7 +122,8 @@
     "pos": "acronym",
     "aliases": [
       "retrieval augmented generation",
-      "retrieval-augmented generation"
+      "retrieval-augmented generation",
+      "r a g"
     ],
     "priority": 1,
     "is_ambiguous": false,
@@ -119,7 +146,8 @@
     "canonical_en": "SDK",
     "pos": "acronym",
     "aliases": [
-      "software development kit"
+      "software development kit",
+      "s d k"
     ],
     "priority": 2,
     "is_ambiguous": false,

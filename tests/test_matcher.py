@@ -60,6 +60,87 @@ def test_generates_plural_variant():
     assert matches[0].surface == "embeddings"
 
 
+def test_generates_verb_inflections():
+    package = make_package([make_term(canonical_en="deploy", pos="verb", priority=1)])
+    matcher = Matcher(package, MatcherConfig(cooldown_s=0))
+
+    matches = matcher.match("We deployed and are deploying again.")
+
+    assert [m.term for m in matches] == ["deploy", "deploy"]
+    assert {m.surface for m in matches} == {"deployed", "deploying"}
+
+
+def test_spoken_acronym_letters_match_canonical_term():
+    package = make_package(
+        [
+            make_term(canonical_en="API", pos="acronym", priority=1),
+            make_term(canonical_en="AI", pos="acronym", priority=1),
+        ]
+    )
+    matcher = Matcher(package, MatcherConfig(cooldown_s=0))
+
+    assert [m.term for m in matcher.match("The A P I is ready.")] == ["API"]
+    assert [m.term for m in matcher.match("The A.I. model is ready.")] == ["AI"]
+    assert [m.term for m in matcher.match("The a-p-i is ready.")] == ["API"]
+
+
+def test_spoken_acronym_does_not_confuse_ai_and_api():
+    package = make_package(
+        [
+            make_term(canonical_en="API", pos="acronym", priority=1),
+            make_term(canonical_en="AI", pos="acronym", priority=1),
+        ]
+    )
+    matcher = Matcher(package)
+
+    matches = matcher.match("A I is not A P I")
+
+    assert [m.term for m in matches] == ["AI", "API"]
+
+
+def test_spoken_acronym_alias_matches_phonetic_phrase():
+    package = make_package(
+        [
+            make_term(
+                canonical_en="API",
+                pos="acronym",
+                aliases=["ai pi ai"],
+                priority=1,
+            )
+        ]
+    )
+    matcher = Matcher(package)
+
+    assert [m.term for m in matcher.match("Call the ai pi ai now.")] == ["API"]
+
+
+def test_fuzzy_is_opt_in():
+    package = make_package([make_term(canonical_en="transformer", priority=1)])
+
+    strict = Matcher(package)
+    fuzzy = Matcher(package, MatcherConfig(fuzzy=True))
+
+    assert strict.match("The transfomer works.") == []
+    assert [m.term for m in fuzzy.match("The transfomer works.")] == ["transformer"]
+
+
+def test_fuzzy_ignores_short_terms():
+    package = make_package([make_term(canonical_en="bias", priority=1)])
+    matcher = Matcher(
+        package, MatcherConfig(fuzzy=True, fuzzy_min_length=5)
+    )
+
+    assert matcher.match("The bais is clear.") == []
+    assert matcher.match("The bias is clear.") != []
+
+
+def test_fuzzy_does_not_match_unrelated_word():
+    package = make_package([make_term(canonical_en="model", priority=1)])
+    matcher = Matcher(package, MatcherConfig(fuzzy=True))
+
+    assert matcher.match("The modal dialog.") == []
+
+
 def test_reports_ambiguous_and_sense_count():
     term = make_term(
         canonical_en="bias",

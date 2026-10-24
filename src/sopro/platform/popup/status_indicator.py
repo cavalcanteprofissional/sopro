@@ -30,6 +30,7 @@ STATE_COLORS = {
 
 TICK_MS = 40
 PHASE_STEP = 0.16
+DRAG_THRESHOLD_PX = 5
 
 
 class IndicatorState(StrEnum):
@@ -141,13 +142,14 @@ class StatusDot(_DotBase):
 
 
 class StatusIndicator(_DotBase):
-    """Indicador flutuante: sem borda, sempre no topo, sem foco e arrastável."""
+    """Indicador flutuante: sem borda, sempre no topo, sem foco, clicável e arrastável."""
 
     def __init__(
         self,
         *,
         size: int = 48,
         on_moved: Callable[[int, int], None] | None = None,
+        on_click: Callable[[], None] | None = None,
         parent: QWidget | None = None,
     ) -> None:
         flags = (
@@ -161,22 +163,59 @@ class StatusIndicator(_DotBase):
         self.setAttribute(Qt.WidgetAttribute.WA_ShowWithoutActivating, True)
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground, True)
         self._on_moved = on_moved
+        self._on_click = on_click
         self._drag_offset = None
-        self.setToolTip("Sopro — indicador de estado")
+        self._press_pos = None
+        self._dragged = False
+        self.setCursor(Qt.CursorShape.PointingHandCursor)
+        self._update_tooltip()
 
     def place(self, x: int, y: int) -> None:
         self.move(int(x), int(y))
 
-    def mousePressEvent(self, event) -> None:  # noqa: N802 (API Qt)
-        self._drag_offset = (
-            event.globalPosition().toPoint() - self.frameGeometry().topLeft()
+    def set_state(self, state: IndicatorState) -> None:
+        super().set_state(state)
+        self._update_tooltip()
+
+    def _update_tooltip(self) -> None:
+        action = (
+            "Clique para retomar"
+            if self._state is IndicatorState.PAUSED
+            else "Clique para pausar"
         )
+        self.setToolTip(f"{action} • Arraste para mover")
+
+    def mousePressEvent(self, event) -> None:  # noqa: N802 (API Qt)
+        if event.button() != Qt.MouseButton.LeftButton:
+            return
+        self._press_pos = event.globalPosition().toPoint()
+        self._drag_offset = self._press_pos - self.frameGeometry().topLeft()
+        self._dragged = False
 
     def mouseMoveEvent(self, event) -> None:  # noqa: N802 (API Qt)
-        if self._drag_offset is not None and event.buttons() & Qt.MouseButton.LeftButton:
-            self.move(event.globalPosition().toPoint() - self._drag_offset)
+        if self._drag_offset is None or not (
+            event.buttons() & Qt.MouseButton.LeftButton
+        ):
+            return
+        current = event.globalPosition().toPoint()
+        if (
+            not self._dragged
+            and self._press_pos is not None
+            and (current - self._press_pos).manhattanLength() >= DRAG_THRESHOLD_PX
+        ):
+            self._dragged = True
+        if self._dragged:
+            self.move(current - self._drag_offset)
 
     def mouseReleaseEvent(self, event) -> None:  # noqa: N802 (API Qt)
+        if event.button() != Qt.MouseButton.LeftButton:
+            return
+        dragged = self._dragged
         self._drag_offset = None
-        if self._on_moved is not None:
-            self._on_moved(self.x(), self.y())
+        self._press_pos = None
+        self._dragged = False
+        if dragged:
+            if self._on_moved is not None:
+                self._on_moved(self.x(), self.y())
+        elif self._on_click is not None:
+            self._on_click()

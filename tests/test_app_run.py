@@ -3,7 +3,13 @@
 import os
 from dataclasses import replace
 
-from sopro.app.run import _configure_app, _maybe_first_run, build_parser, main
+from sopro.app.run import (
+    _configure_app,
+    _matcher_config,
+    _maybe_first_run,
+    build_parser,
+    main,
+)
 from sopro.core.config import Settings, load_settings
 from sopro.core.repo import Database, Repository
 
@@ -23,6 +29,16 @@ def test_parser_flags():
     args = build_parser().parse_args(["--demo", "--home", "C:/tmp/h"])
     assert args.demo is True
     assert args.home == "C:/tmp/h"
+
+
+def test_matcher_config_wires_fuzzy_and_policy():
+    config = _matcher_config(
+        Settings(cooldown_s=12.0, budget_per_minute=3, matcher_fuzzy=True)
+    )
+
+    assert config.cooldown_s == 12.0
+    assert config.max_popups_per_minute == 3
+    assert config.fuzzy is True
 
 
 def test_main_reports_missing_ui_extra(monkeypatch, tmp_path):

@@ -15,8 +15,9 @@ SEED_PATH = "data/domains/tech-en-pt"
 
 
 class FakeProvider(STTProvider):
-    def __init__(self, text: str) -> None:
+    def __init__(self, text: str, confidence: float | None = None) -> None:
         self.text = text
+        self.confidence = confidence
         self.calls = 0
 
     def warmup(self) -> None:
@@ -25,7 +26,11 @@ class FakeProvider(STTProvider):
     def transcribe(self, segment) -> Transcript:
         self.calls += 1
         return Transcript(
-            text=self.text, start_ms=0, end_ms=1000, source=segment.source
+            text=self.text,
+            start_ms=0,
+            end_ms=1000,
+            source=segment.source,
+            confidence=self.confidence,
         )
 
     def close(self) -> None:
@@ -64,6 +69,20 @@ def test_process_ignores_unknown_text():
     provider = FakeProvider("nothing to see here")
 
     assert _service(provider).process(_speech()) == []
+
+
+def test_process_ignores_low_confidence_transcript():
+    provider = FakeProvider("the transformer model", confidence=0.1)
+
+    assert _service(provider).process(_speech()) == []
+
+
+def test_process_accepts_transcript_at_min_confidence():
+    provider = FakeProvider("the transformer model", confidence=0.2)
+
+    detections = _service(provider, min_confidence=0.2).process(_speech())
+
+    assert [d.term for d in detections] == ["transformer"]
 
 
 def test_process_offers_popup():

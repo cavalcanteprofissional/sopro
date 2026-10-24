@@ -70,7 +70,7 @@ class Settings:
     indicator_x: int = -1
     indicator_y: int = -1
     """Posição salva do indicador flutuante (-1 = posição padrão)."""
-    matcher_fuzzy: bool = True
+    matcher_fuzzy: bool = False
     """Permite correspondência aproximada para erros de transcrição (STT)."""
     hotword_enabled: bool = True
     """Escuta por palavra-chave para ligar/desligar o Sopro."""

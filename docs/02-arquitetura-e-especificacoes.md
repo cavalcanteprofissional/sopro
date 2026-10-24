@@ -66,10 +66,16 @@ Princípio central: **o LLM não participa de toda frase.** O caminho rápido é
 
 1. Normalizar: minúsculas, remover pontuação, separar hifens, manter siglas.
 2. Gerar n-gramas de 1 a 4 tokens e buscar **o maior casamento primeiro**.
-3. Casar contra: forma canônica + aliases + flexões comuns (plural, -ing, -ed) por regras simples ou tabela de aliases.
+3. Casar contra: forma canônica + aliases + flexões comuns (plural, `-ing`, `-ed`, `-er/-ers`)
+   por regras simples ou tabela de aliases. Siglas soletradas (`A P I`, `A.I.`, `a-p-i`,
+   `ai pi ai`) são reconhecidas como o termo canônico, sem confundir `AI` com `API`.
 4. Aplicar **lista de exclusão** para palavras muito comuns, a menos que o contexto confirme o domínio (ex.: "model", "token", "layer" exigem palavras de apoio na janela de contexto ou etiqueta de domínio forte).
 5. Aplicar **cooldown** por termo e **orçamento de pop-ups por minuto**.
 6. Candidato desconhecido: sintagmas (maior casamento) que não estão no glossário nem na lista de palavras comuns vão ao caminho LLM, com **limite de taxa próprio** (`llm_candidates_per_minute`).
+7. **Fuzzy opt-in:** desligado por padrão (`matcher_fuzzy`); quando ativo, aceita aproximação
+   conservadora (limiar `0.85` e mínimo de 5 caracteres), nunca para termos curtos/siglas.
+8. **Anti-alucinação:** o serviço de detecção descarta transcrições cuja confiança do STT
+   fique abaixo de `0.25` (quando o provedor informa confiança) antes de consultar o matcher.
 
 ## 5. Transcrição em tempo real (especificação)
 
@@ -80,6 +86,9 @@ Princípio central: **o LLM não participa de toda frase.** O caminho rápido é
   derrubam o pipeline.
 - **Engine e modelo** (faster-whisper vs whisper.cpp; `small.en` vs distilado) são escolhidos por **benchmark** na Fase 0/1. Os modelos são obtidos **sob demanda** na primeira execução, com verificação de integridade (ver `08-distribuicao-e-offline.md`).
 - Segmentação por VAD, com limite máximo de segmento (ex.: 8–12 s) e pequena sobreposição (ex.: 0,3–0,5 s) para não cortar palavras.
+- **Confiança:** o faster-whisper calcula `Transcript.confidence` combinando `avg_logprob`
+  (exponenciado) e `no_speech_prob`; transcrições abaixo de `0.25` são descartadas antes do
+  matcher. Provedores sem confiança continuam aceitos (campo `None`).
 - Dica de vocabulário: lista dos termos do domínio, truncada ao tamanho permitido pelo modelo
   (**~224 tokens**; inclui todos os termos, não só os de maior prioridade — 6ª rodada). Ver regra
   no `05-prompts.md`.
@@ -169,9 +178,11 @@ validador não mudam de comportamento.
 ### Superfícies de interface
 
 - **Indicador de estado** (`platform/popup/status_indicator.py`): bolinha flutuante, sem
-  borda, sempre no topo e **sem foco**, arrastável (posição persistida) e ocultável. Estados:
-  `loading` (download/warmup, pulso pela fração), `listening`, `analyzing` (pulso em tempo
-  real pelo nível de áudio), `paused` e `error`. Nunca rouba foco.
+  borda, sempre no topo e **sem foco**, ocultável e com duas ações: **clique único**
+  pausa/retoma (mesma ação do atalho/hotword) e **arraste** acima de 5 px move e persiste a
+  posição sem alternar. Tooltip e cursor refletem o estado ("Clique para pausar/retomar").
+  Estados: `loading` (download/warmup, pulso pela fração), `listening`, `analyzing` (pulso em
+  tempo real pelo nível de áudio), `paused` e `error`. Nunca rouba foco.
 - **Hub** (`platform/popup/hub.py` + `pages.py`): janela única com navegação entre Status,
   Configurações, Glossários, Termos, Histórico, Demonstração e **Sobre**. Configurações e
   Glossários são páginas reutilizáveis, também hospedadas nos diálogos antigos (`PageHost`).
@@ -194,6 +205,8 @@ validador não mudam de comportamento.
 - Provedor de STT (local/Groq), modelo, chave Groq (armazenada localmente, de preferência no cofre de credenciais do SO).
 - Provedor de LLM (local/Groq/desligado), modelo e URL base (servidor OpenAI-compatível).
 - Domínios ativos, idioma de saída, cooldown, orçamento por minuto, duração, posição, tema.
+- Detecção tolerante: `matcher_fuzzy` (padrão desligado) com limiar `0.85` e mínimo de 5
+  caracteres; siglas soletradas/aliases fonéticos são sempre reconhecidos.
 - Trilhas ativas (`active_tracks`): sub-nichos do domínio escolhido; lista vazia = todas as
   trilhas do domínio. Várias trilhas podem ser ativas ao mesmo tempo.
 - Desambiguação: limiar do resolvedor (`resolution_threshold`) e janela de contexto
