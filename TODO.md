@@ -22,12 +22,7 @@ de fala, erros amigáveis e tela de gerenciamento de glossários (importar/expor
 - **Instância única**: segunda execução ativa o hub existente e encerra (`--demo` tem trava
   separada).
 
-**Estado (2026-10-22):** código, testes e documentação prontos — **416 testes passando**,
-validador sem erros (avisos de revisão humana pendentes), `--demo` smoke OK (fonte e
-portátil). O portátil foi reempacotado em 2026-10-22 com os seis pacotes de domínio
-(`tech-en-pt` + cinco trilhas): `dist/Sopro/`, `dist/Sopro-0.1.0-portable.zip` e
-`SHA256SUMS.txt`. O `dist/Sopro-Setup-0.1.0.exe` ainda é o antigo; o Setup e os hashes
-completos precisam ser refeitos.
+**Estado (2026-10-24):** **B1 (detecção)** parcialmente concluído (siglas/aliases/flexões/fuzzy/confiança STT implementados; monitorar em campo para pronúncia fonética pt-BR, "A P I"/"ai pi ai" e alucinações), **B4 (clique no indicador)** concluído (clique ativa/desativa + arrastar persiste). **A7.4 concluído** (UI em árvore de trilhas em Glossários/Configurações/Primeira execução). **Aba "Sobre Nós"** será implementada nesta sessão (projeto + desenvolvedor Lucas Cavalcante dos Santos + links repo/perfil GitHub). **434 testes passando**, validador sem erros. Pendentes: **B2** (comando por voz "sopro" + sons ligar/desligar + UI/empacotamento), **B3** (som de bolha suave no pop-up), **B5** (consolidação núcleo/consistência hierárquica pai→filhas), validação campo A5.1. **Build 0.1.0** será atualizado no `dist/`.
 
 > **Reteste manual (4ª rodada):** o mantenedor validou o *demo* ("tudo ok") e pediu uma nova
 > rodada — ver a seção **"Quinta rodada — UI/UX, fonte de captura e glossário"** abaixo.
@@ -36,9 +31,9 @@ completos precisam ser refeitos.
 
 **Tarefa inicial da próxima sessão — revisar antes de avançar:**
 
-1. Executar o **backlog de campo B1–B5** (seção própria após a Fase 7), começando por
-   B1/B2/B4 (P0); B3/B5 ficam em seguida.
-2. Fechar A7.4 (seletor visual de trilhas), criar `docs/trilhas/` e refazer Setup + hashes.
+1. Seguir o **backlog de campo**: B2 (hotword via fallback STT), B3 (sons) e B5 continuam
+   pendentes; B1 e B4 já foram concluídos nesta rodada. **A7.4 concluído** nesta sessão.
+2. ~~Fechar A7.4 (seletor visual de trilhas), criar `docs/trilhas/` e refazer Setup + hashes.~~ **Feito.**
 3. Validar o portátil manualmente e confirmar em campo o loopback/microfone (A5.1).
 4. Iniciar a **Fase 7** pelo F7.0 (Clerk, Neon, R2 e Worker) após revisar o plano abaixo;
    a Fase 6 (curadoria) continua planejada.
@@ -399,15 +394,14 @@ com licença do software + "about me" do dev (analisado o GitHub `cavalcanteprof
 - [x] Subir o limite do `vocabulary_hint` (todos os termos, truncando por tokens ~224) e
   incluir siglas/aliases curtos.
 
-### A6.3 — Matcher tolerante (P0) · REABERTO em 2026-10-22
+### A6.3 — Matcher tolerante (P0) · CONCLUÍDO em 2026-10-23
 
-> Reaberto na auditoria do backlog de campo. O código atual não tem `MatcherConfig.fuzzy`,
-> `_term_keys` só gera plural (não gera `-ing/-ed/-er`) e `Settings.matcher_fuzzy` não tem
-> efeito. Ver **B1**.
+> Resolvido em **B1**. `MatcherConfig.fuzzy` existe, `_term_keys` gera `-ing/-ed/-er` além do
+> plural e `Settings.matcher_fuzzy` (desligado por padrão) tem checkbox e efeito real.
 
-- [ ] Gerar variantes `-ing/-ed/-er` além do plural.
-- [ ] Fuzzy opt-in (`MatcherConfig.fuzzy`, limiar alto + comprimento mínimo; setting + checkbox).
-- [ ] Testes: `deployed`→`deploy`; typo `transfomer`→`transformer` (fuzzy); termo curto não
+- [x] Gerar variantes `-ing/-ed/-er` além do plural.
+- [x] Fuzzy opt-in (`MatcherConfig.fuzzy`, limiar alto + comprimento mínimo; setting + checkbox).
+- [x] Testes: `deployed`→`deploy`; typo `transfomer`→`transformer` (fuzzy); termo curto não
   casa por fuzzy.
 
 ### A6.4 — Glossário (P1)
@@ -429,9 +423,9 @@ com licença do software + "about me" do dev (analisado o GitHub `cavalcanteprof
     com flexões + fuzzy opt-in, modelo padrão `whisper-small-en`, aba "Sobre" com MIT e
     créditos; **rodada extra**: hotword (openWakeWord) com palavra configurável, indicador
     clicável, sons distintos e verificação de conflito I/O de áudio.
-- [ ] **Reabertura parcial A6.6 (2026-10-22):** validar no código atual o que foi anunciado
-  na rodada extra. O hotword não está garantido no executável e o indicador só arrasta, sem
-  alternar por clique; rastrear em **B2** e **B4**.
+- [ ] **Reabertura parcial A6.6 (2026-10-22, atualizada em 2026-10-23):** o indicador foi
+  resolvido em **B4** (clique alterna, arraste move e persiste). Resta o hotword, que não está
+  garantido no executável; rastrear em **B2**.
 
 ## Sétima rodada — Nichos/trilhas do glossário `tech` (EM ANDAMENTO)
 
@@ -479,8 +473,8 @@ domínio lógico**, com seleção múltipla simultânea pelo usuário.
 
 ### A7.4 — UI (P1)
 
-- [ ] `GlossaryPage`: lista agrupada (domínio → trilhas) com checkbox por trilha.
-- [ ] `SettingsPage`: seletor de trilhas ativas; `FirstRunDialog`: checkboxes aninhados.
+- [x] `GlossaryPage`: lista agrupada (domínio → trilhas) com checkbox por trilha.
+- [x] `SettingsPage`: seletor de trilhas ativas; `FirstRunDialog`: checkboxes aninhados.
 
 ### A7.5 — Curadoria (P1)
 
@@ -492,7 +486,7 @@ domínio lógico**, com seleção múltipla simultânea pelo usuário.
 
 ### A7.6 — Testes, docs e release (P0)
 
-- [ ] Testes: agregação, migração v6, round-trip import/export, matcher sobre o agregado,
+- [x] Testes: agregação, migração v6, round-trip import/export, matcher sobre o agregado,
   hint priorizando trilha, UI agrupada.
 - [ ] `docs/02 §7/§9`, `docs/07 §7`, README, CHANGELOG; `pytest`; rebuild portátil +
   instalador + `SHA256SUMS.txt`.
@@ -686,7 +680,14 @@ rebuild do portátil/Setup. Nada aqui autoriza gravar ou enviar áudio.
 > A6.6 (hotword não garantido no executável e indicador sem clique). Os itens antigos foram
 > anotados; a correção real é rastreada em B1/B2/B4.
 
-### B1 — STT: fonética pt-BR, siglas e alucinações (P0)
+### B1 — STT: fonética pt-BR, siglas e alucinações (P0) · CONCLUÍDO em 2026-10-23
+
+> **Implementado:** siglas soletradas e aliases fonéticos no matcher/glossário (`A P I`,
+> `A.I.`, `ai pi ai`; `AI` distinto de `API`), flexões `-ing/-ed/-er`, fuzzy opt-in
+> (`matcher_fuzzy` desligado por padrão, limiar `0.85` e mínimo de 5 caracteres), dica de STT
+> com formas faladas/trilhas ativas e descarte de transcrições com confiança `< 0.25`.
+> Cobertura em `tests/test_matcher.py`, `tests/test_stt_vocabulary.py`,
+> `tests/test_detection.py` e `tests/test_faster_whisper_engine.py`.
 
 **Sintoma de campo**
 - Inglês técnico falado com sotaque brasileiro é transcrito de forma fonética e erra termos.
@@ -802,7 +803,11 @@ rebuild do portátil/Setup. Nada aqui autoriza gravar ou enviar áudio.
 **Arquivos prováveis:** `core/audio/chime.py`, `platform/popup/sound.py`,
 `tests/test_popup_sound.py`.
 
-### B4 — Indicador circular: clique para pausar e arraste para mover (P0)
+### B4 — Indicador circular: clique para pausar e arraste para mover (P0) · CONCLUÍDO em 2026-10-23
+
+> **Implementado:** `StatusIndicator(on_click=...)` ligado ao toggle em `app/run.py`, limiar de
+> arraste de 5 px, `on_moved` só após arraste real, tooltip/cursor por estado e testes de
+> clique, micro-movimento, arraste e tooltip em `tests/test_popup_status_indicator.py`.
 
 **Sintoma de campo**
 - O círculo colorido no canto superior esquerdo deve alternar ativar/desativar com **um

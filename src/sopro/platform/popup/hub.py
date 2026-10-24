@@ -1,8 +1,8 @@
 """Hub principal: janela única com navegação entre páginas (docs/02 §9).
 
-Reúne status, configurações, glossários, edição de termos, histórico e demonstração
-em páginas reutilizáveis (``pages.py`` + ``SettingsPage``/``GlossaryPage``). A janela
-apenas emite intenções; o orquestrador (``run.py``) persiste e reflete no indicador.
+Reúne status, configurações, glossários, edição de termos, histórico, demonstração
+e Sobre Nós em páginas reutilizáveis (``pages.py`` + ``SettingsPage``/``GlossaryPage``).
+A janela apenas emite intenções; o orquestrador (``run.py``) persiste e reflete no indicador.
 """
 
 from __future__ import annotations
@@ -26,6 +26,7 @@ from sopro.core.repo import Repository
 
 from sopro.platform.popup.glossary_window import GlossaryPage
 from sopro.platform.popup.pages import (
+    AboutPage,
     DemoPage,
     HistoryPage,
     StatusPage,
@@ -70,6 +71,7 @@ class HubWindow(QWidget):
         self._history = HistoryPage(repo)
         self._demo = DemoPage()
         self._demo.set_terms(demo_pairs)
+        self._about = AboutPage()
 
         self._pages = [
             ("Status", self._status),
@@ -78,6 +80,7 @@ class HubWindow(QWidget):
             ("Termos", self._terms),
             ("Histórico", self._history),
             ("Demonstração", self._demo),
+            ("Sobre Nós", self._about),
         ]
 
         self._nav = QListWidget()

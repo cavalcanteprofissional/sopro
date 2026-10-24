@@ -2,15 +2,17 @@
 
 Cada página é um ``QWidget`` independente que pode ser usado sozinho ou embutido no
 ``HubWindow``: status/visão geral, configurações, glossários, edição de termos,
-histórico/revisão e demonstração. As páginas apenas emitem sinais; o orquestrador
-(``run.py``) decide o que fazer.
+histórico/revisão, demonstração e Sobre Nós. As páginas apenas emitem sinais; o
+orquestrador (``run.py``) decide o que fazer.
 """
 
 from __future__ import annotations
 
 from collections.abc import Callable, Sequence
+from importlib import metadata
 
 from PySide6.QtCore import QDate, Qt, Signal
+from PySide6.QtGui import QDesktopServices
 from PySide6.QtWidgets import (
     QCheckBox,
     QComboBox,
@@ -24,6 +26,7 @@ from PySide6.QtWidgets import (
     QListWidget,
     QListWidgetItem,
     QPushButton,
+    QScrollArea,
     QSpinBox,
     QTableWidget,
     QTableWidgetItem,
@@ -45,6 +48,13 @@ STATE_TEXT = {
     IndicatorState.PAUSED: "Pausado",
     IndicatorState.ERROR: "Erro",
 }
+
+
+def _app_version() -> str:
+    try:
+        return metadata.version("sopro")
+    except Exception:
+        return "0.1.0"
 
 
 class StatusPage(QWidget):
@@ -84,6 +94,8 @@ class StatusPage(QWidget):
         demo_button.clicked.connect(self.demo_requested.emit)
         assistant_button = QPushButton("Assistente inicial…")
         assistant_button.clicked.connect(self.assistant_requested.emit)
+        about_button = QPushButton("Sobre Nós")
+        about_button.clicked.connect(lambda: self.open_page.emit("about"))
         quit_button = QPushButton("Sair")
         quit_button.clicked.connect(self.quit_requested.emit)
 
@@ -95,6 +107,7 @@ class StatusPage(QWidget):
             history_button,
             demo_button,
             assistant_button,
+            about_button,
         ):
             actions.addWidget(button)
         actions.addStretch(1)
@@ -506,3 +519,86 @@ class TermsPage(QWidget):
         self._repo.delete_term(self._editing_id)
         self._on_new()
         self.refresh()
+
+
+class AboutPage(QWidget):
+    """Página Sobre Nós com projeto, desenvolvedor e links."""
+
+    def __init__(self, parent: QWidget | None = None) -> None:
+        super().__init__(parent)
+        self._title = QLabel("Sobre Nós")
+        self._title.setStyleSheet("font-size: 18px; font-weight: 600;")
+        self._subtitle = QLabel(f"Sopro — v{_app_version()}")
+        self._subtitle.setStyleSheet("color: #94A3B8;")
+
+        project = QLabel(
+            "<b>Projeto</b><br/>"
+            "Sopro é um companheiro de glossário para termos técnicos falados em inglês. "
+            "Ele escuta o áudio (loopback do sistema e/ou microfone), transcreve localmente quando possível "
+            "e exibe explicações traduzidas em tempo real, com foco em privacidade: tudo roda local por padrão."
+        )
+        project.setWordWrap(True)
+        project.setTextFormat(Qt.TextFormat.RichText)
+
+        dev = QLabel(
+            "<b>Desenvolvedor</b><br/>"
+            "Lucas Cavalcante dos Santos<br/>"
+            "Analista de Dados &amp; IA · Transformo dados em decisões com Python, ML e BI · 6+ anos em tecnologia · Fortaleza, CE 🇧🇷"
+        )
+        dev.setWordWrap(True)
+        dev.setTextFormat(Qt.TextFormat.RichText)
+
+        links_label = QLabel("<b>Links</b>")
+        links_label.setTextFormat(Qt.TextFormat.RichText)
+
+        repo_btn = QPushButton("Repositório GitHub")
+        repo_btn.clicked.connect(lambda: QDesktopServices.openUrl("https://github.com/cavalcanteprofissional/sopro"))
+        profile_btn = QPushButton("Perfil GitHub")
+        profile_btn.clicked.connect(lambda: QDesktopServices.openUrl("https://github.com/cavalcanteprofissional"))
+        issues_btn = QPushButton("Issues / Feedback")
+        issues_btn.clicked.connect(lambda: QDesktopServices.openUrl("https://github.com/cavalcanteprofissional/sopro/issues"))
+
+        links = QHBoxLayout()
+        links.addWidget(repo_btn)
+        links.addWidget(profile_btn)
+        links.addWidget(issues_btn)
+        links.addStretch(1)
+
+        license_text = QLabel(
+            "<b>Licença</b><br/>"
+            "MIT License — veja <a href='https://github.com/cavalcanteprofissional/sopro/blob/main/LICENSE'>LICENSE</a> no repositório."
+        )
+        license_text.setWordWrap(True)
+        license_text.setOpenExternalLinks(True)
+        license_text.setTextFormat(Qt.TextFormat.RichText)
+
+        privacy = QLabel(
+            "<b>Privacidade</b><br/>"
+            "A transcrição roda local por padrão. Áudio não é gravado em disco. Envio para provedores em nuvem "
+            "só ocorre com consentimento explícito nas configurações."
+        )
+        privacy.setWordWrap(True)
+        privacy.setTextFormat(Qt.TextFormat.RichText)
+
+        scroll = QScrollArea()
+        content = QWidget()
+        cl = QVBoxLayout(content)
+        cl.addWidget(self._title)
+        cl.addWidget(self._subtitle)
+        cl.addSpacing(8)
+        cl.addWidget(project)
+        cl.addSpacing(8)
+        cl.addWidget(dev)
+        cl.addSpacing(8)
+        cl.addWidget(links_label)
+        cl.addLayout(links)
+        cl.addSpacing(8)
+        cl.addWidget(license_text)
+        cl.addSpacing(8)
+        cl.addWidget(privacy)
+        cl.addStretch(1)
+        scroll.setWidget(content)
+        scroll.setWidgetResizable(True)
+
+        layout = QVBoxLayout(self)
+        layout.addWidget(scroll)

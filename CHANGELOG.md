@@ -8,6 +8,22 @@ adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 ## [Unreleased]
 
 ### Added
+- **Trilhas de glossário (A7.4)**: UI em árvore domínio → trilhas nos "Glossários", seletor de trilhas em Configurações e na primeira execução. Marcar uma trilha ativa o pai `tech` automaticamente; desmarcar o pai desmarca as filhas. Adicionado `docs/trilhas/README.md`. As regras de agregação já existentes (`active_tracks`) agora ficam expostas na UI.
+- **Sobre Nós (A6.5)**: nova aba no Hub com informações do projeto, desenvolvedor (Lucas Cavalcante dos Santos), links para repositório/perfil GitHub e privacidade/licença.
+- Detecção tolerante a fala real: siglas soletradas (`A P I`, `A.I.`, `ai pi ai`) e aliases
+  fonéticos, flexões `-ing/-ed/-er` (exceto siglas) e **fuzzy opt-in** com limiar alto e
+  comprimento mínimo. O glossário base ganhou `AI` (distinto de `API`) e aliases falados em
+  `API`, `IDE`, `SDK`, `RAG`, `HTTP` e `SQL`.
+
+### Changed
+- **Pop-up**: som padrão alterado para **bolha de sabão suave** (síntese em memória).
+- **Ativação/desativação**: sons de ligar/desligar mais simples e suaves (sweep curto).
+- **Indicador flutuante**: já suporta clique para ativar/desativar e arrastar com threshold (B4). Mantido e validado.
+- **Empacotamento (v0.1.0)**: portátil (`Sopro-0.1.0-portable.zip`) e instalador (`Sopro-Setup-0.1.0.exe`) refeitos com o código atual; `SHA256SUMS.txt` atualizado com ambos os artefatos.
+- Confiança de transcrição no faster-whisper (`avg_logprob` + `no_speech_prob`); o serviço de
+  detecção descarta transcrições abaixo de `0.25` antes de consultar o matcher.
+- Indicador circular: **clique único** pausa/retoma e **arraste** (acima de 5 px) move e
+  persiste a posição sem alternar; tooltip e cursor refletem o estado.
 - Planejamento da **Fase 7 — conta, dados em nuvem e backup**: Clerk (GitHub ativo, demais
   provedores desabilitados), Neon Postgres, Cloudflare R2, Worker e GitHub Actions para
   backup diário de 30 dias. Inclui isolamento por `user_id`, sync/outbox offline, migração
@@ -184,6 +200,9 @@ adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
   existente e encerra. O modo `--demo` usa trava separada (pode rodar ao lado do app real).
 
 ### Changed
+- `matcher_fuzzy` passa a valer de ponta a ponta e fica **desligado por padrão** (opt-in),
+  com checkbox em Configurações e repasse ao `MatcherConfig`. Pacotes de domínio atualizados:
+  `tech-en-pt` 0.3.0; trilhas backend e data-science 0.1.1.
 - Decisões registradas em `docs/02 §13`, `docs/01` (RNF-08) e README: modelos **on-demand**
   com verificação de integridade, **motor de STT por benchmark** e **Windows** como alvo do
   protótipo.
@@ -204,6 +223,9 @@ adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
   claro/escuro.
 
 ### Fixed
+- Indicador circular não alternava pausa/retomada por clique: agora diferencia clique de
+  arraste por limiar de movimento, só persiste a posição após arraste real e não dispara o
+  toggle duas vezes.
 - **Inicialização do executável congelado (`--demo`)**: `app_stylesheet` passou a existir em
   `platform/popup/theme.py` (tema global de hub/diálogos) e `MatcherConfig` não recebe mais o
   argumento inexistente `fuzzy`. Sem isso, o app encerrava com `ImportError`/`TypeError` antes
