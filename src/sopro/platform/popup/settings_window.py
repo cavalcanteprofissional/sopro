@@ -82,7 +82,9 @@ class SettingsPage(QWidget):
         self._original = settings
         self._source_checks: dict[str, QCheckBox] = {}
         self._domain_checks: dict[str, QCheckBox] = {}
+        self._track_checks: dict[str, QCheckBox] = {}
         self._domains_fallback = settings.active_domains
+        self._tracks_fallback = settings.active_tracks
         self._remote_consent = bool(settings.remote_consent)
         self._confirm = confirm or _qt_confirm
         self._alert = alert or _qt_alert
@@ -126,6 +128,20 @@ class SettingsPage(QWidget):
                 self._domain_checks[slug] = check
                 domains_layout.addWidget(check)
             form.addRow("Domínios ativos", domains_widget)
+
+        # Suporte a trilhas (se passadas via dados adicionais)
+        # Tenta ler tracks do kwargs se disponíveis via atributos
+        track_items = getattr(self, "_track_items", None)
+        if track_items:
+            tracks_widget = QWidget()
+            tracks_layout = QVBoxLayout(tracks_widget)
+            tracks_layout.setContentsMargins(0, 0, 0, 0)
+            for slug, label in track_items:
+                check = QCheckBox(label or slug)
+                check.setChecked(slug in settings.active_tracks)
+                self._track_checks[slug] = check
+                tracks_layout.addWidget(check)
+            form.addRow("Trilhas ativas", tracks_widget)
 
         self._popup_duration = QDoubleSpinBox()
         self._popup_duration.setRange(0.1, 60.0)
@@ -177,6 +193,12 @@ class SettingsPage(QWidget):
         self._indicator.setChecked(settings.indicator_enabled)
         form.addRow("", self._indicator)
 
+        self._matcher_fuzzy = QCheckBox(
+            "Correspondência aproximada (tolera erros de transcrição)"
+        )
+        self._matcher_fuzzy.setChecked(settings.matcher_fuzzy)
+        form.addRow("", self._matcher_fuzzy)
+
         self._save_context = QCheckBox("Salvar trecho de contexto (privacidade)")
         self._save_context.setChecked(settings.save_context)
         form.addRow("", self._save_context)
@@ -222,10 +244,16 @@ class SettingsPage(QWidget):
             if self._domain_checks
             else self._domains_fallback
         )
+        tracks = (
+            self._checked(self._track_checks)
+            if self._track_checks
+            else self._tracks_fallback
+        )
         return replace(
             self._original,
             audio_sources=self._checked(self._source_checks),
             active_domains=domains,
+            active_tracks=tracks,
             output_lang=self._output_lang.text().strip(),
             stt_provider=self._stt_provider.currentText(),
             stt_model=self._stt_model.text().strip(),
@@ -240,6 +268,7 @@ class SettingsPage(QWidget):
             shortcut=self._shortcut.text().strip(),
             shortcut_history=self._shortcut_history.text().strip(),
             indicator_enabled=self._indicator.isChecked(),
+            matcher_fuzzy=self._matcher_fuzzy.isChecked(),
             save_context=self._save_context.isChecked(),
             remote_consent=self._remote_consent,
         )

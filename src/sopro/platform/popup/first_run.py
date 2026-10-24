@@ -70,6 +70,7 @@ class FirstRunDialog(QDialog):
         form.setSpacing(8)
 
         self._domain_checks: dict[str, QCheckBox] = {}
+        self._track_checks: dict[str, QCheckBox] = {}
         slugs = tuple(domain_slugs) or settings.active_domains
         domains_widget = QWidget()
         domains_layout = QVBoxLayout(domains_widget)
@@ -80,6 +81,19 @@ class FirstRunDialog(QDialog):
             self._domain_checks[slug] = check
             domains_layout.addWidget(check)
         form.addRow("Domínio ativo", domains_widget)
+
+        # Trilhas (se fornecidas)
+        track_items = getattr(self, "_track_items", None)
+        if track_items:
+            tracks_widget = QWidget()
+            tracks_layout = QVBoxLayout(tracks_widget)
+            tracks_layout.setContentsMargins(0, 0, 0, 0)
+            for slug, label in track_items:
+                check = QCheckBox(label or slug)
+                check.setChecked(slug in settings.active_tracks)
+                self._track_checks[slug] = check
+                tracks_layout.addWidget(check)
+            form.addRow("Trilhas", tracks_widget)
 
         self._output_lang = QLineEdit(settings.output_lang)
         form.addRow("Idioma de saída", self._output_lang)
@@ -117,9 +131,11 @@ class FirstRunDialog(QDialog):
         """Monta e valida as preferências iniciais (pode lançar ``ConfigError``)."""
         domains = self._checked(self._domain_checks) or self._original.active_domains
         sources = self._checked(self._source_checks) or self._original.audio_sources
+        tracks = self._checked(self._track_checks) if self._track_checks else self._original.active_tracks
         return replace(
             self._original,
             active_domains=domains,
+            active_tracks=tracks,
             output_lang=self._output_lang.text().strip(),
             audio_sources=sources,
             first_run_done=True,
