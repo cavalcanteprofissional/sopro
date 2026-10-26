@@ -12,6 +12,7 @@ adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 ### Added
 - **Trilhas de glossário (A7.4)**: UI em árvore domínio → trilhas nos "Glossários", seletor de trilhas em Configurações e na primeira execução. Marcar uma trilha ativa o pai `tech` automaticamente; desmarcar o pai desmarca as filhas. Adicionado `docs/trilhas/README.md`. As regras de agregação já existentes (`active_tracks`) agora ficam expostas na UI.
 - **Sobre Nós (A6.5)**: nova aba no Hub com informações do projeto, desenvolvedor (Lucas Cavalcante dos Santos), links para repositório/perfil GitHub e privacidade/licença.
+- **Testes STT vocabulário**: cobertura para hints de vocabulário com siglas soletradas/formas faladas (`A P I`, `ai pi ai`), priorização por trilhas ativas e deduplicação/respeito ao limite de tokens.
 - Detecção tolerante a fala real: siglas soletradas (`A P I`, `A.I.`, `ai pi ai`) e aliases
   fonéticos, flexões `-ing/-ed/-er` (exceto siglas) e **fuzzy opt-in** com limiar alto e
   comprimento mínimo. O glossário base ganhou `AI` (distinto de `API`) e aliases falados em
