@@ -33,12 +33,14 @@ class RealtimePipeline:
         vad_config: VadConfig | None = None,
         on_level: Callable[[float, bool], None] | None = None,
         on_analyzing: Callable[[bool], None] | None = None,
+        on_frame: Callable[[AudioFrame], None] | None = None,
     ) -> None:
         self._service = service
         self._vad_config = vad_config or VadConfig()
         self._segmenters: dict[str, StreamingSegmenter] = {}
         self._on_level = on_level
         self._on_analyzing = on_analyzing
+        self._on_frame = on_frame
 
     @property
     def service(self) -> DetectionService:
@@ -61,6 +63,8 @@ class RealtimePipeline:
 
     def handle_frame(self, frame: AudioFrame) -> list[Detection]:
         """Alimenta um quadro e devolve as detecções dos trechos concluídos."""
+        if self._on_frame is not None:
+            self._on_frame(frame)
         self._report_level(frame.pcm)
         detections: list[Detection] = []
         for speech in self._segmenter(frame.source).feed(frame.pcm):

@@ -10,7 +10,7 @@
 [![Versão](https://img.shields.io/badge/vers%C3%A3o-0.1.1-blue)](CHANGELOG.md)
 [![Python](https://img.shields.io/badge/python-3.11%20%7C%203.12-3776AB?logo=python&logoColor=white)](pyproject.toml)
 [![Plataforma](https://img.shields.io/badge/plataforma-Windows%2010%2F11-0078D4?logo=windows&logoColor=white)](#instalação-windows)
-[![Testes](https://img.shields.io/badge/testes-416%20passando-success)](tests)
+[![Testes](https://img.shields.io/badge/testes-440%20passando-success)](tests)
 [![Licença](https://img.shields.io/badge/licen%C3%A7a-MIT-blue)](LICENSE)
 
 [Visão geral](#-por-que-o-sopro) ·
@@ -38,7 +38,7 @@ interromper a aula e sem roubar o foco da janela.
 > (captura → VAD → transcrição → matcher → pop-up → histórico) roda de ponta a ponta, com
 > instalador Windows, assistente de primeira execução, logs sem conteúdo de fala e gestão de
 > glossários. A **Fase 5** (escala e portabilidade) está em andamento; a **Fase 6** (curadoria
-> assistida) e a **Fase 7** (conta, dados em nuvem e backup) estão planejadas. **416 testes
+> assistida) e a **Fase 7** (conta, dados em nuvem e backup) estão planejadas. **440 testes
 > automatizados** passando.
 
 ## ✨ Por que o Sopro
@@ -144,7 +144,8 @@ O conhecimento é composto por uma **base** (`tech-en-pt`) e **trilhas** filhas
 (`tech-programming-en-pt`, `tech-data-science-en-pt`, `tech-devops-en-pt`,
 `tech-frontend-en-pt`, `tech-backend-en-pt`). O runtime importa os pacotes e monta um
 **agregado em memória**: termos são deduplicados, acepções são mescladas e as da trilha ativa
-têm prioridade. `active_tracks` vazio significa “todas as trilhas”.
+têm prioridade. `tracks_mode` é explícito: `all` (todas), `base` (nenhuma) ou `custom` (lista em
+`active_tracks`), com migração automática de configurações antigas.
 
 ```mermaid
 flowchart LR
@@ -176,6 +177,9 @@ em [`docs/roadmap/`](docs/roadmap/README.md) — em especial
   pausa no hover, ação “fixar” e **som opcional** ao exibir.
 - **Indicador de estado** flutuante e arrastável, com pulso em tempo real pelo nível de áudio
   e estados `Carregando`, `Ouvindo`, `Analisando`, `Pausado` e `Erro`.
+- **Hotword por voz** (`sopro`) usando STT curto sobre o áudio já capturado, com frase,
+  sensibilidade, backend e dispositivo configuráveis; sem abrir um segundo microfone.
+- **Tema dark-tech** (ciano/violeta) com tokens centralizados e tema claro preservado.
 - **Hub** único com Status, Configurações, Glossários, Termos, Histórico e Demonstração.
 - **Histórico** com busca, filtro por “aprendido” e período, além de exportação CSV/Markdown.
 - **Bandeja** com atalhos para pausar, abrir o hub, revisar o histórico e ver um exemplo de
@@ -330,7 +334,7 @@ O Sopro segue [Versionamento Semântico](https://semver.org/lang/pt-BR/) (`MAJOR
 
 O histórico completo e as notas de retomada ficam no [CHANGELOG.md](CHANGELOG.md), organizado
 no formato [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). A versão atual dos
-artefatos de build é **`0.1.0`**; até a primeira release marcada, as mudanças permanecem na
+artefatos de build é **`0.1.1`**; até a primeira release marcada, as mudanças permanecem na
 seção `Unreleased`. Cada release publicada usa uma tag `vX.Y.Z` em
 [Releases](../../releases), com instalador, zip portátil e `SHA256SUMS.txt`.
 

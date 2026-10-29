@@ -1,4 +1,10 @@
-from sopro.platform.popup.theme import DARK, LIGHT, app_stylesheet, palette
+from sopro.platform.popup.theme import (
+    DARK,
+    LIGHT,
+    app_stylesheet,
+    palette,
+    resolve_theme,
+)
 
 
 def test_app_stylesheet_uses_theme_colors() -> None:
@@ -11,5 +17,5 @@ def test_app_stylesheet_uses_theme_colors() -> None:
         assert "QToolButton" not in qss
 
 
-def test_app_stylesheet_system_falls_back_to_light() -> None:
-    assert app_stylesheet("system") == app_stylesheet(LIGHT)
+def test_app_stylesheet_system_resolves_to_os_theme() -> None:
+    assert app_stylesheet("system") == app_stylesheet(resolve_theme("system"))

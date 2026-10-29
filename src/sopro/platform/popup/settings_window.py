@@ -37,7 +37,9 @@ from sopro.core.config import (
     cloud_providers,
 )
 
+from sopro.platform.popup.glossary_tree import DomainChoice, GlossaryTree
 from sopro.platform.popup.host import PageHost
+from sopro.platform.stt.factory import list_stt_models
 
 
 def privacy_message(names: Sequence[str]) -> str:
@@ -77,6 +79,7 @@ class SettingsPage(QWidget):
         *,
         confirm: Callable[[str], bool] | None = None,
         alert: Callable[[str], None] | None = None,
+        domain_choices: Sequence[DomainChoice] = (),
     ) -> None:
         super().__init__(parent)
         self._original = settings
@@ -110,7 +113,15 @@ class SettingsPage(QWidget):
         self._stt_provider.setCurrentText(settings.stt_provider)
         form.addRow("Provedor STT", self._stt_provider)
 
-        self._stt_model = QLineEdit(settings.stt_model)
+        self._stt_model = QComboBox()
+        models = list_stt_models()
+        if not any(model_id == settings.stt_model for model_id, _label in models):
+            models = ((settings.stt_model, settings.stt_model),) + models
+        for model_id, label in models:
+            self._stt_model.addItem(label, model_id)
+        index = self._stt_model.findData(settings.stt_model)
+        if index >= 0:
+            self._stt_model.setCurrentIndex(index)
         form.addRow("Modelo STT", self._stt_model)
 
         self._llm_provider = QComboBox()
@@ -118,7 +129,12 @@ class SettingsPage(QWidget):
         self._llm_provider.setCurrentText(settings.llm_provider)
         form.addRow("Provedor LLM", self._llm_provider)
 
-        if domain_slugs:
+        self._tree: GlossaryTree | None = None
+        if domain_choices:
+            self._tree = GlossaryTree()
+            self._tree.set_choices(domain_choices, settings)
+            form.addRow("Domínios e trilhas", self._tree)
+        elif domain_slugs:
             domains_widget = QWidget()
             domains_layout = QVBoxLayout(domains_widget)
             domains_layout.setContentsMargins(0, 0, 0, 0)
@@ -128,20 +144,6 @@ class SettingsPage(QWidget):
                 self._domain_checks[slug] = check
                 domains_layout.addWidget(check)
             form.addRow("Domínios ativos", domains_widget)
-
-        # Suporte a trilhas (se passadas via dados adicionais)
-        # Tenta ler tracks do kwargs se disponíveis via atributos
-        track_items = getattr(self, "_track_items", None)
-        if track_items:
-            tracks_widget = QWidget()
-            tracks_layout = QVBoxLayout(tracks_widget)
-            tracks_layout.setContentsMargins(0, 0, 0, 0)
-            for slug, label in track_items:
-                check = QCheckBox(label or slug)
-                check.setChecked(slug in settings.active_tracks)
-                self._track_checks[slug] = check
-                tracks_layout.addWidget(check)
-            form.addRow("Trilhas ativas", tracks_widget)
 
         self._popup_duration = QDoubleSpinBox()
         self._popup_duration.setRange(0.1, 60.0)
@@ -193,6 +195,24 @@ class SettingsPage(QWidget):
         self._indicator.setChecked(settings.indicator_enabled)
         form.addRow("", self._indicator)
 
+        self._hotword_enabled = QCheckBox("Ativar comando por voz")
+        self._hotword_enabled.setChecked(settings.hotword_enabled)
+        form.addRow("", self._hotword_enabled)
+        self._hotword_phrase = QLineEdit(settings.hotword_phrase)
+        form.addRow("Palavra do hotword", self._hotword_phrase)
+        self._hotword_backend = QComboBox()
+        self._hotword_backend.addItem("stt_short", "stt_short")
+        self._hotword_backend.setCurrentText(settings.hotword_backend)
+        form.addRow("Backend do hotword", self._hotword_backend)
+        self._hotword_sensitivity = QDoubleSpinBox()
+        self._hotword_sensitivity.setRange(0.0, 1.0)
+        self._hotword_sensitivity.setSingleStep(0.05)
+        self._hotword_sensitivity.setValue(settings.hotword_sensitivity)
+        form.addRow("Sensibilidade do hotword", self._hotword_sensitivity)
+        self._hotword_device = QLineEdit(settings.hotword_listen_device or "")
+        self._hotword_device.setPlaceholderText("Dispositivo (vazio = padrão)")
+        form.addRow("Dispositivo do hotword", self._hotword_device)
+
         self._matcher_fuzzy = QCheckBox(
             "Correspondência aproximada (tolera erros de transcrição)"
         )
@@ -212,6 +232,14 @@ class SettingsPage(QWidget):
         layout = QVBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(scroll)
+
+    def update_settings(self, settings: Settings) -> None:
+        """Atualiza a referência-base sem recriar o formulário."""
+        self._original = settings
+        self._domains_fallback = settings.active_domains
+        self._tracks_fallback = settings.active_tracks
+        if self._tree is not None:
+            self._tree.set_choices(self._tree.choices, settings)
 
     # -- confirmação de privacidade (docs/05 A8) ---------------------------
     def confirm(self, message: str) -> bool:
@@ -239,24 +267,29 @@ class SettingsPage(QWidget):
 
     def current_settings(self) -> Settings:
         """Monta e valida um ``Settings`` a partir dos campos (pode lançar ConfigError)."""
-        domains = (
-            self._checked(self._domain_checks)
-            if self._domain_checks
-            else self._domains_fallback
-        )
-        tracks = (
-            self._checked(self._track_checks)
-            if self._track_checks
-            else self._tracks_fallback
-        )
+        if self._tree is not None:
+            domains, tracks, tracks_mode = self._tree.selection()
+        else:
+            domains = (
+                self._checked(self._domain_checks)
+                if self._domain_checks
+                else self._domains_fallback
+            )
+            tracks = (
+                self._checked(self._track_checks)
+                if self._track_checks
+                else self._tracks_fallback
+            )
+            tracks_mode = getattr(self._original, "tracks_mode", "all")
         return replace(
             self._original,
             audio_sources=self._checked(self._source_checks),
             active_domains=domains,
-            active_tracks=tracks,
+            active_tracks=tracks if tracks_mode == "custom" else (),
+            tracks_mode=tracks_mode,
             output_lang=self._output_lang.text().strip(),
             stt_provider=self._stt_provider.currentText(),
-            stt_model=self._stt_model.text().strip(),
+            stt_model=self._stt_model.currentData() or self._stt_model.currentText().strip(),
             llm_provider=self._llm_provider.currentText(),
             popup_duration_s=float(self._popup_duration.value()),
             popup_max=int(self._popup_max.value()),
@@ -268,6 +301,11 @@ class SettingsPage(QWidget):
             shortcut=self._shortcut.text().strip(),
             shortcut_history=self._shortcut_history.text().strip(),
             indicator_enabled=self._indicator.isChecked(),
+            hotword_enabled=self._hotword_enabled.isChecked(),
+            hotword_phrase=self._hotword_phrase.text().strip() or "sopro",
+            hotword_backend=self._hotword_backend.currentText(),
+            hotword_sensitivity=float(self._hotword_sensitivity.value()),
+            hotword_listen_device=self._hotword_device.text().strip() or None,
             matcher_fuzzy=self._matcher_fuzzy.isChecked(),
             save_context=self._save_context.isChecked(),
             remote_consent=self._remote_consent,
@@ -285,13 +323,19 @@ class SettingsDialog(PageHost):
         *,
         confirm: Callable[[str], bool] | None = None,
         alert: Callable[[str], None] | None = None,
+        domain_choices: Sequence[DomainChoice] = (),
     ) -> None:
         super().__init__(parent)
         self.setWindowTitle("Configurações do Sopro")
         self.setMinimumWidth(360)
 
         page = SettingsPage(
-            settings, domain_slugs, parent=self, confirm=confirm, alert=alert
+            settings,
+            domain_slugs,
+            parent=self,
+            confirm=confirm,
+            alert=alert,
+            domain_choices=domain_choices,
         )
         buttons = QDialogButtonBox(
             QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel

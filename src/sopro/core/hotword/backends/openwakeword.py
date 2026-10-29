@@ -127,7 +127,7 @@ class OpenWakeWordDetector(HotwordDetector):
                                         s = float(score)
                                         if s >= self._sensitivity:
                                             # check if matches phrase
-                                            if self._phrase in name.lower() or self._phrase == "sopro":
+                                            if self._phrase and self._phrase in name.lower():
                                                 self._trigger()
                                                 time.sleep(0.8)  # debounce
                                                 break

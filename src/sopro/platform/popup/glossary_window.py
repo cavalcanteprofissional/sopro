@@ -127,6 +127,10 @@ class GlossaryPage(QWidget):
 
         self.refresh()
 
+    def update_settings(self, settings: Settings) -> None:
+        self._settings = settings
+        self.refresh()
+
     # -- apresentação -------------------------------------------------------
     def _qt_choose(self, caption: str) -> str | None:
         return QFileDialog.getExistingDirectory(self, caption) or None
@@ -165,6 +169,7 @@ class GlossaryPage(QWidget):
 
         active_domains = set(self._settings.active_domains)
         active_tracks = set(self._settings.active_tracks)
+        tracks_mode = getattr(self._settings, "tracks_mode", "all")
 
         # Para cada domínio importado no banco
         for domain in self._repo.list_domains():
@@ -191,8 +196,10 @@ class GlossaryPage(QWidget):
                         track_count = len(self._repo.list_terms(track_domain.id))
                     track_item = QTreeWidgetItem([f"  └ {track_name}", str(track_count)])
                     track_item.setFlags(track_item.flags() | Qt.ItemFlag.ItemIsUserCheckable)
-                    # Trilha ativa se base ativa e (active_tracks vazio = todas, ou na lista)
-                    track_active = base_active and (not active_tracks or track_slug in active_tracks)
+                    track_active = base_active and (
+                        tracks_mode == "all"
+                        or (tracks_mode == "custom" and track_slug in active_tracks)
+                    )
                     track_item.setCheckState(0, Qt.CheckState.Checked if track_active else Qt.CheckState.Unchecked)
                     track_item.setData(0, Qt.ItemDataRole.UserRole, ("track", track_pkg.manifest.slug, track_slug))
                     base_item.addChild(track_item)
@@ -212,14 +219,10 @@ class GlossaryPage(QWidget):
             # Marcar pai marca/ativa trilhas? Regras: marcar qualquer trilha ativa automaticamente o pai
             # Desmarcar pai desmarca trilhas filhas
             state = item.checkState(0)
-            if state == Qt.CheckState.Unchecked:
-                # Desmarcar todas as filhas
-                for i in range(item.childCount()):
-                    child = item.child(i)
-                    self._tree.itemChanged.disconnect(self._on_item_changed)
-                    child.setCheckState(0, Qt.CheckState.Unchecked)
-                    self._tree.itemChanged.connect(self._on_item_changed)
-            # Se marcado, não força marcar filhas (usuário pode escolher)
+            self._tree.itemChanged.disconnect(self._on_item_changed)
+            for i in range(item.childCount()):
+                item.child(i).setCheckState(0, state)
+            self._tree.itemChanged.connect(self._on_item_changed)
         elif item_type == "track":
             # Marcar trilha marca o pai automaticamente
             state = item.checkState(0)
@@ -257,6 +260,38 @@ class GlossaryPage(QWidget):
                 if item_type == "track" and item.checkState(0) is Qt.CheckState.Checked and track_slug:
                     tracks.append(str(track_slug))
         return tuple(tracks)
+
+    def _track_slugs(self) -> tuple[str, ...]:
+        slugs: list[str] = []
+        for i in range(self._tree.topLevelItemCount()):
+            base_item = self._tree.topLevelItem(i)
+            for j in range(base_item.childCount()):
+                item = base_item.child(j)
+                data = item.data(0, Qt.ItemDataRole.UserRole)
+                if (
+                    data
+                    and data[0] == "track"
+                    and item.checkState(0) is Qt.CheckState.Checked
+                ):
+                    slugs.append(str(data[1]))
+        return tuple(slugs)
+
+    def tracks_mode(self) -> str:
+        tracks = self.active_tracks()
+        if not self._track_slugs():
+            return "base"
+        available: list[str] = []
+        for i in range(self._tree.topLevelItemCount()):
+            base_item = self._tree.topLevelItem(i)
+            if base_item.checkState(0) is not Qt.CheckState.Checked:
+                continue
+            for j in range(base_item.childCount()):
+                data = base_item.child(j).data(0, Qt.ItemDataRole.UserRole)
+                if data and data[0] == "track":
+                    available.append(str(data[2]))
+        if available and set(tracks) == set(available):
+            return "all"
+        return "custom"
 
     def _selected_slug(self) -> str | None:
         item = self._tree.currentItem()
@@ -319,12 +354,22 @@ class GlossaryPage(QWidget):
     def commit(self) -> Settings:
         """Persiste os domínios ativos no banco e devolve as configurações novas."""
         active_domains = self.active_domains()
-        active_tracks = self.active_tracks()
+        tracks_mode = self.tracks_mode()
+        active_tracks = self.active_tracks() if tracks_mode == "custom" else ()
+        active_track_slugs = set(self._track_slugs())
         for domain in self._repo.list_domains():
-            self._repo.set_domain_active(domain.slug, domain.slug in active_domains)
+            self._repo.set_domain_active(
+                domain.slug,
+                domain.slug in active_domains or domain.slug in active_track_slugs,
+            )
         if not active_domains:
             return self._settings
-        return replace(self._settings, active_domains=active_domains, active_tracks=active_tracks)
+        return replace(
+            self._settings,
+            active_domains=active_domains,
+            active_tracks=active_tracks,
+            tracks_mode=tracks_mode,
+        )
 
 
 class GlossaryDialog(PageHost):

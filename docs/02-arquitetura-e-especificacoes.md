@@ -207,8 +207,12 @@ validador não mudam de comportamento.
 - Domínios ativos, idioma de saída, cooldown, orçamento por minuto, duração, posição, tema.
 - Detecção tolerante: `matcher_fuzzy` (padrão desligado) com limiar `0.85` e mínimo de 5
   caracteres; siglas soletradas/aliases fonéticos são sempre reconhecidos.
-- Trilhas ativas (`active_tracks`): sub-nichos do domínio escolhido; lista vazia = todas as
-  trilhas do domínio. Várias trilhas podem ser ativas ao mesmo tempo.
+- Trilhas (`tracks_mode` + `active_tracks`): sub-nichos do domínio escolhido. `all` carrega
+  todas as trilhas, `base` nenhuma e `custom` apenas a lista de `active_tracks`. Várias
+  trilhas podem ser ativas ao mesmo tempo.
+- Hotword: ativar/desativar, frase, backend (`stt_short` padrão ou `openwakeword`),
+  sensibilidade e dispositivo de escuta. O backend `stt_short` reaproveita os quadros do
+  pipeline e não abre um segundo dispositivo.
 - Desambiguação: limiar do resolvedor (`resolution_threshold`) e janela de contexto
   (`resolution_window_s`).
 - Termos fora do glossário: ativar candidatos (`llm_candidates`) e limite de taxa próprio

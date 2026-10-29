@@ -14,12 +14,9 @@ from PySide6.QtCore import QObject, Qt, Signal
 from PySide6.QtGui import QAction, QColor, QIcon, QPainter, QPixmap
 from PySide6.QtWidgets import QMenu, QSystemTrayIcon
 
-STATE_COLORS = {
-    "loading": "#0EA5E9",
-    "listening": "#16A34A",
-    "paused": "#D97706",
-    "error": "#DC2626",
-}
+from sopro.platform.popup.theme import DARK, indicator_colors
+
+STATE_COLORS = indicator_colors(DARK)
 
 
 class TrayState(StrEnum):

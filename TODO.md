@@ -22,7 +22,7 @@ de fala, erros amigáveis e tela de gerenciamento de glossários (importar/expor
 - **Instância única**: segunda execução ativa o hub existente e encerra (`--demo` tem trava
   separada).
 
-**Estado (2026-10-24):** **B1 (detecção)** parcialmente concluído (siglas/aliases/flexões/fuzzy/confiança STT implementados; monitorar em campo para pronúncia fonética pt-BR, "A P I"/"ai pi ai" e alucinações), **B4 (clique no indicador)** concluído (clique ativa/desativa + arrastar persiste). **A7.4 concluído** (UI em árvore de trilhas em Glossários/Configurações/Primeira execução). **Aba "Sobre Nós"** será implementada nesta sessão (projeto + desenvolvedor Lucas Cavalcante dos Santos + links repo/perfil GitHub). **434 testes passando**, validador sem erros. Pendentes: **B2** (comando por voz "sopro" + sons ligar/desligar + UI/empacotamento), **B3** (som de bolha suave no pop-up), **B5** (consolidação núcleo/consistência hierárquica pai→filhas), validação campo A5.1. **Build 0.1.0** será atualizado no `dist/`.
+**Estado (2026-10-28):** **B1 (detecção)** parcialmente concluído (siglas/aliases/flexões/fuzzy/confiança STT implementados; monitorar em campo para pronúncia fonética pt-BR, "A P I"/"ai pi ai" e alucinações), **B2 (hotword)** concluído (STT curto sobre o pipeline, UI e empacotamento), **B4 (clique no indicador)** concluído, **B5 (trilhas)** concluído (`tracks_mode` + árvore compartilhada), **A7.4 concluído** e **Aba "Sobre Nós"** implementada. **440 testes passando**, validador sem erros. Pendentes: **B3** (som de bolha suave no pop-up) e validação de campo A5.1. Rebuild manual pendente de confirmação do mantenedor.
 
 > **Reteste manual (4ª rodada):** o mantenedor validou o *demo* ("tudo ok") e pediu uma nova
 > rodada — ver a seção **"Quinta rodada — UI/UX, fonte de captura e glossário"** abaixo.
@@ -31,11 +31,10 @@ de fala, erros amigáveis e tela de gerenciamento de glossários (importar/expor
 
 **Tarefa inicial da próxima sessão — revisar antes de avançar:**
 
-1. Seguir o **backlog de campo**: B2 (hotword via fallback STT), B3 (sons) e B5 continuam
-   pendentes; B1 e B4 já foram concluídos nesta rodada. **A7.4 concluído** nesta sessão.
-2. ~~Fechar A7.4 (seletor visual de trilhas), criar `docs/trilhas/` e refazer Setup + hashes.~~ **Feito.**
-3. Validar o portátil manualmente e confirmar em campo o loopback/microfone (A5.1).
-4. Iniciar a **Fase 7** pelo F7.0 (Clerk, Neon, R2 e Worker) após revisar o plano abaixo;
+1. Validar o rebuild manualmente: hotword “sopro” no executável, trilhas tri-state, tema
+   dark-tech e captura loopback/microfone (A5.1).
+2. Fechar **B3** (som de bolha suave no pop-up) na próxima rodada.
+3. Iniciar a **Fase 7** pelo F7.0 (Clerk, Neon, R2 e Worker) após revisar o plano abaixo;
    a Fase 6 (curadoria) continua planejada.
 
 ## Fase 0 — Validação
@@ -731,7 +730,7 @@ rebuild do portátil/Setup. Nada aqui autoriza gravar ou enviar áudio.
 `core/matcher/matcher.py`, `app/detection.py`, `platform/stt/faster_whisper_engine.py`,
 `platform/stt/groq_stt.py`, `tests/test_matcher.py`, `tests/test_text.py`.
 
-### B2 — Hotword “sopro”, ativação/desativação e sons (P0)
+### B2 — Hotword “sopro”, ativação/desativação e sons (P0) · CONCLUÍDO em 2026-10-28
 
 **Sintoma de campo**
 - O comando por voz “sopro” deveria pausar/retomar o app, mas não foi observado funcionando.
@@ -839,7 +838,7 @@ rebuild do portátil/Setup. Nada aqui autoriza gravar ou enviar áudio.
 **Arquivos prováveis:** `platform/popup/status_indicator.py`, `app/run.py`,
 `tests/test_popup_status_indicator.py`, `core/config/settings.py`.
 
-### B5 — Glossário em árvore e ativação automática do pai (P1)
+### B5 — Glossário em árvore e ativação automática do pai (P1) · CONCLUÍDO em 2026-10-28
 
 **Sintoma de campo**
 - O glossário deve ser uma árvore hierárquica, tanto visualmente quanto na arquitetura.

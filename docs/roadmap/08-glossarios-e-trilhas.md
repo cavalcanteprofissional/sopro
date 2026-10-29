@@ -64,7 +64,9 @@ flowchart TD
 | Termo na base e na trilha | Metadados da base vencem; acepções são somadas |
 | Mesmo termo em duas trilhas ativas | Uma entrada; acepções das duas trilhas são preservadas |
 | Trilha inativa | Seus termos e acepções ficam fora do agregado |
-| `active_tracks` vazio | Todas as trilhas filhas da base são carregadas |
+| `tracks_mode="all"` | Todas as trilhas filhas da base são carregadas |
+| `tracks_mode="base"` | Somente a base, sem trilhas |
+| `tracks_mode="custom"` | Apenas as trilhas listadas em `active_tracks` |
 | `active_domains` aponta para trilha | A base é inferida por `parent_slug` |
 
 ## Por que agregar em vez de importar tudo
@@ -80,8 +82,9 @@ flowchart TD
 - `track_order` define a ordem de exibição e de preferência.
 - `term.tracks` lista as trilhas do termo; `sense.track` marca a acepção específica.
 - `build_aggregate_from_repo(repo, base_slug, active_tracks)` carrega tudo do SQLite.
-- A UI atual lista pacotes importados; a seleção granular de trilhas usa
-  `Settings.active_tracks` e está evoluindo para uma tela dedicada.
+- A UI usa a árvore compartilhada `platform/popup/glossary_tree.py` em Glossários,
+  Configurações e primeira execução; a seleção é persistida em `tracks_mode` +
+  `active_tracks`.
 
 ## Criação de um novo glossário
 

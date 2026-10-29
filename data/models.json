@@ -9,17 +9,35 @@
       "languages": ["en"],
       "output_langs": ["pt-BR"],
       "license": "MIT",
-      "size_bytes": 0,
-      "verified": false,
+      "size_bytes": 486098798,
+      "verified": true,
       "files": [
         {
+          "path": "config.json",
+          "url": "https://huggingface.co/Systran/faster-whisper-small.en/resolve/main/config.json",
+          "sha256": "666a9605530ac1f61fa8177f3702b4dacec9966749e42610839fcc32661d5fae",
+          "size_bytes": 2657
+        },
+        {
           "path": "model.bin",
-          "url": "",
-          "sha256": "",
-          "size_bytes": 0
+          "url": "https://huggingface.co/Systran/faster-whisper-small.en/resolve/main/model.bin",
+          "sha256": "62b2a45b05ee59acb4a5341b33ee35e041395d378d418a18acfe4c9e768ee37a",
+          "size_bytes": 483545366
+        },
+        {
+          "path": "tokenizer.json",
+          "url": "https://huggingface.co/Systran/faster-whisper-small.en/resolve/main/tokenizer.json",
+          "sha256": "929c5252409436dce1b38a75d1abbcb5e132d170d8e324e4e04ed915fa2d22df",
+          "size_bytes": 2128466
+        },
+        {
+          "path": "vocabulary.txt",
+          "url": "https://huggingface.co/Systran/faster-whisper-small.en/resolve/main/vocabulary.txt",
+          "sha256": "ff77588746d3a2595d32ab5b69ffd7b95ce2441ac57533cb66fc3eb575a115cf",
+          "size_bytes": 422309
         }
       ],
-      "notes": "Candidato principal (docs/08 §6). Preencher url/sha256/tamanho e marcar verified=true (prompt A9)."
+      "notes": "Verificado contra Systran/faster-whisper-small.en (2026-10). Modelo padrão de produção; download único de ~466 MB."
     },
     {
       "id": "whisper-tiny-en",

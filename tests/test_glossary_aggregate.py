@@ -176,3 +176,14 @@ def test_build_aggregate_from_repo_uses_parent_slug(tmp_path):
 
     assert any(term.canonical_en == "queue" for term in aggregate.terms)
     assert aggregate.manifest.slug == "tech-en-pt"
+
+
+def test_resolve_active_tracks_modes():
+    from sopro.core.glossary import resolve_active_tracks
+
+    available = ("backend", "frontend", "devops")
+    assert resolve_active_tracks("all", (), available) == available
+    assert resolve_active_tracks("base", ("backend",), available) == ()
+    assert resolve_active_tracks(
+        "custom", ("frontend", "inexistente"), available
+    ) == ("frontend",)

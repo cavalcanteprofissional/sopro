@@ -384,6 +384,18 @@ class OverlayController(QObject):
             (sound or partial(play_popup_sound, volume=volume)) if plays else None
         )
 
+    def update_settings(self, settings) -> None:
+        """Reflete tema/posição/duração/som sem recriar o overlay."""
+        self._theme = settings.theme
+        self._position = settings.popup_position
+        self._duration_ms = int(settings.popup_duration_s * 1000)
+        self._show_source = getattr(settings, "show_source", False)
+        volume = float(getattr(settings, "popup_volume", 0.25) or 0.25)
+        plays = getattr(settings, "popup_sound", True)
+        self._sound = (
+            (partial(play_popup_sound, volume=volume)) if plays else None
+        )
+
     @property
     def queue(self) -> PopupQueue:
         return self._queue

@@ -26,6 +26,8 @@ from PySide6.QtWidgets import (
 from sopro.core.audio import SOURCE_LABELS
 from sopro.core.config import ConfigError, Settings
 
+from sopro.platform.popup.glossary_tree import DomainChoice, GlossaryTree
+
 CONSENT_TITLE = "Antes de começar"
 
 
@@ -54,6 +56,7 @@ class FirstRunDialog(QDialog):
         parent: QWidget | None = None,
         *,
         alert: Callable[[str], None] | None = None,
+        domain_choices: Sequence[DomainChoice] = (),
     ) -> None:
         super().__init__(parent)
         self.setWindowTitle(CONSENT_TITLE)
@@ -70,30 +73,24 @@ class FirstRunDialog(QDialog):
         form.setSpacing(8)
 
         self._domain_checks: dict[str, QCheckBox] = {}
-        self._track_checks: dict[str, QCheckBox] = {}
+        self._tree: GlossaryTree | None = None
         slugs = tuple(domain_slugs) or settings.active_domains
-        domains_widget = QWidget()
-        domains_layout = QVBoxLayout(domains_widget)
-        domains_layout.setContentsMargins(0, 0, 0, 0)
-        for slug in slugs:
-            check = QCheckBox(slug)
-            check.setChecked(slug in settings.active_domains or not settings.active_domains)
-            self._domain_checks[slug] = check
-            domains_layout.addWidget(check)
-        form.addRow("Domínio ativo", domains_widget)
-
-        # Trilhas (se fornecidas)
-        track_items = getattr(self, "_track_items", None)
-        if track_items:
-            tracks_widget = QWidget()
-            tracks_layout = QVBoxLayout(tracks_widget)
-            tracks_layout.setContentsMargins(0, 0, 0, 0)
-            for slug, label in track_items:
-                check = QCheckBox(label or slug)
-                check.setChecked(slug in settings.active_tracks)
-                self._track_checks[slug] = check
-                tracks_layout.addWidget(check)
-            form.addRow("Trilhas", tracks_widget)
+        if domain_choices:
+            self._tree = GlossaryTree()
+            self._tree.set_choices(domain_choices, settings)
+            form.addRow("Domínios e trilhas", self._tree)
+        else:
+            domains_widget = QWidget()
+            domains_layout = QVBoxLayout(domains_widget)
+            domains_layout.setContentsMargins(0, 0, 0, 0)
+            for slug in slugs:
+                check = QCheckBox(slug)
+                check.setChecked(
+                    slug in settings.active_domains or not settings.active_domains
+                )
+                self._domain_checks[slug] = check
+                domains_layout.addWidget(check)
+            form.addRow("Domínio ativo", domains_widget)
 
         self._output_lang = QLineEdit(settings.output_lang)
         form.addRow("Idioma de saída", self._output_lang)
@@ -129,13 +126,19 @@ class FirstRunDialog(QDialog):
 
     def current_settings(self) -> Settings:
         """Monta e valida as preferências iniciais (pode lançar ``ConfigError``)."""
-        domains = self._checked(self._domain_checks) or self._original.active_domains
+        if self._tree is not None:
+            domains, tracks, tracks_mode = self._tree.selection()
+            domains = domains or self._original.active_domains
+        else:
+            domains = self._checked(self._domain_checks) or self._original.active_domains
+            tracks = self._original.active_tracks
+            tracks_mode = getattr(self._original, "tracks_mode", "all")
         sources = self._checked(self._source_checks) or self._original.audio_sources
-        tracks = self._checked(self._track_checks) if self._track_checks else self._original.active_tracks
         return replace(
             self._original,
             active_domains=domains,
-            active_tracks=tracks,
+            active_tracks=tracks if tracks_mode == "custom" else (),
+            tracks_mode=tracks_mode,
             output_lang=self._output_lang.text().strip(),
             audio_sources=sources,
             first_run_done=True,

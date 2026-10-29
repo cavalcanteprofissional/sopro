@@ -54,7 +54,7 @@ def _app_version() -> str:
     try:
         return metadata.version("sopro")
     except Exception:
-        return "0.1.0"
+        return "0.1.1"
 
 
 class StatusPage(QWidget):
@@ -73,7 +73,7 @@ class StatusPage(QWidget):
         self._dot = StatusDot(size=56)
         self._state_label = QLabel()
         self._remote_label = QLabel()
-        self._remote_label.setStyleSheet("color: #B45309;")
+        self._remote_label.setObjectName("SoproWarning")
         self._summary = QLabel()
         self._summary.setWordWrap(True)
 
@@ -148,6 +148,10 @@ class StatusPage(QWidget):
 
     def set_summary(self, text: str) -> None:
         self._summary.setText(text)
+
+    def update_settings(self, settings: Settings) -> None:
+        self._settings = settings
+        self.set_summary(self._default_summary())
 
 
 class HistoryPage(QWidget):
@@ -529,7 +533,7 @@ class AboutPage(QWidget):
         self._title = QLabel("Sobre Nós")
         self._title.setStyleSheet("font-size: 18px; font-weight: 600;")
         self._subtitle = QLabel(f"Sopro — v{_app_version()}")
-        self._subtitle.setStyleSheet("color: #94A3B8;")
+        self._subtitle.setObjectName("SoproMuted")
 
         project = QLabel(
             "<b>Projeto</b><br/>"

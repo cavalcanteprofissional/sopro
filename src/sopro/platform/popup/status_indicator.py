@@ -20,13 +20,9 @@ from PySide6.QtCore import QPointF, Qt, QTimer
 from PySide6.QtGui import QColor, QPainter, QRadialGradient
 from PySide6.QtWidgets import QWidget
 
-STATE_COLORS = {
-    "loading": "#0EA5E9",
-    "listening": "#16A34A",
-    "analyzing": "#F59E0B",
-    "paused": "#D97706",
-    "error": "#DC2626",
-}
+from sopro.platform.popup.theme import DARK, indicator_colors
+
+STATE_COLORS = indicator_colors(DARK)
 
 TICK_MS = 40
 PHASE_STEP = 0.16

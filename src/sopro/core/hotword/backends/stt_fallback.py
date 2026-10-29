@@ -1,33 +1,55 @@
-"""Fallback de hotword usando STT curto + VAD."""
+"""Fallback de hotword usando STT curto + VAD, alimentado pelo pipeline.
+
+Não abre dispositivo de áudio: recebe os mesmos quadros PCM da captura principal
+via ``feed()``. O modelo é carregado uma única vez dentro de uma thread de trabalho,
+e o callback é disparado com debounce. Nenhum conteúdo de fala é logado.
+"""
+
 from __future__ import annotations
 
+import logging
+import queue
 import threading
 import time
 from collections.abc import Callable
 
-import numpy as np
-import sounddevice as sd
-
 from sopro.core.hotword.detector import DetCallback, HotwordDetector
-from sopro.core.vad import VadConfig, segment
+from sopro.core.stt import AudioSegment, STTProvider
+from sopro.core.text.normalize import normalize
+from sopro.core.vad import VadConfig
+from sopro.core.vad.streaming import StreamingSegmenter
+
+log = logging.getLogger("sopro")
+
+_MAX_QUEUED_FRAMES = 128
+_DEBOUNCE_S = 1.5
 
 
 class SttShortHotwordDetector(HotwordDetector):
+    """Detecta a frase por transcrição curta, sem captura própria."""
+
     def __init__(
         self,
         phrase: str = "sopro",
         sensitivity: float = 0.5,
         device: str | None = None,
+        provider_factory: Callable[[], STTProvider] | None = None,
         **kwargs,
     ):
-        self._phrase = (phrase or "sopro").lower().strip()
-        self._sensitivity = sensitivity
+        self._phrase = normalize(phrase or "sopro")
+        self._sensitivity = float(max(0.0, min(1.0, sensitivity)))
         self._device = device
+        self._provider_factory = provider_factory
+        self._provider: STTProvider | None = None
         self._callbacks: list[DetCallback] = []
         self._running = False
         self._thread: threading.Thread | None = None
         self._stop = threading.Event()
         self._enabled = True
+        self._queue: queue.Queue[bytes | None] = queue.Queue(
+            maxsize=_MAX_QUEUED_FRAMES
+        )
+        self._last_trigger = 0.0
 
     def register_callback(self, callback: DetCallback) -> None:
         self._callbacks.append(callback)
@@ -39,90 +61,120 @@ class SttShortHotwordDetector(HotwordDetector):
     def running(self) -> bool:
         return self._running
 
+    def feed(self, pcm: bytes) -> None:
+        if not self._running or not self._enabled or not pcm:
+            return
+        try:
+            self._queue.put_nowait(bytes(pcm))
+        except queue.Full:
+            # Áudio é descartável: perder um quadro é melhor que bloquear a captura.
+            return
+
     def start(self) -> None:
         if self._running:
             return
         self._stop.clear()
         self._running = True
-        self._thread = threading.Thread(target=self._run, daemon=True)
+        self._thread = threading.Thread(target=self._run, name="sopro-hotword", daemon=True)
         self._thread.start()
 
     def stop(self) -> None:
         if not self._running:
             return
         self._stop.set()
+        try:
+            self._queue.put_nowait(None)
+        except queue.Full:
+            pass
         self._running = False
         if self._thread and self._thread.is_alive():
             self._thread.join(timeout=1.0)
         self._thread = None
+        provider = self._provider
+        self._provider = None
+        if provider is not None:
+            try:
+                provider.close()
+            except Exception:
+                log.debug("falha ao fechar provider do hotword", exc_info=True)
 
     def _trigger(self) -> None:
-        for cb in list(self._callbacks):
+        for callback in list(self._callbacks):
             try:
-                cb()
+                callback()
             except Exception:
-                pass
+                log.debug("callback de hotword falhou", exc_info=True)
+
+    def _matches(self, text: str) -> bool:
+        normalized = normalize(text)
+        if not self._phrase:
+            return False
+        return self._phrase in normalized
+
+    def _get_provider(self) -> STTProvider | None:
+        if self._provider is None and self._provider_factory is not None:
+            try:
+                self._provider = self._provider_factory()
+                self._provider.warmup()
+            except Exception as exc:  # noqa: BLE001 - recurso opcional
+                log.warning("hotword indisponível: %s", exc)
+                self._provider = None
+                self._enabled = False
+        return self._provider
 
     def _run(self) -> None:
+        energy = 0.02 - 0.015 * self._sensitivity
+        segmenter = StreamingSegmenter(
+            VadConfig(
+                energy_threshold=max(0.002, energy),
+                min_speech_ms=250,
+                min_silence_ms=350,
+                max_segment_ms=3_500,
+                overlap_ms=0,
+            )
+        )
         try:
-            # capture 16kHz mono short chunks
-            rate = 16000
-            chunk = 1024
-            with sd.InputStream(
-                device=self._device,
-                channels=1,
-                samplerate=rate,
-                blocksize=chunk,
-                dtype="int16",
-            ) as stream:
-                buf = []
-                last = time.time()
-                while not self._stop.is_set():
-                    if not self._enabled:
-                        time.sleep(0.01)
+            while not self._stop.is_set():
+                try:
+                    pcm = self._queue.get(timeout=0.2)
+                except queue.Empty:
+                    continue
+                if pcm is None:
+                    break
+                if not self._enabled:
+                    continue
+                for speech in segmenter.feed(pcm):
+                    if self._stop.is_set() or not self._enabled:
+                        break
+                    provider = self._get_provider()
+                    if provider is None:
+                        break
+                    try:
+                        transcript = provider.transcribe(
+                            AudioSegment(pcm=speech.pcm, source="system")
+                        )
+                    except Exception:
+                        log.debug("transcrição do hotword falhou", exc_info=True)
                         continue
-                    data, _ = stream.read(chunk)
-                    buf.append(data)
-                    now = time.time()
-                    if now - last > 0.8:  # check every 0.8s
-                        last = now
-                        pcm = np.concatenate(buf, axis=0).flatten()
-                        buf.clear()
-                        # quick VAD segments
-                        vad_cfg = VadConfig()
-                        segments = list(segment(pcm, vad_cfg))
-                        if segments:
-                            # concat speech
-                            audio = np.concatenate([s.pcm for s in segments]).astype(np.float32)
-                            audio /= 32768.0
-                            # try tiny quick check via faster-whisper if installed
-                            try:
-                                from faster_whisper import WhisperModel
-
-                                model = WhisperModel(
-                                    "tiny.en",
-                                    device="cpu",
-                                    compute_type="int8",
-                                    download_root=None,
-                                    local_files_only=False,
-                                )
-                                segments_res, _ = model.transcribe(
-                                    audio,
-                                    language="en",
-                                    beam_size=1,
-                                    vad_filter=False,
-                                    initial_prompt=None,
-                                    word_timestamps=False,
-                                )
-                                text = " ".join([s.text for s in segments_res]).lower()
-                                if self._phrase in text:
-                                    self._trigger()
-                                    time.sleep(0.8)
-                                    model = None
-                            except Exception:
-                                pass
-                    time.sleep(0.001)
-        except Exception:
-            self._running = False
+                    if not self._matches(transcript.text):
+                        continue
+                    now = time.monotonic()
+                    if now - self._last_trigger < _DEBOUNCE_S:
+                        continue
+                    self._last_trigger = now
+                    self._trigger()
+            for speech in segmenter.flush():
+                provider = self._get_provider()
+                if provider is None:
+                    break
+                try:
+                    transcript = provider.transcribe(
+                        AudioSegment(pcm=speech.pcm, source="system")
+                    )
+                except Exception:
+                    continue
+                if self._matches(transcript.text):
+                    self._trigger()
+                    break
         finally:
             self._running = False

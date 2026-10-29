@@ -9,6 +9,7 @@ def create_hotword_detector(
     backend: str = "openwakeword",
     sensitivity: float = 0.5,
     device: str | None = None,
+    provider_factory=None,
 ) -> HotwordDetector | None:
     backend = (backend or "openwakeword").lower()
     if backend == "openwakeword":
@@ -25,7 +26,10 @@ def create_hotword_detector(
         from sopro.core.hotword.backends.stt_fallback import SttShortHotwordDetector
 
         return SttShortHotwordDetector(
-            phrase=phrase, sensitivity=sensitivity, device=device
+            phrase=phrase,
+            sensitivity=sensitivity,
+            device=device,
+            provider_factory=provider_factory,
         )
     except Exception:
         return None

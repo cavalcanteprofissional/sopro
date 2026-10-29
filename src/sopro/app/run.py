@@ -31,11 +31,13 @@ from sopro.core.config import (
     save_settings,
 )
 from sopro.core.hotkeys import HotkeyError, parse_hotkey
+from sopro.core.hotword import create_hotword_detector
 from sopro.core.paths import data_path
 from sopro.core.rag import default_embedder
 from sopro.core.repo import Database, Repository, import_package
 from sopro.core.audio.io_check import check_audio_io_conflict
 from sopro.platform.hotkey import create_listener
+from sopro.platform.popup.sound import play_hotword_off, play_hotword_on
 
 DEMO_TICK_MS = 40
 DEMO_FRAMES_PER_TICK = 6
@@ -101,6 +103,7 @@ def _load_active_glossary(
         aggregate_packages,
         list_package_slugs,
         load_package,
+        resolve_active_tracks,
     )
 
     available = list_package_slugs(domains_root)
@@ -128,23 +131,44 @@ def _load_active_glossary(
         base = sorted(bases, key=lambda p: p.manifest.slug)[0]
     base_slug = base.manifest.slug
 
-    tracks = [
-        package
-        for package in packages.values()
-        if package.manifest.parent_slug == base_slug
-    ]
-    active_tracks = tuple(settings.active_tracks)
-    if not active_tracks:
-        configured_tracks = {
+    tracks = sorted(
+        (
+            package
+            for package in packages.values()
+            if package.manifest.parent_slug == base_slug
+        ),
+        key=lambda package: (
+            package.manifest.track_order
+            if package.manifest.track_order is not None
+            else 10_000,
+            package.manifest.track or package.manifest.slug,
+        ),
+    )
+    available_tracks = tuple(
+        package.manifest.track
+        for package in tracks
+        if package.manifest.track
+    )
+    tracks_mode = getattr(settings, "tracks_mode", "all")
+    selected_tracks = settings.active_tracks
+    if tracks_mode == "all" and configured and base not in configured:
+        direct = tuple(
             package.manifest.track
             for package in configured
-            if package.manifest.parent_slug == base_slug and package.manifest.track
-        }
-        active_tracks = tuple(sorted(configured_tracks))
+            if package.manifest.track
+        )
+        if direct:
+            tracks_mode = "custom"
+            selected_tracks = tuple(dict.fromkeys(direct))
+    active_tracks = resolve_active_tracks(
+        tracks_mode,
+        selected_tracks,
+        available_tracks,
+    )
     selected = [
         package
         for package in tracks
-        if not active_tracks or package.manifest.track in active_tracks
+        if package.manifest.track in active_tracks
     ]
 
     sources: list[tuple[object, int]] = []
@@ -271,7 +295,7 @@ def _build_provider(settings: Settings, home: Path, secret_store=None, on_progre
             "Groq indisponível (%s); usando transcrição local", exc
         )
         return faster_whisper(
-            model_id="whisper-small-en",
+            model_id=settings.stt_model,
             home=home / "models",
             language="en",
             progress=on_progress,
@@ -334,8 +358,16 @@ def _maybe_first_run(args, repo: Repository, settings: Settings, domains_root: P
     from sopro.core.glossary import list_package_slugs
     from sopro.platform.popup.first_run import FirstRunDialog
 
+    from sopro.platform.popup.glossary_tree import load_domain_choices
+
     slugs = list_package_slugs(domains_root) or settings.active_domains
-    dialog = FirstRunDialog(settings, domain_slugs=slugs)
+    choices = load_domain_choices(domains_root, repo=repo)
+    try:
+        dialog = FirstRunDialog(
+            settings, domain_slugs=slugs, domain_choices=choices
+        )
+    except TypeError:  # compatibilidade com diálogos injetados em testes
+        dialog = FirstRunDialog(settings, domain_slugs=slugs)
     if not dialog.exec():
         return settings
     try:
@@ -449,9 +481,12 @@ def _run(args, home, repo, settings, domains_root, instance=None) -> int:
     tray = TrayIcon()
     state = {"paused": False, "running": True, "status": IndicatorState.LISTENING}
     hub = None
+    hotword_holder: dict[str, object | None] = {"detector": None}
 
     def on_indicator_moved(x: int, y: int) -> None:
-        save_settings(repo, replace(settings, indicator_x=x, indicator_y=y))
+        nonlocal settings
+        settings = replace(settings, indicator_x=x, indicator_y=y)
+        save_settings(repo, settings)
 
     indicator = (
         StatusIndicator(
@@ -589,6 +624,11 @@ def _run(args, home, repo, settings, domains_root, instance=None) -> int:
                         service,
                         on_level=status_bridge.level.emit,
                         on_analyzing=status_bridge.analyzing.emit,
+                        on_frame=lambda frame: (
+                            hotword_holder["detector"].feed(frame.pcm)
+                            if hotword_holder["detector"] is not None
+                            else None
+                        ),
                     )
                 except Exception as exc:  # noqa: BLE001 - mantém a bandeja viva
                     logging.getLogger("sopro").exception(
@@ -610,7 +650,7 @@ def _run(args, home, repo, settings, domains_root, instance=None) -> int:
                         getattr(settings, "system_device_id", None),
                     )
                     if conf.has_conflict:
-                        _log.warning("Conflito I/O áudio: %s", conf.message)
+                        log.warning("Conflito I/O áudio: %s", conf.message)
                 except Exception:
                     pass
                 source.start(capture)
@@ -679,32 +719,111 @@ def _run(args, home, repo, settings, domains_root, instance=None) -> int:
                 pass
             set_status(IndicatorState.LISTENING)
 
-    def on_hub_settings(new_settings) -> None:
+    def apply_saved_settings(new_settings, *, domains: bool = False) -> None:
+        """Persiste e propaga uma configuração nova para todas as superfícies."""
+        nonlocal settings, loaded
+        hotword_changed = (
+            new_settings.hotword_enabled,
+            new_settings.hotword_phrase,
+            new_settings.hotword_backend,
+            new_settings.hotword_sensitivity,
+            new_settings.hotword_listen_device,
+        ) != (
+            settings.hotword_enabled,
+            settings.hotword_phrase,
+            settings.hotword_backend,
+            settings.hotword_sensitivity,
+            settings.hotword_listen_device,
+        )
+        new_settings = replace(
+            new_settings,
+            indicator_x=settings.indicator_x,
+            indicator_y=settings.indicator_y,
+        )
         save_settings(repo, new_settings)
-        remote = bool(cloud_providers(new_settings))
+        settings = new_settings
+        app.setStyleSheet(app_stylesheet(settings.theme))
+        overlay.update_settings(settings)
+        remote = bool(cloud_providers(settings))
         tray.set_remote(remote)
         if hub is not None:
+            hub.update_settings(settings)
             hub.set_remote(remote)
+        if domains:
+            try:
+                loaded = _load_active_glossary(repo, settings, domains_root)
+            except Exception as exc:  # noqa: BLE001 - mantém o app vivo
+                log.exception("falha ao recarregar glossário")
+                show_error(exc)
+                return
+            if hub is not None:
+                hub.refresh_history()
+            restart_realtime()
+        if hotword_changed:
+            restart_hotword()
+
+    def stop_realtime() -> None:
+        """Encerra a thread/provider atuais antes de reconstruir o pipeline."""
+        stop.set()
+        if thread is not None:
+            thread.join(timeout=2.0)
+        provider = provider_holder.get("obj")
+        if provider is not None:
+            try:
+                provider.close()
+            except Exception:
+                log.debug("falha ao fechar provider", exc_info=True)
+            provider_holder["obj"] = None
+        session_id = session_holder.get("id")
+        if session_id is not None:
+            try:
+                repo.end_session(session_id)
+            except Exception:
+                log.debug("falha ao encerrar sessão", exc_info=True)
+            session_holder["id"] = None
+
+    def restart_realtime() -> None:
+        if args.demo:
+            return
+        stop_realtime()
+        stop.clear()
+        state["paused"] = False
+        set_status(IndicatorState.LOADING)
+        start_realtime()
+
+    def on_hub_settings(new_settings) -> None:
+        domains = (new_settings.active_domains, new_settings.active_tracks, getattr(new_settings, "tracks_mode", None)) != (
+            settings.active_domains,
+            settings.active_tracks,
+            getattr(settings, "tracks_mode", None),
+        )
+        apply_saved_settings(new_settings, domains=domains)
 
     def on_hub_domains(new_settings) -> None:
-        save_settings(repo, new_settings)
-        log.info("domínios ativos: %s", ", ".join(new_settings.active_domains))
-        if hub is not None:
-            hub.refresh_history()
+        apply_saved_settings(new_settings, domains=True)
+        log.info("domínios ativos: %s", ", ".join(settings.active_domains))
 
     def on_assistant() -> None:
         from sopro.core.glossary import list_package_slugs
         from sopro.platform.popup.first_run import FirstRunDialog
 
+        from sopro.platform.popup.glossary_tree import load_domain_choices
+
         slugs = list_package_slugs(domains_root) or settings.active_domains
-        dialog = FirstRunDialog(settings, domain_slugs=slugs)
+        choices = load_domain_choices(domains_root, repo=repo)
+        try:
+            dialog = FirstRunDialog(
+                settings, domain_slugs=slugs, domain_choices=choices
+            )
+        except TypeError:  # compatibilidade com diálogos injetados
+            dialog = FirstRunDialog(settings, domain_slugs=slugs)
         if dialog.exec():
             try:
                 new_settings = dialog.current_settings()
             except ConfigError as exc:
                 log.warning("assistente inválido: %s", exc)
                 return
-            save_settings(repo, new_settings)
+            on_hub_settings(new_settings)
 
     def on_retry() -> None:
         if args.demo:
@@ -721,6 +840,7 @@ def _run(args, home, repo, settings, domains_root, instance=None) -> int:
             hotkey.stop()
         if hotkey_history is not None:
             hotkey_history.stop()
+        stop_hotword()
         if thread is not None:
             thread.join(timeout=2.0)
         overlay.stop()
@@ -774,20 +894,57 @@ def _run(args, home, repo, settings, domains_root, instance=None) -> int:
     tray.show()
 
     hotkey = _start_hotkey(settings, on_toggle)
+
+    class HotwordBridge(QObject):
+        triggered = Signal()
+
+    hotword_bridge = HotwordBridge()
+    hotword_bridge.triggered.connect(on_toggle)
+
     hotword_detector = None
-    if getattr(settings, "hotword_enabled", False):
+
+    def stop_hotword() -> None:
+        nonlocal hotword_detector
+        hotword_holder["detector"] = None
+        if hotword_detector is not None:
+            hotword_detector.stop()
+            hotword_detector = None
+
+    def start_hotword(current) -> None:
+        nonlocal hotword_detector
+        stop_hotword()
+        if not getattr(current, "hotword_enabled", False) or args.demo:
+            return
         try:
+            from sopro.platform.stt.factory import faster_whisper
+
+            def _hotword_provider():
+                return faster_whisper(
+                    model_id="whisper-tiny-en",
+                    home=home / "models",
+                    language="en",
+                )
+
             hotword_detector = create_hotword_detector(
-                phrase=getattr(settings, "hotword_phrase", "sopro"),
-                backend=getattr(settings, "hotword_backend", "openwakeword"),
-                sensitivity=getattr(settings, "hotword_sensitivity", 0.5),
-                device=getattr(settings, "hotword_listen_device", None),
+                phrase=getattr(current, "hotword_phrase", "sopro"),
+                backend=getattr(current, "hotword_backend", "stt_short"),
+                sensitivity=getattr(current, "hotword_sensitivity", 0.5),
+                device=getattr(current, "hotword_listen_device", None),
+                provider_factory=_hotword_provider,
             )
             if hotword_detector is not None:
-                hotword_detector.register_callback(on_toggle)
+                hotword_holder["detector"] = hotword_detector
+                hotword_detector.register_callback(hotword_bridge.triggered.emit)
                 hotword_detector.start()
-        except Exception:
-            hotword_detector = None
+                log.info("hotword ativo (backend=%s)", current.hotword_backend)
+        except Exception as exc:  # noqa: BLE001 - recurso opcional
+            log.warning("hotword não iniciado: %s", exc)
+            stop_hotword()
+
+    def restart_hotword() -> None:
+        start_hotword(settings)
+
+    start_hotword(settings)
 
     hotkey_history = _start_hotkey_for(
         settings.shortcut_history, lambda: open_hub("Histórico")

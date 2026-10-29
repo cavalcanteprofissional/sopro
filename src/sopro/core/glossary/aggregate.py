@@ -40,6 +40,25 @@ def _merge_hints(existing: tuple[str, ...], incoming: tuple[str, ...]) -> tuple[
     return tuple(merged)
 
 
+def resolve_active_tracks(
+    mode: str,
+    selected: tuple[str, ...] | list[str] | None,
+    available: tuple[str, ...] | list[str],
+) -> tuple[str, ...]:
+    """Resolve a seleção persistida de trilhas para nomes canônicos.
+
+    ``all`` inclui todas as trilhas disponíveis; ``base`` não inclui nenhuma;
+    ``custom`` usa apenas nomes existentes em ``selected``.
+    """
+    names = tuple(dict.fromkeys(str(name) for name in available if name))
+    if mode == "base":
+        return ()
+    if mode == "custom":
+        wanted = {str(name) for name in (selected or ())}
+        return tuple(name for name in names if name in wanted)
+    return names
+
+
 def aggregate_packages(
     base: DomainPackage,
     tracks: tuple[DomainPackage, ...] | list[DomainPackage],

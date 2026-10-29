@@ -24,6 +24,7 @@ from PySide6.QtWidgets import (
 from sopro.core.config import Settings
 from sopro.core.repo import Repository
 
+from sopro.platform.popup.glossary_tree import load_domain_choices
 from sopro.platform.popup.glossary_window import GlossaryPage
 from sopro.platform.popup.pages import (
     AboutPage,
@@ -64,7 +65,9 @@ class HubWindow(QWidget):
 
         self._status = StatusPage(settings)
         self._settings_page = SettingsPage(
-            settings, [d.slug for d in repo.list_domains()]
+            settings,
+            [d.slug for d in repo.list_domains()],
+            domain_choices=load_domain_choices(domains_root, repo=repo),
         )
         self._glossary = GlossaryPage(repo, domains_root, settings)
         self._terms = TermsPage(repo, settings)
@@ -152,6 +155,12 @@ class HubWindow(QWidget):
 
     def refresh_history(self) -> None:
         self._history.refresh()
+
+    def update_settings(self, settings: Settings) -> None:
+        """Mantém páginas e páginas-filhas alinhadas após Aplicar/assistente."""
+        self._settings_page.update_settings(settings)
+        self._glossary.update_settings(settings)
+        self._status.update_settings(settings)
 
     # -- aplicação das páginas ---------------------------------------------
     def _apply_current(self) -> None:

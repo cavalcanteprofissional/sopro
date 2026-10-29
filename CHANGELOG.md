@@ -7,6 +7,31 @@ adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+### Added
+- **Hotword por voz (B2)**: backend padrão `stt_short` reaproveita os quadros PCM do pipeline
+  de captura (VAD + STT curto, modelo carregado uma vez, debounce) e não abre um segundo
+  dispositivo. `openwakeword` permanece opcional e só dispara com modelo cujo nome casa com a
+  frase. Novos controles em Configurações (ativar, frase, backend, sensibilidade e
+  dispositivo) e sinal Qt para alternar pausa/retomada na thread da UI.
+- **Modelo principal verificado**: `whisper-small-en` no `data/models.json` com URL, SHA-256
+  e tamanho reais; seletor de modelo STT em Configurações.
+- **Trilhas tri-state (B5)**: `tracks_mode` (`all`/`base`/`custom`) com migração de configs
+  antigas, `resolve_active_tracks()` no núcleo e árvore compartilhada (`glossary_tree.py`) em
+  Glossários, Configurações e primeira execução.
+- **Tema dark-tech**: paleta centralizada (ciano/violeta), tokens de superfície/borda/estado,
+  QSS para entradas, listas, árvores, abas, menus e barras de rolagem; tema claro preservado.
+- Testes de hotword STT, modos de trilha, `resolve_active_tracks` e validação de hotword.
+
+### Changed
+- Indicador e bandeja usam as mesmas cores de estado, centralizadas em `theme.py`.
+- Licença declarada como MIT no `pyproject.toml`; `openwakeword`/`numpy` considerados no
+  `sopro.spec`.
+- Conflito de áudio compara IDs **e** nomes normalizados de microfone/loopback.
+
+### Fixed
+- Hotword não dispara mais com qualquer modelo default do openWakeWord.
+- Seleção de trilhas persiste “somente base”, “todas” e seleção explícita sem ambiguidade.
+
 ## [0.1.1] - 2026-10-24
 
 ### Added

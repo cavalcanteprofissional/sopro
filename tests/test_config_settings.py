@@ -110,3 +110,26 @@ def test_save_rejects_invalid_settings():
 
     with pytest.raises(ConfigError):
         save_settings(repo, invalid)
+
+
+def test_tracks_mode_explicit_and_legacy():
+    assert Settings().tracks_mode == "all"
+    assert Settings(active_tracks=("backend",)).tracks_mode == "custom"
+    assert Settings(tracks_mode="base", active_tracks=("backend",)).active_tracks == ()
+    assert Settings(tracks_mode="custom").tracks_mode == "base"
+    legacy = Settings.from_dict({"active_tracks": ["backend"]})
+    assert legacy.tracks_mode == "custom"
+    assert legacy.active_tracks == ("backend",)
+
+
+def test_invalid_hotword_settings_raise():
+    import pytest
+
+    from sopro.core.config import ConfigError
+
+    with pytest.raises(ConfigError):
+        Settings(hotword_backend="nope")
+    with pytest.raises(ConfigError):
+        Settings(hotword_sensitivity=1.5)
+    with pytest.raises(ConfigError):
+        Settings(hotword_phrase=" ")

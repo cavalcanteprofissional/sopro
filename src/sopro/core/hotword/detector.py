@@ -43,3 +43,7 @@ class HotwordDetector(ABC):
     @abstractmethod
     def set_enabled(self, enabled: bool) -> None:
         """Ativa ou desativa a detecção."""
+
+    def feed(self, pcm: bytes) -> None:
+        """Entrega PCM do pipeline de captura (quando o backend reaproveita áudio)."""
+        return None
