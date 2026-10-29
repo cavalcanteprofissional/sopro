@@ -287,10 +287,11 @@ powershell -ExecutionPolicy Bypass -File scripts/build-windows.ps1
 # ou: python scripts/tasks.py build
 ```
 
-Saída em `dist/`: `Sopro/` (onedir com `Sopro.exe`), `Sopro-<versão>-portable.zip` e
-`SHA256SUMS.txt`. Para o instalador, compile `installer.iss` com
-`iscc /DVersion=<versão> installer.iss`. O workflow `.github/workflows/release.yml` automatiza
-build, instalador e publicação em uma tag `v*`.
+Saída em `dist/`: `Sopro/` (onedir com `Sopro.exe`), `Sopro-<versão>-portable.zip`,
+`Sopro-Setup-<versão>.exe` e `SHA256SUMS.txt` com os hashes dos dois artefatos. O script
+localiza o Inno Setup automaticamente; use `-Iscc <caminho>` para apontar outro `ISCC.exe`
+ou `-SkipInstaller` para gerar apenas o portátil. O workflow
+`.github/workflows/release.yml` automatiza build, instalador e publicação em uma tag `v*`.
 
 ## 🗂️ Estrutura do repositório
 

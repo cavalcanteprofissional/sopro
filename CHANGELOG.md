@@ -31,6 +31,9 @@ adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 ### Fixed
 - Hotword não dispara mais com qualquer modelo default do openWakeWord.
 - Seleção de trilhas persiste “somente base”, “todas” e seleção explícita sem ambiguidade.
+- Build local agora recompila o instalador Inno Setup e inclui zip + Setup no
+  `SHA256SUMS.txt`; o Setup antigo é removido antes da compilação, evitando artefato
+  obsoleto/corrompido. O script detecta o `ISCC.exe` fora do `PATH`.
 
 ## [0.1.1] - 2026-10-24
 

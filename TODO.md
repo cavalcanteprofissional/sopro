@@ -22,7 +22,7 @@ de fala, erros amigáveis e tela de gerenciamento de glossários (importar/expor
 - **Instância única**: segunda execução ativa o hub existente e encerra (`--demo` tem trava
   separada).
 
-**Estado (2026-10-28):** **B1 (detecção)** parcialmente concluído (siglas/aliases/flexões/fuzzy/confiança STT implementados; monitorar em campo para pronúncia fonética pt-BR, "A P I"/"ai pi ai" e alucinações), **B2 (hotword)** concluído (STT curto sobre o pipeline, UI e empacotamento), **B4 (clique no indicador)** concluído, **B5 (trilhas)** concluído (`tracks_mode` + árvore compartilhada), **A7.4 concluído** e **Aba "Sobre Nós"** implementada. **440 testes passando**, validador sem erros. Pendentes: **B3** (som de bolha suave no pop-up) e validação de campo A5.1. Rebuild manual pendente de confirmação do mantenedor.
+**Estado (2026-10-28):** **B1 (detecção)** parcialmente concluído (siglas/aliases/flexões/fuzzy/confiança STT implementados; monitorar em campo para pronúncia fonética pt-BR, "A P I"/"ai pi ai" e alucinações), **B2 (hotword)** concluído (STT curto sobre o pipeline, UI e empacotamento), **B4 (clique no indicador)** concluído, **B5 (trilhas)** concluído (`tracks_mode` + árvore compartilhada), **A7.4 concluído** e **Aba "Sobre Nós"** implementada. **440 testes passando**, validador sem erros. Pendentes: **B3** (som de bolha suave no pop-up) e validação de campo A5.1. Rebuild manual pendente de confirmação do mantenedor. O build local agora gera portátil e instalador com hashes de ambos.
 
 > **Reteste manual (4ª rodada):** o mantenedor validou o *demo* ("tudo ok") e pediu uma nova
 > rodada — ver a seção **"Quinta rodada — UI/UX, fonte de captura e glossário"** abaixo.

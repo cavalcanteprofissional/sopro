@@ -113,6 +113,18 @@ repositório. No executável, embutir `data/models.json` e resolver via
 `sys._MEIPASS`/`importlib.resources` (ou apontar `SOPRO_CATALOG` para o caminho embutido).
 Ajustar antes do primeiro build.
 
+### 3.4 Build local (Windows)
+
+```powershell
+python -m pip install -e ".[packaging]"
+powershell -ExecutionPolicy Bypass -File scripts/build-windows.ps1
+```
+
+O script roda os testes, gera o *onedir* com PyInstaller, o zip portátil e, se o Inno Setup 6
+estiver instalado, o `Sopro-Setup-<versão>.exe`. O `SHA256SUMS.txt` inclui **ambos** os
+artefatos. Use `-SkipTests`, `-SkipInstaller` ou `-Iscc <caminho>` conforme necessário. Se o
+Setup antigo existir, ele é removido antes da compilação para evitar artefato obsoleto.
+
 ## 4. Versionamento e releases
 
 - **SemVer** (`MAJOR.MINOR.PATCH`) e tag anotada `vX.Y.Z`.
