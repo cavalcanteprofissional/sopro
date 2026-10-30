@@ -22,6 +22,7 @@ ArchitecturesInstallIn64BitMode=x64compatible
 ArchitecturesAllowed=x64compatible
 WizardStyle=modern
 DisableProgramGroupPage=yes
+SetupIconFile=src\sopro\platform\popup\assets\sopro.ico
 UninstallDisplayIcon={app}\Sopro.exe
 ; Dados/modelos ficam em {localappdata}\Sopro e NÃO são removidos na desinstalação.
 

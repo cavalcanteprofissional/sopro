@@ -22,7 +22,7 @@ de fala, erros amigáveis e tela de gerenciamento de glossários (importar/expor
 - **Instância única**: segunda execução ativa o hub existente e encerra (`--demo` tem trava
   separada).
 
-**Estado (2026-10-28):** **B1 (detecção)** parcialmente concluído (siglas/aliases/flexões/fuzzy/confiança STT implementados; monitorar em campo para pronúncia fonética pt-BR, "A P I"/"ai pi ai" e alucinações), **B2 (hotword)** concluído (STT curto sobre o pipeline, UI e empacotamento), **B4 (clique no indicador)** concluído, **B5 (trilhas)** concluído (`tracks_mode` + árvore compartilhada), **A7.4 concluído** e **Aba "Sobre Nós"** implementada. **440 testes passando**, validador sem erros. Pendentes: **B3** (som de bolha suave no pop-up) e validação de campo A5.1. Rebuild manual pendente de confirmação do mantenedor. O build local agora gera portátil e instalador com hashes de ambos.
+**Estado (2026-10-30):** **B1 (detecção)** parcialmente concluído (siglas/aliases/flexões/fuzzy/confiança STT implementados; monitorar em campo para pronúncia fonética pt-BR, "A P I"/"ai pi ai" e alucinações), **B2 (hotword)** concluído (STT curto sobre o pipeline, UI e empacotamento), **B3 (som de bolha)** implementado (falta validação auditiva), **B4 (clique no indicador)** concluído, **B5 (trilhas)** concluído (`tracks_mode` + árvore compartilhada), **A7.4 concluído** e **Aba "Sobre Nós"** implementada. **441 testes passando**, validador sem erros. Rebuild 0.1.1 verificado: portátil + instalador com ícone embutido e `SHA256SUMS.txt` conferindo (`sha256sum -c`). Pendentes: validação de campo A5.1 e reteste manual do mantenedor (hotword, trilhas, tema e som).
 
 > **Reteste manual (4ª rodada):** o mantenedor validou o *demo* ("tudo ok") e pediu uma nova
 > rodada — ver a seção **"Quinta rodada — UI/UX, fonte de captura e glossário"** abaixo.
@@ -31,9 +31,9 @@ de fala, erros amigáveis e tela de gerenciamento de glossários (importar/expor
 
 **Tarefa inicial da próxima sessão — revisar antes de avançar:**
 
-1. Validar o rebuild manualmente: hotword “sopro” no executável, trilhas tri-state, tema
-   dark-tech e captura loopback/microfone (A5.1).
-2. Fechar **B3** (som de bolha suave no pop-up) na próxima rodada.
+1. Reteste manual no portátil 0.1.1: hotword “sopro”, trilhas tri-state, tema dark-tech,
+   captura loopback/microfone (A5.1) e som do pop-up. Build, ícone e hashes já verificados.
+2. Validar auditivamente **B3** (som de bolha já implementado em `core/audio/chime.py`).
 3. Iniciar a **Fase 7** pelo F7.0 (Clerk, Neon, R2 e Worker) após revisar o plano abaixo;
    a Fase 6 (curadoria) continua planejada.
 
@@ -285,8 +285,10 @@ atrativo", com UI/UX ideal para a ferramenta; (b) **registrar a fonte** de cada 
   real de `theme=system`** (hoje cai sempre no claro).
 - [x] **Glossário:** ampliar ~35 termos ausentes nesta rodada + corrigir os `context_hints`.
 - [x] **Ícone:** gerar ícone de marca (SVG→ICO) para janela/bandeja/instalador agora.
-- [ ] **Pendência futura:** o mantenedor criará o ícone definitivo no Illustrator e
-  solicitaremos a substituição do ícone gerado (registrar ao fim da rodada).
+- [x] **Ícone definitivo (2026-10-30):** mestre do Illustrator em
+  `docs/assets/brand/sopro-icon.ai` (+ `.svg`/`.png`); runtime `sopro.ico` multi-resolução e
+  `sopro.png` gerados por `scripts/make-icon.py`; `sopro.spec` embute os assets e define o
+  ícone do `.exe`; `installer.iss` usa `SetupIconFile`. A bandeja mantém o disco de estado.
 
 ### A5.0 — Correção da detecção (P0)
 
@@ -329,12 +331,14 @@ atrativo", com UI/UX ideal para a ferramenta; (b) **registrar a fonte** de cada 
   setting `show_source` (checkbox nas Configurações).
 - [x] Badge de classe (pos), hierarquia tipográfica.
 - [x] **Animações de entrada/saída** (fade + slide ≤ 200 ms via `QPropertyAnimation`).
+- [x] **B3**: som de bolha suave no pop-up (síntese em `core/audio/chime.py`).
 - [x] Histórico/export: `source_label` rotula `system`/`mic` como "Sistema"/"Microfone".
 
 ### A5.5 — Hub, ícones e microinterações (C3/C4/C5)
 
 - [x] Hub e páginas com o novo tema; navegação lateral estilizada; botões com hierarquia.
-- [x] Ícone de marca (SVG→ICO) + `setWindowIcon` + bandeja + `sopro.spec`/`installer.iss`.
+- [x] Ícone de marca (SVG→ICO) + `setWindowIcon` + executável/instalador
+  (`sopro.spec`/`installer.iss`); a bandeja mantém o disco de estado.
 - [x] Corrigir nível/fala do indicador (`realtime.py` usava `max(1.0, threshold)` numa
   escala `rms` 0..1 → `speaking` sempre falso; agora usa o `energy_threshold` direto).
 
@@ -776,7 +780,11 @@ rebuild do portátil/Setup. Nada aqui autoriza gravar ou enviar áudio.
 `platform/popup/settings_window.py`, `platform/popup/sound.py`, `core/audio/chime.py`,
 `pyproject.toml`, `sopro.spec`, `scripts/build-windows.ps1`.
 
-### B3 — Som de bolha no pop-up (P1)
+### B3 — Som de bolha no pop-up (P1) · IMPLEMENTADO em 2026-10-30
+
+> **Implementado:** `chime_wav` sintetiza a bolha (sweep descendente + ruído suave) e
+> `play_popup_sound` respeita `popup_volume`/`popup_sound`, com fallback silencioso.
+> Testes em `tests/test_popup_sound.py`; falta apenas a validação auditiva no reteste manual.
 
 **Sintoma de campo**
 - O pop-up usa hoje um chime sintetizado de duas notas; o mantenedor quer um som de bolha

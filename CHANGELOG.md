@@ -8,6 +8,9 @@ adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 ## [Unreleased]
 
 ### Added
+- **Ícone de marca definitivo**: mestres do Illustrator em `docs/assets/brand/`
+  (`sopro-icon.ai`, `.svg` e `.png`) e runtime `sopro.ico` multi-resolução (16–256) +
+  `sopro.png` em `src/sopro/platform/popup/assets/`, gerados por `scripts/make-icon.py`.
 - **Hotword por voz (B2)**: backend padrão `stt_short` reaproveita os quadros PCM do pipeline
   de captura (VAD + STT curto, modelo carregado uma vez, debounce) e não abre um segundo
   dispositivo. `openwakeword` permanece opcional e só dispara com modelo cujo nome casa com a
@@ -29,11 +32,16 @@ adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 - Conflito de áudio compara IDs **e** nomes normalizados de microfone/loopback.
 
 ### Fixed
+- **Ícone no executável/instalador**: `sopro.spec` agora embute a pasta de assets e define
+  `icon=` no `EXE`; `installer.iss` usa `SetupIconFile`. Antes o build congelado não continha
+  `sopro.ico` e o ícone da janela caía no disco de estado.
 - Hotword não dispara mais com qualquer modelo default do openWakeWord.
 - Seleção de trilhas persiste “somente base”, “todas” e seleção explícita sem ambiguidade.
 - Build local agora recompila o instalador Inno Setup e inclui zip + Setup no
   `SHA256SUMS.txt`; o Setup antigo é removido antes da compilação, evitando artefato
   obsoleto/corrompido. O script detecta o `ISCC.exe` fora do `PATH`.
+- `SHA256SUMS.txt` passa a ser gravado com quebras de linha LF, para `sha256sum -c`
+  funcionar também no Git Bash/Windows.
 
 ## [0.1.1] - 2026-10-24
 

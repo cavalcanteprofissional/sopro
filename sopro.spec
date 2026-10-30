@@ -11,6 +11,7 @@ from PyInstaller.utils.hooks import collect_all, collect_data_files, collect_dyn
 DATAS = [
     ("data/models.json", "data"),
     ("data/domains", "data/domains"),
+    ("src/sopro/platform/popup/assets", "sopro/platform/popup/assets"),
 ]
 BINARIES = []
 HIDDENIMPORTS = []
@@ -55,6 +56,7 @@ exe = EXE(
     exclude_binaries=True,
     name="Sopro",
     console=False,
+    icon="src/sopro/platform/popup/assets/sopro.ico",
 )
 coll = COLLECT(
     exe,

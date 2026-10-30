@@ -156,10 +156,11 @@ validador não mudam de comportamento.
   sistema" / "Microfone") a partir de `Detection.source` (setting `show_source`); sombra
   adaptativa ao tema; hierarquia tipográfica reforçada. `theme="system"` passa a resolver o
   modo escuro do SO de verdade.
-- **Ícone de marca** (`platform/popup/assets/sopro.ico`, gerado de `sopro.svg`): aplicado à
-  janela (`setWindowIcon`), à bandeja (marca + disco de estado) e ao executável/instalador
-  (`sopro.spec`, `installer.iss`). *Pendência futura:* o mantenedor criará o ícone definitivo
-  no Illustrator e a substituição será solicitada ao fim da rodada.
+- **Ícone de marca** (`platform/popup/assets/sopro.ico`): aplicado à janela
+  (`setWindowIcon`), ao `.exe` e ao instalador (`sopro.spec`, `installer.iss`). A bandeja
+  mantém o **disco de estado** colorido. Os mestres ficam em `docs/assets/brand/`
+  (`sopro-icon.ai`, `.svg` e `.png`); os arquivos de runtime (`sopro.ico` multi-resolução e
+  `sopro.png`) são gerados por `scripts/make-icon.py` a partir de `sopro-icon.png`.
 
 ### Comportamento
 - Janela sem borda, **sempre no topo**, **sem receber foco** e **sem ativar** ao aparecer.
@@ -172,8 +173,9 @@ validador não mudam de comportamento.
 - **Alta legibilidade**: superfície 100% opaca (a translucidez da janela fica restrita aos
   cantos e à sombra), texto com contraste reforçado e tamanhos maiores; nunca deixar texto
   sobre o vídeo.
-- **Efeito sonoro opcional** (`popup_sound`): bipe curto de duas notas (160 ms), abaixo da
-  fala mínima do VAD, para não ser transcrito como fala.
+- **Efeito sonoro opcional** (`popup_sound`): bolha suave sintetizada (140 ms, volume em
+  `popup_volume`), abaixo da fala mínima do VAD, para não ser transcrito como fala; falha de
+  áudio não impede o cartão.
 
 ### Superfícies de interface
 

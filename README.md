@@ -10,7 +10,7 @@
 [![Versão](https://img.shields.io/badge/vers%C3%A3o-0.1.1-blue)](CHANGELOG.md)
 [![Python](https://img.shields.io/badge/python-3.11%20%7C%203.12-3776AB?logo=python&logoColor=white)](pyproject.toml)
 [![Plataforma](https://img.shields.io/badge/plataforma-Windows%2010%2F11-0078D4?logo=windows&logoColor=white)](#instalação-windows)
-[![Testes](https://img.shields.io/badge/testes-440%20passando-success)](tests)
+[![Testes](https://img.shields.io/badge/testes-441%20passando-success)](tests)
 [![Licença](https://img.shields.io/badge/licen%C3%A7a-MIT-blue)](LICENSE)
 
 [Visão geral](#-por-que-o-sopro) ·
@@ -38,7 +38,7 @@ interromper a aula e sem roubar o foco da janela.
 > (captura → VAD → transcrição → matcher → pop-up → histórico) roda de ponta a ponta, com
 > instalador Windows, assistente de primeira execução, logs sem conteúdo de fala e gestão de
 > glossários. A **Fase 5** (escala e portabilidade) está em andamento; a **Fase 6** (curadoria
-> assistida) e a **Fase 7** (conta, dados em nuvem e backup) estão planejadas. **440 testes
+> assistida) e a **Fase 7** (conta, dados em nuvem e backup) estão planejadas. **441 testes
 > automatizados** passando.
 
 ## ✨ Por que o Sopro
@@ -288,7 +288,9 @@ powershell -ExecutionPolicy Bypass -File scripts/build-windows.ps1
 ```
 
 Saída em `dist/`: `Sopro/` (onedir com `Sopro.exe`), `Sopro-<versão>-portable.zip`,
-`Sopro-Setup-<versão>.exe` e `SHA256SUMS.txt` com os hashes dos dois artefatos. O script
+`Sopro-Setup-<versão>.exe` e `SHA256SUMS.txt` com os hashes dos dois artefatos. Os ícones de
+runtime (`sopro.ico`/`sopro.png`) são gerados por `python scripts/make-icon.py` a partir do
+mestre `docs/assets/brand/sopro-icon.png` e embutidos no `.exe` e no instalador. O script
 localiza o Inno Setup automaticamente; use `-Iscc <caminho>` para apontar outro `ISCC.exe`
 ou `-SkipInstaller` para gerar apenas o portátil. O workflow
 `.github/workflows/release.yml` automatiza build, instalador e publicação em uma tag `v*`.

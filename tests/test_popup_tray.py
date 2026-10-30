@@ -6,7 +6,13 @@ os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
 import pytest  # noqa: E402
 
-from sopro.platform.popup.tray import STATE_LABELS, TrayIcon, TrayState, state_icon  # noqa: E402
+from sopro.platform.popup.tray import (  # noqa: E402
+    STATE_LABELS,
+    TrayIcon,
+    TrayState,
+    brand_icon,
+    state_icon,
+)
 
 
 @pytest.fixture(scope="module")
@@ -21,6 +27,14 @@ def test_state_icon_is_drawn(qt_app):
     icon = state_icon(TrayState.LISTENING)
 
     assert not icon.pixmap(32, 32).isNull()
+
+
+def test_brand_icon_uses_multi_size_asset(qt_app):
+    icon = brand_icon()
+
+    assert not icon.isNull()
+    sizes = {(size.width(), size.height()) for size in icon.availableSizes()}
+    assert {(16, 16), (32, 32), (48, 48), (256, 256)} <= sizes
 
 
 def test_set_state_updates_tooltip_and_toggle(qt_app):

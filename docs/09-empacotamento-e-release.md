@@ -88,7 +88,8 @@ binaries = collect_dynamic_libs("ctranslate2")
 datas = (
     collect_data_files("sopro")            # se os dados forem empacotados no pacote
     + [("data/models.json", "data"),
-       ("data/domains", "data/domains")]
+       ("data/domains", "data/domains"),
+       ("src/sopro/platform/popup/assets", "sopro/platform/popup/assets")]
 )
 
 a = Analysis(
@@ -99,9 +100,20 @@ a = Analysis(
     excludes=["tkinter", "matplotlib", "pandas"],
 )
 pyz = PYZ(a.pure, a.zipped_data)
-exe = EXE(pyz, a.scripts, exclude_binaries=True, name="Sopro", console=False)
+exe = EXE(
+    pyz,
+    a.scripts,
+    exclude_binaries=True,
+    name="Sopro",
+    console=False,
+    icon="src/sopro/platform/popup/assets/sopro.ico",
+)
 coll = COLLECT(exe, a.binaries, a.zipfiles, a.datas, name="Sopro")
 ```
+
+> O ícone de runtime é gerado a partir do mestre `docs/assets/brand/sopro-icon.png` com
+> `python scripts/make-icon.py`; o `sopro.spec` precisa embutir a pasta `assets` e apontar
+> `icon=` no `EXE`, senão o `.exe` usa o ícone padrão do PyInstaller.
 
 > Ainda **não existe** `src/sopro/app/__main__.py`; ele entra quando houver app de verdade
 > (Fase 2). Até lá, o build pode empacotar apenas o CLI de benchmark.
@@ -179,6 +191,7 @@ OutputDir=dist
 ArchitecturesInstallIn64BitMode=x64compatible
 Compression=lzma2
 SolidCompression=yes
+SetupIconFile=src\sopro\platform\popup\assets\sopro.ico
 
 [Files]
 Source: "dist\Sopro\*"; DestDir: "{app}"; Flags: recursesubdirs
@@ -215,9 +228,9 @@ jobs:
       - name: Checksums
         run: |
           cd dist
-          Get-FileHash -Algorithm SHA256 Sopro-Setup-*.exe, Sopro-*-portable.zip |
-            ForEach-Object { "$($_.Hash.ToLower())  $($_.Path | Split-Path -Leaf)" } |
-            Out-File SHA256SUMS.txt -Encoding ascii
+          $lines = Get-FileHash -Algorithm SHA256 Sopro-Setup-*.exe, Sopro-*-portable.zip |
+            ForEach-Object { "$($_.Hash.ToLower())  $($_.Path | Split-Path -Leaf)" }
+          [System.IO.File]::WriteAllText("SHA256SUMS.txt", ($lines -join "`n") + "`n", [System.Text.Encoding]::ASCII)
       - uses: softprops/action-gh-release@v2
         with:
           files: |
@@ -265,9 +278,11 @@ Get-FileHash .\Sopro-Setup-x.y.z.exe -Algorithm SHA256
 - [ ] `CHANGELOG.md` atualizado e versão no `pyproject.toml` alinhada ao tag.
 - [ ] `pytest` verde e `sopro-validate-glossary` sem erros.
 - [ ] Catálogo com os modelos necessários `verified=true` (`08` §3).
-- [ ] Build PyInstaller *onedir* gerado; smoke test em máquina **sem** Python.
-- [ ] Instalador Inno Setup gerado e testado (instalar, abrir, desinstalar).
-- [ ] Assets + `SHA256SUMS.txt` publicados na release.
+- [ ] Build PyInstaller *onedir* gerado; smoke test em máquina **sem** Python; ícone do
+      `.exe` conferido.
+- [ ] Instalador Inno Setup gerado e testado (instalar, abrir, desinstalar); ícone do Setup e
+      atalhos conferidos.
+- [ ] Assets + `SHA256SUMS.txt` publicados na release; `sha256sum -c SHA256SUMS.txt` verde.
 - [ ] Matriz de compatibilidade (§2.3) verificada.
 - [ ] README com seção de download apontando para a release.
 

@@ -90,11 +90,12 @@ if (-not $SkipInstaller) {
     $assets += $setup
 }
 
-$assets |
+$lines = $assets |
     ForEach-Object {
         "{0}  {1}" -f (Get-FileHash $_ -Algorithm SHA256).Hash.ToLower(), (Split-Path $_ -Leaf)
-    } |
-    Out-File "dist/SHA256SUMS.txt" -Encoding ascii
+    }
+$sums = ($lines -join "`n") + "`n"
+[System.IO.File]::WriteAllText("dist/SHA256SUMS.txt", $sums, [System.Text.Encoding]::ASCII)
 
 Write-Host ""
 Write-Host "Build concluido: $zip"
