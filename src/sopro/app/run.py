@@ -16,6 +16,7 @@ import os
 import subprocess
 import sys
 import threading
+import time
 from dataclasses import dataclass, replace
 from pathlib import Path
 
@@ -37,7 +38,11 @@ from sopro.core.rag import default_embedder
 from sopro.core.repo import Database, Repository, import_package
 from sopro.core.audio.io_check import check_audio_io_conflict
 from sopro.platform.hotkey import create_listener
-from sopro.platform.popup.sound import play_hotword_off, play_hotword_on
+from sopro.platform.popup.sound import (
+    play_hotword_off,
+    play_hotword_on,
+    set_before_play,
+)
 
 DEMO_TICK_MS = 40
 DEMO_FRAMES_PER_TICK = 6
@@ -483,6 +488,19 @@ def _run(args, home, repo, settings, domains_root, instance=None) -> int:
     hub = None
     hotword_holder: dict[str, object | None] = {"detector": None}
 
+    def mute_hotword(seconds: float = 2.0) -> None:
+        detector = hotword_holder["detector"]
+        mute = getattr(detector, "mute", None)
+        if callable(mute):
+            mute(seconds)
+
+    def feed_hotword(frame) -> None:
+        detector = hotword_holder["detector"]
+        if detector is not None:
+            detector.feed(frame.pcm, frame.source)
+
+    set_before_play(mute_hotword)
+
     def on_indicator_moved(x: int, y: int) -> None:
         nonlocal settings
         settings = replace(settings, indicator_x=x, indicator_y=y)
@@ -624,11 +642,7 @@ def _run(args, home, repo, settings, domains_root, instance=None) -> int:
                         service,
                         on_level=status_bridge.level.emit,
                         on_analyzing=status_bridge.analyzing.emit,
-                        on_frame=lambda frame: (
-                            hotword_holder["detector"].feed(frame.pcm)
-                            if hotword_holder["detector"] is not None
-                            else None
-                        ),
+                        on_frame=feed_hotword,
                     )
                 except Exception as exc:  # noqa: BLE001 - mantém a bandeja viva
                     logging.getLogger("sopro").exception(
@@ -706,6 +720,7 @@ def _run(args, home, repo, settings, domains_root, instance=None) -> int:
 
     def on_toggle() -> None:
         state["paused"] = not state["paused"]
+        log.info("Sopro %s", "pausado" if state["paused"] else "retomado")
         if state["paused"]:
             try:
                 play_hotword_off(getattr(settings, "hotword_volume", 0.4))

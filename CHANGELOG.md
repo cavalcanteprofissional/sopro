@@ -36,6 +36,15 @@ adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
   `icon=` no `EXE`; `installer.iss` usa `SetupIconFile`. Antes o build congelado não continha
   `sopro.ico` e o ícone da janela caía no disco de estado.
 - Hotword não dispara mais com qualquer modelo default do openWakeWord.
+- **Hotword mais robusto**: a frase configurada vai como `vocabulary_hint`, o trecho recebe
+  100 ms de silêncio nas bordas e o casamento ignora espaços. Sem isso, “sopro” virava
+  “Seprow”/“Soapro”/“So pro” em vozes sintéticas e o gatilho não disparava.
+- **Hotword não ouve os próprios sons**: antes de tocar qualquer efeito, o detector descarta
+  o áudio por 2 s. Sem isso, o bipe de pausa era capturado pelo loopback, transcrito como
+  “sopro” e retomava o app logo em seguida.
+- **Hotword com VAD por fonte**: sistema e microfone têm segmentadores independentes; ruído
+  contínuo em uma fonte não impede a detecção na outra (antes os quadros intercalados
+  mantinham o VAD em segmentos máximos e a frase se perdia).
 - Seleção de trilhas persiste “somente base”, “todas” e seleção explícita sem ambiguidade.
 - Build local agora recompila o instalador Inno Setup e inclui zip + Setup no
   `SHA256SUMS.txt`; o Setup antigo é removido antes da compilação, evitando artefato

@@ -13,16 +13,18 @@ import threading
 import time
 from collections.abc import Callable
 
+from sopro.core.audio import SAMPLE_RATE_HZ
 from sopro.core.hotword.detector import DetCallback, HotwordDetector
 from sopro.core.stt import AudioSegment, STTProvider
 from sopro.core.text.normalize import normalize
-from sopro.core.vad import VadConfig
+from sopro.core.vad import SpeechSegment, VadConfig
 from sopro.core.vad.streaming import StreamingSegmenter
 
 log = logging.getLogger("sopro")
 
 _MAX_QUEUED_FRAMES = 128
 _DEBOUNCE_S = 1.5
+_SILENCE_PAD = b"\x00\x00" * (SAMPLE_RATE_HZ // 10)
 
 
 class SttShortHotwordDetector(HotwordDetector):
@@ -46,13 +48,25 @@ class SttShortHotwordDetector(HotwordDetector):
         self._thread: threading.Thread | None = None
         self._stop = threading.Event()
         self._enabled = True
-        self._queue: queue.Queue[bytes | None] = queue.Queue(
+        self._queue: queue.Queue[tuple[str, bytes] | None] = queue.Queue(
             maxsize=_MAX_QUEUED_FRAMES
         )
         self._last_trigger = 0.0
+        self._mute_until = 0.0
+        self._reset = threading.Event()
 
     def register_callback(self, callback: DetCallback) -> None:
         self._callbacks.append(callback)
+
+    def mute(self, seconds: float = 2.0) -> None:
+        """Descarta áudio por alguns segundos (evita ouvir os próprios sons)."""
+        self._mute_until = time.monotonic() + max(0.0, seconds)
+        self._reset.set()
+        while True:
+            try:
+                self._queue.get_nowait()
+            except queue.Empty:
+                break
 
     def set_enabled(self, enabled: bool) -> None:
         self._enabled = bool(enabled)
@@ -61,11 +75,16 @@ class SttShortHotwordDetector(HotwordDetector):
     def running(self) -> bool:
         return self._running
 
-    def feed(self, pcm: bytes) -> None:
-        if not self._running or not self._enabled or not pcm:
+    def feed(self, pcm: bytes, source: str = "system") -> None:
+        if (
+            not self._running
+            or not self._enabled
+            or not pcm
+            or time.monotonic() < self._mute_until
+        ):
             return
         try:
-            self._queue.put_nowait(bytes(pcm))
+            self._queue.put_nowait((source, bytes(pcm)))
         except queue.Full:
             # Áudio é descartável: perder um quadro é melhor que bloquear a captura.
             return
@@ -109,7 +128,18 @@ class SttShortHotwordDetector(HotwordDetector):
         normalized = normalize(text)
         if not self._phrase:
             return False
-        return self._phrase in normalized
+        if self._phrase in normalized:
+            return True
+        compact = normalized.replace(" ", "")
+        phrase = self._phrase.replace(" ", "")
+        return bool(phrase) and phrase in compact
+
+    def _audio(self, speech: SpeechSegment) -> AudioSegment:
+        return AudioSegment(
+            pcm=_SILENCE_PAD + speech.pcm + _SILENCE_PAD,
+            source="system",
+            vocabulary_hint=(self._phrase,),
+        )
 
     def _get_provider(self) -> STTProvider | None:
         if self._provider is None and self._provider_factory is not None:
@@ -122,59 +152,61 @@ class SttShortHotwordDetector(HotwordDetector):
                 self._enabled = False
         return self._provider
 
+    def _heard(self, speech: SpeechSegment) -> bool:
+        provider = self._get_provider()
+        if provider is None:
+            return False
+        try:
+            transcript = provider.transcribe(self._audio(speech))
+        except Exception:
+            log.debug("transcrição do hotword falhou", exc_info=True)
+            return False
+        return self._matches(transcript.text)
+
     def _run(self) -> None:
         energy = 0.02 - 0.015 * self._sensitivity
-        segmenter = StreamingSegmenter(
-            VadConfig(
-                energy_threshold=max(0.002, energy),
-                min_speech_ms=250,
-                min_silence_ms=350,
-                max_segment_ms=3_500,
-                overlap_ms=0,
-            )
+        config = VadConfig(
+            energy_threshold=max(0.002, energy),
+            min_speech_ms=250,
+            min_silence_ms=350,
+            max_segment_ms=3_500,
+            overlap_ms=0,
         )
+        segmenters: dict[str, StreamingSegmenter] = {}
         try:
             while not self._stop.is_set():
+                if self._reset.is_set():
+                    self._reset.clear()
+                    segmenters.clear()
                 try:
-                    pcm = self._queue.get(timeout=0.2)
+                    item = self._queue.get(timeout=0.2)
                 except queue.Empty:
                     continue
-                if pcm is None:
+                if item is None:
                     break
+                if time.monotonic() < self._mute_until:
+                    continue
                 if not self._enabled:
                     continue
+                source, pcm = item
+                segmenter = segmenters.get(source)
+                if segmenter is None:
+                    segmenter = StreamingSegmenter(config)
+                    segmenters[source] = segmenter
                 for speech in segmenter.feed(pcm):
                     if self._stop.is_set() or not self._enabled:
                         break
-                    provider = self._get_provider()
-                    if provider is None:
-                        break
-                    try:
-                        transcript = provider.transcribe(
-                            AudioSegment(pcm=speech.pcm, source="system")
-                        )
-                    except Exception:
-                        log.debug("transcrição do hotword falhou", exc_info=True)
-                        continue
-                    if not self._matches(transcript.text):
+                    if not self._heard(speech):
                         continue
                     now = time.monotonic()
                     if now - self._last_trigger < _DEBOUNCE_S:
                         continue
                     self._last_trigger = now
                     self._trigger()
-            for speech in segmenter.flush():
-                provider = self._get_provider()
-                if provider is None:
-                    break
-                try:
-                    transcript = provider.transcribe(
-                        AudioSegment(pcm=speech.pcm, source="system")
-                    )
-                except Exception:
-                    continue
-                if self._matches(transcript.text):
-                    self._trigger()
-                    break
+            for segmenter in segmenters.values():
+                for speech in segmenter.flush():
+                    if self._heard(speech):
+                        self._trigger()
+                        return
         finally:
             self._running = False

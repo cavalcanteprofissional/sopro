@@ -8,11 +8,19 @@ próprio (notas ascendentes ao ativar, descendentes ao desativar).
 from __future__ import annotations
 
 import logging
+from collections.abc import Callable
 from functools import lru_cache
 
 from sopro.core.audio.chime import chime_wav, hotword_off_wav, hotword_on_wav
 
 _log = logging.getLogger("sopro")
+_before_play: Callable[[], None] | None = None
+
+
+def set_before_play(callback: Callable[[], None] | None) -> None:
+    """Registra um aviso executado antes de cada som (ex.: silenciar o hotword)."""
+    global _before_play
+    _before_play = callback
 
 
 @lru_cache(maxsize=4)
@@ -28,6 +36,11 @@ def _hotword(volume: float, enabled: bool) -> bytes:
 
 def _play(wav: bytes) -> bool:
     """Toca um WAV em memória; devolve ``False`` se não foi possível."""
+    if _before_play is not None:
+        try:
+            _before_play()
+        except Exception:  # noqa: BLE001 - aviso de melhor esforço
+            pass
     try:
         import winsound
 

@@ -54,6 +54,10 @@ def test_feed_triggers_callback_and_debounces():
         time.sleep(0.02)
     assert calls == [True]
     assert provider.segments
+    assert provider.segments[0].vocabulary_hint == ("sopro",)
+    pad = b"\x00\x00" * 1600
+    assert provider.segments[0].pcm.startswith(pad)
+    assert provider.segments[0].pcm.endswith(pad)
 
     _utterance(detector)
     time.sleep(0.3)
@@ -81,3 +85,51 @@ def test_detector_does_not_import_sounddevice():
 
     SttShortHotwordDetector(phrase="sopro")
     assert "sounddevice" not in sys.modules
+
+
+def test_matches_accepts_spaced_phrase():
+    detector = SttShortHotwordDetector(phrase="sopro")
+
+    assert detector._matches("So pro.")
+    assert detector._matches("SOPRO")
+    assert not detector._matches("outra palavra")
+
+
+def test_feed_accepts_source():
+    provider = FakeProvider()
+    detector = SttShortHotwordDetector(
+        phrase="sopro", provider_factory=lambda: provider
+    )
+    calls = []
+    detector.register_callback(lambda: calls.append(True))
+    detector.start()
+
+    for _ in range(20):
+        detector.feed(_loud_frame(), source="mic")
+    for _ in range(16):
+        detector.feed(_silence_frame(), source="mic")
+
+    deadline = time.monotonic() + 3
+    while not calls and time.monotonic() < deadline:
+        time.sleep(0.02)
+    detector.stop()
+    assert calls == [True]
+
+
+def test_muted_detector_ignores_frames():
+    provider = FakeProvider()
+    detector = SttShortHotwordDetector(
+        phrase="sopro", provider_factory=lambda: provider
+    )
+    calls: list[float] = []
+    detector.register_callback(lambda: calls.append(time.monotonic()))
+    detector.start()
+
+    detector.mute(1.0)
+    _utterance(detector)
+    time.sleep(0.3)
+
+    assert detector._queue.empty()
+    assert provider.segments == []
+    assert calls == []
+    detector.stop()

@@ -22,7 +22,7 @@ de fala, erros amigáveis e tela de gerenciamento de glossários (importar/expor
 - **Instância única**: segunda execução ativa o hub existente e encerra (`--demo` tem trava
   separada).
 
-**Estado (2026-10-30):** **B1 (detecção)** parcialmente concluído (siglas/aliases/flexões/fuzzy/confiança STT implementados; monitorar em campo para pronúncia fonética pt-BR, "A P I"/"ai pi ai" e alucinações), **B2 (hotword)** concluído (STT curto sobre o pipeline, UI e empacotamento), **B3 (som de bolha)** implementado (falta validação auditiva), **B4 (clique no indicador)** concluído, **B5 (trilhas)** concluído (`tracks_mode` + árvore compartilhada), **A7.4 concluído** e **Aba "Sobre Nós"** implementada. **441 testes passando**, validador sem erros. Rebuild 0.1.1 verificado: portátil + instalador com ícone embutido e `SHA256SUMS.txt` conferindo (`sha256sum -c`). Pendentes: validação de campo A5.1 e reteste manual do mantenedor (hotword, trilhas, tema e som).
+**Estado (2026-10-30):** **B1 (detecção)** parcialmente concluído (siglas/aliases/flexões/fuzzy/confiança STT implementados; monitorar em campo para pronúncia fonética pt-BR, "A P I"/"ai pi ai" e alucinações), **B2 (hotword)** concluído (STT curto sobre o pipeline, UI e empacotamento), **B3 (som de bolha)** implementado (falta validação auditiva), **B4 (clique no indicador)** concluído, **B5 (trilhas)** concluído (`tracks_mode` + árvore compartilhada), **A7.4 concluído** e **Aba "Sobre Nós"** implementada. **445 testes passando**, validador sem erros. Rebuild 0.1.1 verificado: portátil + instalador com ícone embutido e `SHA256SUMS.txt` conferindo (`sha256sum -c`). Pendentes: validação de campo A5.1 e reteste manual do mantenedor (hotword, trilhas, tema e som).
 
 > **Reteste manual (4ª rodada):** o mantenedor validou o *demo* ("tudo ok") e pediu uma nova
 > rodada — ver a seção **"Quinta rodada — UI/UX, fonte de captura e glossário"** abaixo.
@@ -735,6 +735,15 @@ rebuild do portátil/Setup. Nada aqui autoriza gravar ou enviar áudio.
 `platform/stt/groq_stt.py`, `tests/test_matcher.py`, `tests/test_text.py`.
 
 ### B2 — Hotword “sopro”, ativação/desativação e sons (P0) · CONCLUÍDO em 2026-10-28
+
+> **Reforço (2026-10-30):** o detector envia a frase como `vocabulary_hint`, adiciona 100 ms
+> de silêncio nas bordas do trecho e casa a frase ignorando espaços. Testes com Zira/Maria
+> mostraram que, sem isso, “sopro” virava “Seprow”/“Soapro”/“So pro” e não disparava; com o
+> ajuste, as pronúncias de “sopro” passaram a disparar. O detector também é mutado por 2 s
+> antes de cada efeito sonoro, pois o bipe de pausa no loopback era transcrito como “sopro”
+> e retomava o app. O VAD também é separado por fonte (sistema/microfone), para que ruído
+> contínuo em uma fonte não bloqueie a detecção na outra. Validado no executável: uma fala
+> pausa, o bipe não reverte e outra fala retoma.
 
 **Sintoma de campo**
 - O comando por voz “sopro” deveria pausar/retomar o app, mas não foi observado funcionando.
