@@ -282,6 +282,8 @@ Get-FileHash .\Sopro-Setup-x.y.z.exe -Algorithm SHA256
       `.exe` conferido.
 - [ ] Instalador Inno Setup gerado e testado (instalar, abrir, desinstalar); ícone do Setup e
       atalhos conferidos.
+- [ ] Hotword validado no executável: “sopro” pausa e repete retoma; o bipe de pausa **não**
+      reverte o estado.
 - [ ] Assets + `SHA256SUMS.txt` publicados na release; `sha256sum -c SHA256SUMS.txt` verde.
 - [ ] Matriz de compatibilidade (§2.3) verificada.
 - [ ] README com seção de download apontando para a release.

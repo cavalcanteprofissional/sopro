@@ -178,7 +178,8 @@ em [`docs/roadmap/`](docs/roadmap/README.md) — em especial
 - **Indicador de estado** flutuante e arrastável, com pulso em tempo real pelo nível de áudio
   e estados `Carregando`, `Ouvindo`, `Analisando`, `Pausado` e `Erro`.
 - **Hotword por voz** (`sopro`) usando STT curto sobre o áudio já capturado, com frase,
-  sensibilidade, backend e dispositivo configuráveis; sem abrir um segundo microfone.
+  sensibilidade, backend e dispositivo configuráveis; VAD por fonte e proteção contra o
+  auto-disparo dos próprios efeitos sonoros, sem abrir um segundo microfone.
 - **Tema dark-tech** (ciano/violeta) com tokens centralizados e tema claro preservado.
 - **Hub** único com Status, Configurações, Glossários, Termos, Histórico e Demonstração.
 - **Histórico** com busca, filtro por “aprendido” e período, além de exportação CSV/Markdown.

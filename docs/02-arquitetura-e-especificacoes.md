@@ -95,6 +95,19 @@ Princípio central: **o LLM não participa de toda frase.** O caminho rápido é
 - Provedor Groq: respeitar os limites do plano gratuito (ver `06-referencias.md`), enviar segmentos de **no mínimo ~10 s** devido à cobrança mínima por requisição, aceitando latência maior; reduzir requisições com VAD.
 - Duas fontes simultâneas: processar em filas separadas, com limite de concorrência para não saturar CPU.
 
+### 5.1 Hotword por STT curto (`stt_short`)
+
+- **Sem dispositivo extra**: reaproveita os quadros já capturados; o VAD do hotword é mantido
+  **por fonte** (sistema/microfone), para que ruído contínuo em uma fonte não bloqueie a outra.
+- **Trecho e dica**: antes de transcrever, o segmento recebe 100 ms de silêncio nas bordas e a
+  frase configurada vai como `vocabulary_hint`; o casamento normaliza o texto e ignora espaços
+  (`“So pro”` também casa com `“sopro”`). Modelo leve (`whisper-tiny-en`).
+- **Sem auto-disparo**: antes de tocar qualquer efeito (pop-up ou som de pausa/retomada), o
+  detector descarta a fila e ignora áudio por **2 s**. Sem isso, o bipe capturado pelo loopback
+  podia ser transcrito como a frase e reverter o estado.
+- **Debounce** de 1,5 s entre disparos; o log registra apenas pausa/retomada, nunca o conteúdo
+  da fala.
+
 ## 6. Modelo de dados (SQLite)
 
 Arquivo único por usuário, em pasta de dados do aplicativo.
@@ -214,7 +227,7 @@ validador não mudam de comportamento.
   trilhas podem ser ativas ao mesmo tempo.
 - Hotword: ativar/desativar, frase, backend (`stt_short` padrão ou `openwakeword`),
   sensibilidade e dispositivo de escuta. O backend `stt_short` reaproveita os quadros do
-  pipeline e não abre um segundo dispositivo.
+  pipeline, mantém VAD por fonte e não abre um segundo dispositivo (ver §5.1).
 - Desambiguação: limiar do resolvedor (`resolution_threshold`) e janela de contexto
   (`resolution_window_s`).
 - Termos fora do glossário: ativar candidatos (`llm_candidates`) e limite de taxa próprio
