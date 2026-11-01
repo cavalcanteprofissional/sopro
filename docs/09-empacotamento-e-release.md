@@ -286,6 +286,7 @@ Get-FileHash .\Sopro-Setup-x.y.z.exe -Algorithm SHA256
       reverte o estado.
 - [ ] Assets + `SHA256SUMS.txt` publicados na release; `sha256sum -c SHA256SUMS.txt` verde.
 - [ ] Matriz de compatibilidade (§2.3) verificada.
+- [ ] Roteiro manual da versão executado (ver `roadmap/14-testes-e-qualidade.md`).
 - [ ] README com seção de download apontando para a release.
 
 ## 10. Relação com os requisitos

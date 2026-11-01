@@ -33,9 +33,30 @@ de fala, erros amigáveis e tela de gerenciamento de glossários (importar/expor
 
 1. Reteste manual no portátil 0.1.1: hotword “sopro”, trilhas tri-state, tema dark-tech,
    captura loopback/microfone (A5.1) e som do pop-up. Build, ícone e hashes já verificados.
+   Roteiro detalhado em `docs/roadmap/14-testes-e-qualidade.md` (§ Roteiro manual — 0.1.1).
 2. Validar auditivamente **B3** (som de bolha já implementado em `core/audio/chime.py`).
 3. Iniciar a **Fase 7** pelo F7.0 (Clerk, Neon, R2 e Worker) após revisar o plano abaixo;
    a Fase 6 (curadoria) continua planejada.
+
+### Plano de testes da 0.1.1 (registrado em 2026-10-31)
+
+Roteiro completo, pré-condições e critérios de saída em
+`docs/roadmap/14-testes-e-qualidade.md`. Status desta sessão: **T0 e T1 verdes**; T1 deve ser
+repetido no aceite final (T6).
+
+- [x] **T0 — Gate automatizado:** `pytest -q` (445), validador, smoke `--demo` e
+      `sha256sum -c SHA256SUMS.txt`.
+- [x] **T1 — Hotword:** 3 ciclos “sopro” no executável alternaram pausa/retomada sem
+      auto-disparo do bipe; repetir no aceite final.
+- [ ] **T2 — Trilhas tri-state:** `all`/`base`/`custom`, normalização, persistência e
+      disparo apenas de trilhas ativas.
+- [ ] **T3 — Tema:** `dark`/`light`/`system`, contraste nas superfícies e persistência.
+- [ ] **T4 — Captura A5.1:** sonda loopback/mic, fontes `system`/`mic`/ambas e aula real
+      de ~10 min (termos, latência e falhas).
+- [ ] **T5 — Som do pop-up:** audível/desligado, volume, fila e ausência de auto-disparo
+      do hotword.
+- [ ] **T6 — Regressão e aceite:** instalar/desinstalar, primeira execução, instância única,
+      privacidade dos logs e repetição do hotword.
 
 ## Fase 0 — Validação
 

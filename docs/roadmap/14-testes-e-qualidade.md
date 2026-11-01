@@ -39,6 +39,45 @@ flowchart TD
 | UI | overlay, hub, configurações, bandeja | Comportamento sem roubo de foco |
 | Smoke | executável congelado em `--demo` | Empacotamento e inicialização |
 
+## Roteiro manual — 0.1.1
+
+Plano registrado em **2026-10-31** para o reteste do portátil/instalador 0.1.1. Executar no
+`dist/Sopro-0.1.1-portable.zip` (extraído) ou no `Sopro-Setup-0.1.1.exe` instalado.
+
+### Pré-condições
+
+- `sha256sum -c dist/SHA256SUMS.txt` verde; modelo `whisper-tiny-en` presente.
+- Backup de `%LOCALAPPDATA%\Sopro\settings.json`; loopback padrão `FxSound Speakers`.
+- Microfone correto selecionado; nenhuma outra instância do Sopro aberta.
+- Evidências: screenshots, horários, trechos de `logs/sopro.log` (sem fala) e settings
+  antes/depois.
+
+### Passos
+
+| ID | Teste | Esperado |
+|---|---|---|
+| T0 | Gate automatizado: `pytest -q`, `sopro-validate-glossary`, `Sopro.exe --demo` com `SOPRO_SMOKE_MS=3000`, `sha256sum -c` | 445 testes verdes; validador sem erros; smoke exit 0; hashes OK |
+| T1 | Hotword `sopro` ativo, backend `stt_short`, sensibilidade 0,5 | 3 ciclos alternam `Ouvindo`/`Pausado`; após 3 s o estado não reverte; “So pro”/“sôpro” casam; mute de 2 s respeitado; log só registra pausa/retomada |
+| T2 | Trilhas na árvore: `all` → `base` → `custom` → reaplicar/reiniciar | Base e filhas coerentes; modo normaliza; seleção persiste; termo de trilha desativada não dispara |
+| T3 | Tema `dark`/`light`/`system` no hub, páginas, árvore, pop-up e indicador | Paleta correta e contraste legível; `system` segue o SO; escolha persiste após reiniciar |
+| T4 | `sopro-capture-probe --seconds 6` e app com `system`, `mic` e ambas as fontes | Loopback com `rms > 0,01`; microfone responde ao falar; rótulos corretos; sem bloqueio cruzado de VAD |
+| T5 | Pop-up com som ligado/desligado, volumes 0 e 1, vários pop-ups | Bolha audível e curta, silêncio quando desligado; fila sem sobreposição áspera; bolha não dispara hotword |
+| T6 | Instalar/desinstalar, primeira execução, instância única, bandeja, hub, histórico, demo e privacidade | Fluxo preservado; `%LOCALAPPDATA%\Sopro` mantido; logs sem fala; repetir T1 no aceite final |
+
+### Validação de campo (T4)
+
+- Aula/vídeo real de ~10 min com termos conhecidos; anotar esperados, detectados, fonte,
+  latência e falsos positivos.
+- Confirmar que nenhum áudio é gravado e que o log não contém conteúdo de fala.
+- Se falhar: registrar sintoma, dispositivo, trecho do log e repro; criar teste automatizado
+  que falhe antes da correção.
+
+### Critérios de saída
+
+- Todos os **P0** (T0, T1, T2, T4) verdes; falhas **P1** (T3, T5, T6) documentadas.
+- Nenhum auto-disparo do hotword, crash ou perda de settings.
+- Resultado registrado no `TODO.md` e, se houver correção, teste de regressão incluído.
+
 ## Comandos
 
 ```bash
