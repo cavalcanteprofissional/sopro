@@ -93,19 +93,32 @@ Princípio central: **o LLM não participa de toda frase.** O caminho rápido é
   (**~224 tokens**; inclui todos os termos, não só os de maior prioridade — 6ª rodada). Ver regra
   no `05-prompts.md`.
 - Provedor Groq: respeitar os limites do plano gratuito (ver `06-referencias.md`), enviar segmentos de **no mínimo ~10 s** devido à cobrança mínima por requisição, aceitando latência maior; reduzir requisições com VAD.
-- Duas fontes simultâneas: processar em filas separadas, com limite de concorrência para não saturar CPU.
+- Duas fontes simultâneas: cada fonte mantém segmentador, contexto e nível próprios. O
+  microfone pode ficar aberto em **standby** (só hotword) sem transcrever; ao ser ativado, o
+  segmentador é reiniciado. Com o microfone ativo, trechos do sistema aguardam **500 ms** antes
+  de serem processados. Se o microfone produzir a mesma fala nesse intervalo, ela é a aceita e
+  a do sistema é descartada; se não houver fala do microfone, o sistema segue normalmente.
+  Falas repetidas entre fontes também são deduplicadas por `source_dedup_window_s`
+  (padrão 2 s). A análise é separada do commit para permitir essa arbitragem. A leitura e o
+  processamento rodam em threads separadas, com **fila por fonte** (microfone prioritário),
+  para que a captura continue enquanto o STT transcreve.
 
 ### 5.1 Hotword por STT curto (`stt_short`)
 
-- **Sem dispositivo extra**: reaproveita os quadros já capturados; o VAD do hotword é mantido
-  **por fonte** (sistema/microfone), para que ruído contínuo em uma fonte não bloqueie a outra.
+- **Palavra fixa e somente no microfone**: a hotword é sempre `sopro`; não é editável na UI
+  nem por configuração persistida. Quadros de áudio do sistema são ignorados pelo detector —
+  “sopro” no loopback nunca ativa o microfone.
+- **Microfone em standby**: com a hotword habilitada, o microfone abre mesmo fora de
+  `audio_sources`, apenas para ouvir a palavra, com aviso explícito. Ao ouvir “sopro”, entra
+  em `ACTIVE` e passa a alimentar VAD/STT; volta a `STANDBY` após 30 s de silêncio
+  (`mic_wake_timeout_s`, 10–300 s). Um novo “sopro” reinicia o contador.
 - **Trecho e dica**: antes de transcrever, o segmento recebe 100 ms de silêncio nas bordas e a
-  frase configurada vai como `vocabulary_hint`; o casamento normaliza o texto e ignora espaços
+  frase fixa vai como `vocabulary_hint`; o casamento normaliza o texto e ignora espaços
   (`“So pro”` também casa com `“sopro”`). Modelo leve (`whisper-tiny-en`).
-- **Sem auto-disparo**: antes de tocar qualquer efeito (pop-up ou som de pausa/retomada), o
-  detector descarta a fila e ignora áudio por **2 s**. Sem isso, o bipe capturado pelo loopback
-  podia ser transcrito como a frase e reverter o estado.
-- **Debounce** de 1,5 s entre disparos; o log registra apenas pausa/retomada, nunca o conteúdo
+- **Sem auto-disparo**: antes de tocar qualquer efeito, o detector descarta a fila e ignora
+  áudio por **2 s**. Como a hotword só escuta o microfone e os efeitos não são reproduzidos
+  nele, o som do pop-up não se transcreve como “sopro”.
+- **Debounce** de 1,5 s entre disparos; o log registra apenas a ativação, nunca o conteúdo
   da fala.
 
 ## 6. Modelo de dados (SQLite)
@@ -186,18 +199,22 @@ validador não mudam de comportamento.
 - **Alta legibilidade**: superfície 100% opaca (a translucidez da janela fica restrita aos
   cantos e à sombra), texto com contraste reforçado e tamanhos maiores; nunca deixar texto
   sobre o vídeo.
-- **Efeito sonoro opcional** (`popup_sound`): bolha suave sintetizada (140 ms, volume em
-  `popup_volume`), abaixo da fala mínima do VAD, para não ser transcrito como fala; falha de
-  áudio não impede o cartão.
+- **Efeito sonoro opcional** (`popup_sound`): bolha suave sintetizada (180 ms, volume padrão
+  `0.18` em `popup_volume`), abaixo da fala mínima do VAD. Sons distintos de ativação e
+  standby da hotword (`hotword_sound`, `hotword_volume`) são sintetizados em memória. A
+  reprodução acontece em worker serializado, sem bloquear a UI, e falha de áudio não impede
+  o cartão.
 
 ### Superfícies de interface
 
 - **Indicador de estado** (`platform/popup/status_indicator.py`): bolinha flutuante, sem
   borda, sempre no topo e **sem foco**, ocultável e com duas ações: **clique único**
-  pausa/retoma (mesma ação do atalho/hotword) e **arraste** acima de 5 px move e persiste a
-  posição sem alternar. Tooltip e cursor refletem o estado ("Clique para pausar/retomar").
-  Estados: `loading` (download/warmup, pulso pela fração), `listening`, `analyzing` (pulso em
-  tempo real pelo nível de áudio), `paused` e `error`. Nunca rouba foco.
+  pausa/retoma (mesma ação do atalho) e **arraste** acima de 5 px move e persiste a posição
+  sem alternar. Tooltip e cursor refletem o estado. Estados: `loading` (download/warmup,
+  pulso pela fração), `listening`, `analyzing` (pulso em tempo real pelo nível de áudio),
+  `paused` e `error`. Anel/badge de fonte: sistema em ciano, microfone ativo em verde,
+  standby em cinza tracejado, combinação dos dois e destaque âmbar ao analisar. O tooltip
+  mostra dispositivo e tempo restante do microfone. Nunca rouba foco.
 - **Hub** (`platform/popup/hub.py` + `pages.py`): janela única com navegação entre Status,
   Configurações, Glossários, Termos, Histórico, Demonstração e **Sobre**. Configurações e
   Glossários são páginas reutilizáveis, também hospedadas nos diálogos antigos (`PageHost`).
@@ -216,8 +233,10 @@ validador não mudam de comportamento.
 
 ## 9. Configuração (campos)
 
-- Fontes de áudio e dispositivos; ganho/limiar do VAD.
-- Provedor de STT (local/Groq), modelo, chave Groq (armazenada localmente, de preferência no cofre de credenciais do SO).
+- Fontes de áudio, dispositivos de sistema/microfone e ganho/limiar do VAD.
+- Provedor de STT (local/Groq), modelo e chave Groq. A chave é digitada na UI, nunca vai
+  para `Settings`/SQLite e é salva no cofre do SO (`keyring`, extra `secrets`); sem cofre, vale
+  apenas para a sessão.
 - Provedor de LLM (local/Groq/desligado), modelo e URL base (servidor OpenAI-compatível).
 - Domínios ativos, idioma de saída, cooldown, orçamento por minuto, duração, posição, tema.
 - Detecção tolerante: `matcher_fuzzy` (padrão desligado) com limiar `0.85` e mínimo de 5
@@ -225,9 +244,13 @@ validador não mudam de comportamento.
 - Trilhas (`tracks_mode` + `active_tracks`): sub-nichos do domínio escolhido. `all` carrega
   todas as trilhas, `base` nenhuma e `custom` apenas a lista de `active_tracks`. Várias
   trilhas podem ser ativas ao mesmo tempo.
-- Hotword: ativar/desativar, frase, backend (`stt_short` padrão ou `openwakeword`),
-  sensibilidade e dispositivo de escuta. O backend `stt_short` reaproveita os quadros do
-  pipeline, mantém VAD por fonte e não abre um segundo dispositivo (ver §5.1).
+- Hotword: ativar/desativar, palavra fixa `sopro`, backend `stt_short`, sensibilidade,
+  dispositivo de escuta, sons de ativação/standby e volumes. O campo de frase não é editável;
+  valores antigos são normalizados para `sopro`, e configurações com backend legado migram
+  para `stt_short`. O detector reaproveita os quadros do pipeline, escuta apenas o microfone
+  e não abre um segundo dispositivo (ver §5.1).
+- Microfone por voz: `mic_wake_timeout_s` (10–300 s) e `source_dedup_window_s` (0–10 s,
+  padrão 2 s) para deduplicação entre fontes.
 - Desambiguação: limiar do resolvedor (`resolution_threshold`) e janela de contexto
   (`resolution_window_s`).
 - Termos fora do glossário: ativar candidatos (`llm_candidates`) e limite de taxa próprio

@@ -132,4 +132,19 @@ def test_invalid_hotword_settings_raise():
     with pytest.raises(ConfigError):
         Settings(hotword_sensitivity=1.5)
     with pytest.raises(ConfigError):
-        Settings(hotword_phrase=" ")
+        Settings(mic_wake_timeout_s=5)
+    with pytest.raises(ConfigError):
+        Settings(popup_volume=1.5)
+
+
+def test_legacy_openwakeword_backend_migrates_to_stt_short():
+    assert Settings.from_dict({"hotword_backend": "openwakeword"}).hotword_backend == (
+        "stt_short"
+    )
+
+
+def test_hotword_phrase_is_fixed():
+    from sopro.core.hotword import WAKE_WORD
+
+    assert Settings(hotword_phrase="outra").hotword_phrase == WAKE_WORD
+    assert Settings.from_dict({"hotword_phrase": "outra"}).hotword_phrase == WAKE_WORD

@@ -24,7 +24,6 @@ NATIVE_PACKAGES = (
     "onnxruntime",
     "av",
     "pyaudiowpatch",
-    "openwakeword",
     "numpy",
 )
 for _package in NATIVE_PACKAGES:

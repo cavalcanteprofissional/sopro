@@ -1,4 +1,4 @@
-"""Gera o efeito sonoro dos pop-ups e hotword (síntese em memória).
+"""Gera os efeitos sonoros dos pop-ups e do hotword (síntese em memória).
 
 O áudio é sintetizado em memória e devolvido como WAV, sem arquivos de mídia
 nem dependências externas. A reprodução fica na camada de plataforma
@@ -13,45 +13,57 @@ import struct
 import wave
 
 SAMPLE_RATE_HZ = 44_100
-DURATION_MS = 140
-_VOLUME = 0.12
+DURATION_MS = 180
+_VOLUME = 0.18
 HOTWORD_DURATION_MS = 170
 
 
-def _tone(
-    frequency: float, samples: int, sample_rate: int, *, volume: float = _VOLUME
-) -> list[int]:
-    attack = max(1, int(sample_rate * 0.006))
-    release = max(1, int(sample_rate * 0.040))
+def _clamp(value: float) -> float:
+    return max(-1.0, min(1.0, value))
+
+
+def _fade(index: int, samples: int, sample_rate: int) -> float:
+    attack = max(1, int(sample_rate * 0.005))
+    release = max(1, int(sample_rate * 0.035))
+    if index < attack:
+        return index / attack
+    remaining = samples - index
+    if remaining < release:
+        return max(0.0, remaining / release)
+    return 1.0
+
+
+def _render(samples: int, sample_rate: int, voice) -> list[int]:
     frames: list[int] = []
     for index in range(samples):
-        envelope = min(1.0, index / attack, (samples - index) / release)
-        value = volume * envelope * math.sin(
-            2.0 * math.pi * frequency * index / sample_rate
-        )
-        frames.append(int(32767 * value))
+        value = voice(index / sample_rate) * _fade(index, samples, sample_rate)
+        frames.append(int(32767 * _clamp(value)))
+    if frames:
+        frames[-1] = 0
     return frames
 
 
-def _noise_bubble(samples: int, sample_rate: int, *, volume: float = _VOLUME) -> list[int]:
-    """Bolha de sabão suave: ruído filtrado com sweep descendente."""
-    frames: list[int] = []
-    for index in range(samples):
-        t = index / sample_rate
-        # envelope em forma de bolha (ataque rápido, decaimento exponencial)
-        attack = max(1, int(sample_rate * 0.004))
-        if index < attack:
-            envelope = index / attack
-        else:
-            envelope = math.exp(-t * 18.0)
-        # sweep descendente
-        freq = 1400.0 * math.exp(-t * 12.0) + 220.0
-        # mistura seno + ruído levemente filtrado
-        noise = (math.sin(2.0 * math.pi * freq * index / sample_rate) * 0.7 +
-                math.sin(2.0 * math.pi * freq * 0.6 * index / sample_rate) * 0.3)
-        value = volume * envelope * noise
-        frames.append(int(32767 * max(-1.0, min(1.0, value))))
-    return frames
+def _bubble(samples: int, sample_rate: int, *, volume: float = _VOLUME) -> list[int]:
+    """Bolha curta com glide descendente e um segundo estalo suave."""
+    phase = [0.0]
+    echo_phase = [0.0]
+
+    def voice(t: float) -> float:
+        freq = 430.0 + 820.0 * math.exp(-t * 11.0)
+        phase[0] += 2.0 * math.pi * freq / sample_rate
+        primary = math.sin(phase[0]) + 0.14 * math.sin(phase[0] * 2.02)
+
+        echo = 0.0
+        if t >= 0.058:
+            echo_t = t - 0.058
+            echo_freq = 620.0 + 780.0 * math.exp(-echo_t * 19.0)
+            echo_phase[0] += 2.0 * math.pi * echo_freq / sample_rate
+            echo = 0.26 * math.exp(-echo_t * 34.0) * math.sin(echo_phase[0])
+
+        body = math.exp(-t * 21.0) * (0.72 * primary + echo)
+        return volume * math.tanh(body * 1.15)
+
+    return _render(samples, sample_rate, voice)
 
 
 def _wav(frames: list[int], sample_rate: int) -> bytes:
@@ -71,10 +83,32 @@ def chime_wav(
     duration_ms: int = DURATION_MS,
     volume: float = _VOLUME,
 ) -> bytes:
-    """Devolve um WAV mono 16-bit com som suave de bolha estourando."""
+    """Devolve um WAV mono 16-bit com o som suave de bolha do pop-up."""
     total = int(sample_rate * duration_ms / 1000)
-    frames = _noise_bubble(total, sample_rate, volume=volume)
+    frames = _bubble(total, sample_rate, volume=_clamp(volume))
     return _wav(frames, sample_rate)
+
+
+def _sweep(
+    *,
+    start_hz: float,
+    end_hz: float,
+    duration_ms: int,
+    sample_rate: int,
+    volume: float,
+    decay: float,
+) -> bytes:
+    total = int(sample_rate * duration_ms / 1000)
+    phase = [0.0]
+
+    def voice(t: float) -> float:
+        progress = t / max(1e-6, duration_ms / 1000.0)
+        freq = start_hz + (end_hz - start_hz) * progress
+        phase[0] += 2.0 * math.pi * freq / sample_rate
+        value = volume * math.exp(-t * decay) * math.sin(phase[0])
+        return value
+
+    return _wav(_render(total, sample_rate, voice), sample_rate)
 
 
 def hotword_on_wav(
@@ -83,20 +117,15 @@ def hotword_on_wav(
     duration_ms: int = HOTWORD_DURATION_MS,
     volume: float = 0.35,
 ) -> bytes:
-    """Som simples e suave de *ativação*: sweep ascendente curto."""
-    total = int(sample_rate * duration_ms / 1000)
-    frames: list[int] = []
-    for index in range(total):
-        t = index / sample_rate
-        attack = max(1, int(sample_rate * 0.01))
-        if index < attack:
-            envelope = index / attack
-        else:
-            envelope = math.exp(-t * 14.0)
-        freq = 520.0 + 280.0 * (index / total)
-        value = volume * envelope * math.sin(2.0 * math.pi * freq * index / sample_rate)
-        frames.append(int(32767 * max(-1.0, min(1.0, value))))
-    return _wav(frames, sample_rate)
+    """Som de ativação: sweep ascendente curto."""
+    return _sweep(
+        start_hz=520.0,
+        end_hz=800.0,
+        duration_ms=duration_ms,
+        sample_rate=sample_rate,
+        volume=_clamp(volume),
+        decay=14.0,
+    )
 
 
 def hotword_off_wav(
@@ -105,17 +134,12 @@ def hotword_off_wav(
     duration_ms: int = HOTWORD_DURATION_MS,
     volume: float = 0.35,
 ) -> bytes:
-    """Som simples e suave de *desativação*: sweep descendente curto."""
-    total = int(sample_rate * duration_ms / 1000)
-    frames: list[int] = []
-    for index in range(total):
-        t = index / sample_rate
-        attack = max(1, int(sample_rate * 0.01))
-        if index < attack:
-            envelope = index / attack
-        else:
-            envelope = math.exp(-t * 16.0)
-        freq = 800.0 - 420.0 * (index / total)
-        value = volume * envelope * math.sin(2.0 * math.pi * freq * index / sample_rate)
-        frames.append(int(32767 * max(-1.0, min(1.0, value))))
-    return _wav(frames, sample_rate)
+    """Som de desativação: sweep descendente curto."""
+    return _sweep(
+        start_hz=800.0,
+        end_hz=380.0,
+        duration_ms=duration_ms,
+        sample_rate=sample_rate,
+        volume=_clamp(volume),
+        decay=16.0,
+    )

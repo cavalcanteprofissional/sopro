@@ -30,7 +30,17 @@ flowchart TD
     FIRST -->|não| SETTINGS["Carrega preferências salvas"]
     SETTINGS --> LISTEN
 
+    LISTEN --> STANDBY["Microfone em standby
+(sistema segue ativo)"]
+    STANDBY --> WAKE{"Ouviu 'sopro'
+no microfone?"}
+    WAKE -->|não| STANDBY
+    WAKE -->|sim| MIC["Microfone ativo
+(verde no indicador)"]
+    MIC -->|30 s sem fala| STANDBY
+
     LISTEN --> SPEECH["Fala detectada"]
+    MIC --> SPEECH
     SPEECH --> CARD["Cartão: termo, tradução\ne definição"]
     CARD --> ACTION{"Ação do usuário"}
     ACTION -->|hover| PAUSE["Pausa o tempo do cartão"]
@@ -61,6 +71,10 @@ flowchart TD
 | Download do modelo | Progresso no indicador/bandeja, sem diálogo modal |
 | Falha de áudio ou modelo | Estado `Erro`, mensagem curta e ação de tentar de novo |
 | Escutando | Indicador pulsando com o nível de áudio |
+| Microfone em standby | Anel cinza tracejado; tooltip explica que só “sopro” ativa |
+| “sopro” no microfone | Microfone entra em `ACTIVE` (anel verde); o app não pausa |
+| 30 s sem fala no microfone | Microfone volta ao standby; áudio do sistema continua |
+| Fala nas duas fontes | Um único cartão, com a fonte identificada |
 | Analisando um trecho | Indicador em `Analisando` enquanto transcreve/resolve |
 | Cartão exibido | Sem roubar foco; som opcional; hover pausa; fixar/ fechar |
 | Pausado | Indicador em `Pausado`; nenhum novo cartão |
@@ -71,7 +85,10 @@ flowchart TD
 - **Consentimento antes de ouvir**: a primeira execução apresenta o aviso de privacidade e
   só segue com aceite.
 - **Escolha explícita de fontes**: microfone e áudio do sistema podem ser ligados ou
-  desligados independentemente.
+  desligados independentemente. Com a hotword ligada, o microfone abre em standby para ouvir
+  “sopro” mesmo fora das fontes marcadas, com aviso.
+- **Hotword fixa e privada**: a palavra é sempre `sopro`, não editável, e só o microfone é
+  escutado pelo detector — o áudio do sistema nunca dispara a ativação.
 - **Demonstração sem risco**: `--demo` exercita o pipeline com dados sintéticos, sem áudio
   real e sem download de modelo.
 - **Fechar janelas não encerra o app**: o Sopro vive na bandeja; apenas “Sair” encerra.

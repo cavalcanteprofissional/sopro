@@ -551,7 +551,7 @@ class Repository:
         until: str | None = None,
     ) -> list[HistoryEntry]:
         sql = (
-            "SELECT d.at AS at, d.session_id AS session_id, "
+            "SELECT d.id AS detection_id, d.at AS at, d.session_id AS session_id, "
             "COALESCE(t.canonical_en, '') AS term, "
             "COALESCE(s.translation_pt, '') AS translation, "
             "d.source AS source, d.method AS method, d.learned AS learned, "
@@ -598,6 +598,7 @@ class Repository:
                 method=row["method"],
                 learned=bool(row["learned"]),
                 context_snippet=row["context_snippet"] if include_context else None,
+                detection_id=int(row["detection_id"]),
             )
             for row in rows
         ]

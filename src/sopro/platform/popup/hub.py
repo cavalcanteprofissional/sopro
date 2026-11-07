@@ -41,6 +41,7 @@ class HubWindow(QWidget):
     """Janela principal do Sopro com navegação lateral entre páginas."""
 
     settings_saved = Signal(object)
+    secret_saved = Signal(str)
     domains_changed = Signal(object)
     toggle_requested = Signal()
     demo_requested = Signal()
@@ -56,6 +57,7 @@ class HubWindow(QWidget):
         parent: QWidget | None = None,
         *,
         demo_pairs: Sequence[tuple[str, str]] = (),
+        device_choices: Sequence[tuple[str, str | None, str]] = (),
     ) -> None:
         super().__init__(parent)
         self.setObjectName("SoproHub")
@@ -68,6 +70,7 @@ class HubWindow(QWidget):
             settings,
             [d.slug for d in repo.list_domains()],
             domain_choices=load_domain_choices(domains_root, repo=repo),
+            device_choices=device_choices,
         )
         self._glossary = GlossaryPage(repo, domains_root, settings)
         self._terms = TermsPage(repo, settings)
@@ -147,6 +150,9 @@ class HubWindow(QWidget):
     def set_level(self, level: float) -> None:
         self._status.set_level(level)
 
+    def set_capture(self, capture) -> None:
+        self._status.set_capture(capture)
+
     def set_remote(self, active: bool) -> None:
         self._status.set_remote(active)
 
@@ -171,6 +177,9 @@ class HubWindow(QWidget):
                 return
             self._settings_page._original = new_settings
             self.settings_saved.emit(new_settings)
+            api_key = self._settings_page.take_api_key()
+            if api_key:
+                self.secret_saved.emit(api_key)
         elif isinstance(page, GlossaryPage):
             new_settings = self._glossary.commit()
             self._glossary._settings = new_settings

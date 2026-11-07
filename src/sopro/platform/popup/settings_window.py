@@ -18,15 +18,18 @@ from PySide6.QtWidgets import (
     QDialogButtonBox,
     QDoubleSpinBox,
     QFormLayout,
+    QHBoxLayout,
+    QLabel,
     QLineEdit,
     QMessageBox,
+    QPushButton,
     QScrollArea,
     QSpinBox,
     QVBoxLayout,
     QWidget,
 )
 
-from sopro.core.audio import SOURCE_LABELS
+from sopro.core.audio import SOURCE_LABELS, SOURCE_MIC, SOURCE_SYSTEM
 from sopro.core.config import (
     LLM_PROVIDERS,
     POPUP_POSITIONS,
@@ -39,6 +42,7 @@ from sopro.core.config import (
 
 from sopro.platform.popup.glossary_tree import DomainChoice, GlossaryTree
 from sopro.platform.popup.host import PageHost
+from sopro.platform.popup.sound import play_hotword_on, play_popup_sound
 from sopro.platform.stt.factory import list_stt_models
 
 
@@ -80,9 +84,11 @@ class SettingsPage(QWidget):
         confirm: Callable[[str], bool] | None = None,
         alert: Callable[[str], None] | None = None,
         domain_choices: Sequence[DomainChoice] = (),
+        device_choices: Sequence[tuple[str, str | None, str]] = (),
     ) -> None:
         super().__init__(parent)
         self._original = settings
+        self._device_choices = device_choices
         self._source_checks: dict[str, QCheckBox] = {}
         self._domain_checks: dict[str, QCheckBox] = {}
         self._track_checks: dict[str, QCheckBox] = {}
@@ -104,6 +110,14 @@ class SettingsPage(QWidget):
             self._source_checks[source] = check
             sources_layout.addWidget(check)
         form.addRow("Fontes de áudio", sources_widget)
+
+        self._system_device = self._device_combo(
+            SOURCE_SYSTEM, settings.system_device_id
+        )
+        form.addRow("Dispositivo do sistema", self._system_device)
+
+        self._mic_device = self._device_combo(SOURCE_MIC, settings.mic_device_id)
+        form.addRow("Dispositivo do microfone", self._mic_device)
 
         self._output_lang = QLineEdit(settings.output_lang)
         form.addRow("Idioma de saída", self._output_lang)
@@ -128,6 +142,13 @@ class SettingsPage(QWidget):
         self._llm_provider.addItems(LLM_PROVIDERS)
         self._llm_provider.setCurrentText(settings.llm_provider)
         form.addRow("Provedor LLM", self._llm_provider)
+
+        self._groq_api_key = QLineEdit()
+        self._groq_api_key.setEchoMode(QLineEdit.EchoMode.Password)
+        self._groq_api_key.setPlaceholderText(
+            "Cole a chave (vazio = manter a atual)"
+        )
+        form.addRow("Chave Groq", self._groq_api_key)
 
         self._tree: GlossaryTree | None = None
         if domain_choices:
@@ -165,6 +186,17 @@ class SettingsPage(QWidget):
         self._popup_sound.setChecked(settings.popup_sound)
         form.addRow("", self._popup_sound)
 
+        self._popup_volume = QDoubleSpinBox()
+        self._popup_volume.setRange(0.0, 1.0)
+        self._popup_volume.setSingleStep(0.05)
+        self._popup_volume.setDecimals(2)
+        self._popup_volume.setValue(settings.popup_volume)
+        form.addRow("Volume do pop-up", self._popup_volume)
+
+        self._show_source = QCheckBox("Mostrar a fonte no cartão (sistema/microfone)")
+        self._show_source.setChecked(settings.show_source)
+        form.addRow("", self._show_source)
+
         self._cooldown = QDoubleSpinBox()
         self._cooldown.setRange(0.0, 3600.0)
         self._cooldown.setSingleStep(5.0)
@@ -195,11 +227,14 @@ class SettingsPage(QWidget):
         self._indicator.setChecked(settings.indicator_enabled)
         form.addRow("", self._indicator)
 
-        self._hotword_enabled = QCheckBox("Ativar comando por voz")
+        self._hotword_enabled = QCheckBox('Ativar microfone ao dizer "sopro"')
         self._hotword_enabled.setChecked(settings.hotword_enabled)
         form.addRow("", self._hotword_enabled)
-        self._hotword_phrase = QLineEdit(settings.hotword_phrase)
-        form.addRow("Palavra do hotword", self._hotword_phrase)
+        hint = QLabel(
+            'A palavra "sopro" é fixa. O microfone fica em standby e ativa ao ouvi-la.'
+        )
+        hint.setWordWrap(True)
+        form.addRow("", hint)
         self._hotword_backend = QComboBox()
         self._hotword_backend.addItem("stt_short", "stt_short")
         self._hotword_backend.setCurrentText(settings.hotword_backend)
@@ -213,6 +248,36 @@ class SettingsPage(QWidget):
         self._hotword_device.setPlaceholderText("Dispositivo (vazio = padrão)")
         form.addRow("Dispositivo do hotword", self._hotword_device)
 
+        self._mic_wake_timeout = QDoubleSpinBox()
+        self._mic_wake_timeout.setRange(10.0, 300.0)
+        self._mic_wake_timeout.setSingleStep(5.0)
+        self._mic_wake_timeout.setSuffix(" s")
+        self._mic_wake_timeout.setValue(settings.mic_wake_timeout_s)
+        form.addRow("Silêncio até voltar ao standby", self._mic_wake_timeout)
+
+        self._hotword_sound = QCheckBox("Tocar sons ao ativar/desativar o microfone")
+        self._hotword_sound.setChecked(settings.hotword_sound)
+        form.addRow("", self._hotword_sound)
+
+        self._hotword_volume = QDoubleSpinBox()
+        self._hotword_volume.setRange(0.0, 1.0)
+        self._hotword_volume.setSingleStep(0.05)
+        self._hotword_volume.setDecimals(2)
+        self._hotword_volume.setValue(settings.hotword_volume)
+        form.addRow("Volume do hotword", self._hotword_volume)
+
+        sounds = QWidget()
+        sounds_layout = QHBoxLayout(sounds)
+        sounds_layout.setContentsMargins(0, 0, 0, 0)
+        popup_preview = QPushButton("Testar pop-up")
+        popup_preview.clicked.connect(self._preview_popup)
+        hotword_preview = QPushButton("Testar hotword")
+        hotword_preview.clicked.connect(self._preview_hotword)
+        sounds_layout.addWidget(popup_preview)
+        sounds_layout.addWidget(hotword_preview)
+        sounds_layout.addStretch(1)
+        form.addRow("Sons", sounds)
+
         self._matcher_fuzzy = QCheckBox(
             "Correspondência aproximada (tolera erros de transcrição)"
         )
@@ -223,6 +288,18 @@ class SettingsPage(QWidget):
         self._save_context.setChecked(settings.save_context)
         form.addRow("", self._save_context)
 
+        self._save_transcript = QCheckBox(
+            "Salvar transcrição completa (privacidade)"
+        )
+        self._save_transcript.setChecked(settings.save_transcript)
+        form.addRow("", self._save_transcript)
+
+        self._llm_candidates = QCheckBox(
+            "Gerar termos fora do glossário com LLM"
+        )
+        self._llm_candidates.setChecked(settings.llm_candidates)
+        form.addRow("", self._llm_candidates)
+
         scroll = QScrollArea()
         form_host = QWidget()
         form_host.setLayout(form)
@@ -232,6 +309,33 @@ class SettingsPage(QWidget):
         layout = QVBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(scroll)
+
+    def take_api_key(self) -> str | None:
+        """Devolve a chave digitada (nunca persiste em ``Settings``)."""
+        value = self._groq_api_key.text().strip()
+        self._groq_api_key.clear()
+        return value or None
+
+    def _device_combo(
+        self, source: str, current: str | None
+    ) -> QComboBox:
+        combo = QComboBox()
+        combo.addItem("Padrão (automático)", None)
+        for item_source, device_id, label in self._device_choices:
+            if item_source == source:
+                combo.addItem(label, device_id)
+        index = combo.findData(current)
+        if current and index < 0:
+            combo.addItem(f"ID {current}", current)
+            index = combo.count() - 1
+        combo.setCurrentIndex(index if index >= 0 else 0)
+        return combo
+
+    def _preview_popup(self) -> None:
+        play_popup_sound(float(self._popup_volume.value()))
+
+    def _preview_hotword(self) -> None:
+        play_hotword_on(float(self._hotword_volume.value()))
 
     def update_settings(self, settings: Settings) -> None:
         """Atualiza a referência-base sem recriar o formulário."""
@@ -284,6 +388,8 @@ class SettingsPage(QWidget):
         return replace(
             self._original,
             audio_sources=self._checked(self._source_checks),
+            system_device_id=self._system_device.currentData(),
+            mic_device_id=self._mic_device.currentData(),
             active_domains=domains,
             active_tracks=tracks if tracks_mode == "custom" else (),
             tracks_mode=tracks_mode,
@@ -295,6 +401,8 @@ class SettingsPage(QWidget):
             popup_max=int(self._popup_max.value()),
             popup_position=self._popup_position.currentText(),
             popup_sound=self._popup_sound.isChecked(),
+            popup_volume=float(self._popup_volume.value()),
+            show_source=self._show_source.isChecked(),
             cooldown_s=float(self._cooldown.value()),
             budget_per_minute=int(self._budget.value()),
             theme=self._theme.currentText(),
@@ -302,12 +410,16 @@ class SettingsPage(QWidget):
             shortcut_history=self._shortcut_history.text().strip(),
             indicator_enabled=self._indicator.isChecked(),
             hotword_enabled=self._hotword_enabled.isChecked(),
-            hotword_phrase=self._hotword_phrase.text().strip() or "sopro",
             hotword_backend=self._hotword_backend.currentText(),
             hotword_sensitivity=float(self._hotword_sensitivity.value()),
             hotword_listen_device=self._hotword_device.text().strip() or None,
+            hotword_sound=self._hotword_sound.isChecked(),
+            hotword_volume=float(self._hotword_volume.value()),
+            mic_wake_timeout_s=float(self._mic_wake_timeout.value()),
             matcher_fuzzy=self._matcher_fuzzy.isChecked(),
             save_context=self._save_context.isChecked(),
+            save_transcript=self._save_transcript.isChecked(),
+            llm_candidates=self._llm_candidates.isChecked(),
             remote_consent=self._remote_consent,
         )
 
@@ -324,6 +436,7 @@ class SettingsDialog(PageHost):
         confirm: Callable[[str], bool] | None = None,
         alert: Callable[[str], None] | None = None,
         domain_choices: Sequence[DomainChoice] = (),
+        device_choices: Sequence[tuple[str, str | None, str]] = (),
     ) -> None:
         super().__init__(parent)
         self.setWindowTitle("Configurações do Sopro")
@@ -336,6 +449,7 @@ class SettingsDialog(PageHost):
             confirm=confirm,
             alert=alert,
             domain_choices=domain_choices,
+            device_choices=device_choices,
         )
         buttons = QDialogButtonBox(
             QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel

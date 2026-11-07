@@ -32,11 +32,11 @@ def _silence_frame() -> bytes:
     return b"\x00\x00" * 480
 
 
-def _utterance(detector) -> None:
+def _utterance(detector, source: str = "mic") -> None:
     for _ in range(20):
-        detector.feed(_loud_frame())
+        detector.feed(_loud_frame(), source=source)
     for _ in range(16):
-        detector.feed(_silence_frame())
+        detector.feed(_silence_frame(), source=source)
 
 
 def test_feed_triggers_callback_and_debounces():
@@ -63,6 +63,22 @@ def test_feed_triggers_callback_and_debounces():
     time.sleep(0.3)
     assert calls == [True]
     detector.stop()
+
+
+def test_feed_ignores_system_audio():
+    provider = FakeProvider()
+    detector = SttShortHotwordDetector(
+        phrase="sopro",
+        provider_factory=lambda: provider,
+    )
+    calls = []
+    detector.register_callback(lambda: calls.append(True))
+    detector.start()
+    _utterance(detector, source="system")
+    time.sleep(0.5)
+    detector.stop()
+    assert calls == []
+    assert provider.segments == []
 
 
 def test_feed_ignores_other_words():

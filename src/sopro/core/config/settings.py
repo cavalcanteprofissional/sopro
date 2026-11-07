@@ -12,6 +12,7 @@ from typing import Any, Mapping
 
 from sopro.core.audio import SOURCE_LABELS
 from sopro.core.hotkeys import HotkeyError, parse_hotkey
+from sopro.core.hotword.constants import WAKE_WORD
 
 SETTINGS_KEY = "config"
 
@@ -75,22 +76,29 @@ class Settings:
     """Permite correspondência aproximada para erros de transcrição (STT)."""
     hotword_enabled: bool = True
     """Escuta por palavra-chave para ligar/desligar o Sopro."""
-    hotword_phrase: str = "sopro"
-    """Palavra-chave configurável para ativação."""
+    hotword_phrase: str = WAKE_WORD
+    """Palavra-chave fixa de ativação (não configurável)."""
     hotword_backend: str = "stt_short"
-    """Backend do hotword (stt_short reaproveita o áudio; openwakeword é opcional)."""
+    """Backend do hotword (stt_short reaproveita os quadros do microfone)."""
     hotword_sensitivity: float = 0.5
     """Sensibilidade do detector de hotword (0-1)."""
     hotword_listen_device: str | None = None
     """Dispositivo de áudio prioritário para hotword (None = padrão)."""
     hotword_volume: float = 0.4
     """Volume dos sons de ativação/desativação do hotword (0-1)."""
+    hotword_sound: bool = True
+    """Toca sons distintos ao ativar/desativar o microfone."""
+    mic_wake_timeout_s: float = 30.0
+    """Silêncio no microfone antes de voltar ao standby (10-300 s)."""
+    source_dedup_window_s: float = 2.0
+    """Janela para descartar a mesma fala capturada por sistema e microfone."""
     active_tracks: tuple[str, ...] = ()
     """Trilhas ativas quando ``tracks_mode == "custom"``."""
     tracks_mode: str = "all"
     """Seleção de trilhas: ``all`` (todas), ``base`` (só base) ou ``custom``."""
 
     def __post_init__(self) -> None:
+        object.__setattr__(self, "hotword_phrase", WAKE_WORD)
         if self.tracks_mode == "base":
             object.__setattr__(self, "active_tracks", ())
         if self.active_tracks and self.tracks_mode == "all":
@@ -123,12 +131,18 @@ class Settings:
             raise ConfigError(f"tema inválido: {self.theme!r}")
         if self.tracks_mode not in TRACK_MODES:
             raise ConfigError(f"tracks_mode inválido: {self.tracks_mode!r}")
-        if self.hotword_backend not in ("stt_short", "openwakeword"):
+        if self.hotword_backend != "stt_short":
             raise ConfigError(f"hotword_backend inválido: {self.hotword_backend!r}")
         if not 0 <= self.hotword_sensitivity <= 1:
             raise ConfigError("hotword_sensitivity deve estar em [0, 1]")
-        if not self.hotword_phrase.strip():
-            raise ConfigError("hotword_phrase não pode ser vazio")
+        if not 0 <= self.popup_volume <= 1:
+            raise ConfigError("popup_volume deve estar em [0, 1]")
+        if not 0 <= self.hotword_volume <= 1:
+            raise ConfigError("hotword_volume deve estar em [0, 1]")
+        if not 10 <= self.mic_wake_timeout_s <= 300:
+            raise ConfigError("mic_wake_timeout_s deve estar em [10, 300]")
+        if not 0 <= self.source_dedup_window_s <= 10:
+            raise ConfigError("source_dedup_window_s deve estar em [0, 10]")
         if not 0 < self.popup_duration_s <= 60:
             raise ConfigError("popup_duration_s deve estar em (0, 60]")
         if not 1 <= self.popup_max <= 10:
@@ -168,8 +182,8 @@ class Settings:
                 kwargs[name] = tuple(kwargs[name] or ())
         if "tracks_mode" not in kwargs:
             kwargs["tracks_mode"] = "custom" if kwargs.get("active_tracks") else "all"
-        # Ainda não há modelo openWakeWord customizado para "sopro"; sem ele o backend
-        # padrão nunca dispararia. Configurações antigas migram para o STT curto.
+        # O backend OpenWakeWord foi removido; configurações antigas migram para o
+        # STT curto, que é o único suportado.
         if kwargs.get("hotword_backend") == "openwakeword":
             kwargs["hotword_backend"] = "stt_short"
         try:

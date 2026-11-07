@@ -12,14 +12,20 @@ SEED_PATH = "data/domains/tech-en-pt"
 
 
 class FakeProvider(STTProvider):
-    def __init__(self, text: str = "the transformer model is large") -> None:
+    def __init__(
+        self,
+        text: str = "the transformer model is large",
+        by_source: dict[str, str] | None = None,
+    ) -> None:
         self.text = text
+        self.by_source = by_source or {}
 
     def warmup(self) -> None:
         pass
 
     def transcribe(self, segment) -> Transcript:
-        return Transcript(text=self.text, start_ms=0, end_ms=1000, source=segment.source)
+        text = self.by_source.get(segment.source, self.text)
+        return Transcript(text=text, start_ms=0, end_ms=1000, source=segment.source)
 
     def close(self) -> None:
         pass
@@ -96,6 +102,93 @@ def test_sources_have_separate_segmenters():
     assert detections[0].source == "system"
 
 
+def test_inactive_source_reports_level_without_detecting():
+    levels = []
+    pipeline = RealtimePipeline(
+        _service(),
+        on_source_level=lambda source, level, speaking: levels.append(
+            (source, level, speaking)
+        ),
+    )
+    pipeline.set_source_active(SOURCE_MIC, False)
+
+    detections = []
+    for chunk in _chunks(_tone(500) + _silence(400)):
+        detections.extend(pipeline.handle_frame(default_frame(chunk, source=SOURCE_MIC)))
+
+    assert detections == []
+    assert levels and all(source == SOURCE_MIC for source, _l, _s in levels)
+
+    pipeline.set_source_active(SOURCE_MIC, True)
+    detections = []
+    for chunk in _chunks(_tone(500) + _silence(400)):
+        detections.extend(pipeline.handle_frame(default_frame(chunk, source=SOURCE_MIC)))
+
+    assert [d.term for d in detections] == ["transformer"]
+    assert detections[0].source == SOURCE_MIC
+
+
+def test_mic_wins_arbitration_against_pending_system():
+    now = [0.0]
+    pipeline = RealtimePipeline(
+        _service(), arbitration_ms=500, clock=lambda: now[0]
+    )
+    pipeline.set_source_active(SOURCE_MIC, True)
+
+    for chunk in _chunks(_tone(500) + _silence(400)):
+        assert pipeline.handle_frame(default_frame(chunk, source="system")) == []
+
+    detections = []
+    for chunk in _chunks(_tone(500) + _silence(400)):
+        detections.extend(pipeline.handle_frame(default_frame(chunk, source=SOURCE_MIC)))
+
+    assert [(d.term, d.source) for d in detections] == [("transformer", SOURCE_MIC)]
+    assert pipeline.flush_pending(now=1.0) == []
+
+
+def test_different_system_content_still_commits_after_mic():
+    now = [0.0]
+    provider = FakeProvider(
+        by_source={
+            "system": "the transformer model is large",
+            SOURCE_MIC: "the api returns data",
+        }
+    )
+    pipeline = RealtimePipeline(
+        DetectionService(provider, load_package(SEED_PATH)),
+        arbitration_ms=500,
+        clock=lambda: now[0],
+    )
+    pipeline.set_source_active(SOURCE_MIC, True)
+
+    for chunk in _chunks(_tone(500) + _silence(400)):
+        pipeline.handle_frame(default_frame(chunk, source="system"))
+
+    detections = []
+    for chunk in _chunks(_tone(500) + _silence(400)):
+        detections.extend(pipeline.handle_frame(default_frame(chunk, source=SOURCE_MIC)))
+
+    assert {(d.term, d.source) for d in detections} == {
+        ("transformer", "system"),
+        ("API", SOURCE_MIC),
+    }
+
+
+def test_system_commits_after_arbitration_timeout():
+    now = [0.0]
+    pipeline = RealtimePipeline(
+        _service(), arbitration_ms=500, clock=lambda: now[0]
+    )
+    pipeline.set_source_active(SOURCE_MIC, True)
+
+    for chunk in _chunks(_tone(500) + _silence(400)):
+        assert pipeline.handle_frame(default_frame(chunk, source="system")) == []
+
+    detections = pipeline.flush_pending(now=0.6)
+
+    assert [(d.term, d.source) for d in detections] == [("transformer", "system")]
+
+
 def test_drain_flushes_pending_speech():
     pipeline = RealtimePipeline(_service())
 
@@ -107,12 +200,54 @@ def test_drain_flushes_pending_speech():
     assert [d.term for d in detections] == ["transformer"]
 
 
+def test_run_keeps_frames_while_slow_stt_processes():
+    import time
+
+    class SlowProvider(FakeProvider):
+        def __init__(self):
+            super().__init__()
+            self.texts = iter(
+                ["the transformer model is large", "ai is changing how we work"]
+            )
+
+        def transcribe(self, segment):
+            time.sleep(0.05)
+            return Transcript(
+                text=next(self.texts),
+                start_ms=0,
+                end_ms=1000,
+                source=segment.source,
+            )
+
+    pipeline = RealtimePipeline(
+        DetectionService(SlowProvider(), load_package(SEED_PATH))
+    )
+    pcm = _tone(500) + _silence(400) + _tone(500) + _silence(400)
+    source = FakeSource([default_frame(c) for c in _chunks(pcm)])
+    seen = []
+
+    pipeline.run(
+        source,
+        poll_timeout=0.0,
+        should_stop=lambda: not source.frames,
+        on_detection=seen.append,
+        queue_size=4,
+    )
+
+    assert [d.term for d in seen] == ["transformer", "AI"]
+
+
 def test_run_reads_source_and_reports_detections():
     frames = [default_frame(c) for c in _chunks(_tone(500) + _silence(400))]
     source = FakeSource(frames)
     pipeline = RealtimePipeline(_service())
     seen = []
 
-    pipeline.run(source, poll_timeout=0.0, should_stop=lambda: not source.frames, on_detection=seen.append)
+    pipeline.run(
+        source,
+        poll_timeout=0.0,
+        should_stop=lambda: not source.frames,
+        on_detection=seen.append,
+    )
 
     assert [d.term for d in seen] == ["transformer"]

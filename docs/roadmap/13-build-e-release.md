@@ -39,7 +39,7 @@ flowchart TD
 ```bash
 # ambiente
 python -m venv .venv
-python -m pip install -e ".[dev,ui,audio,stt,packaging]"
+python -m pip install -e ".[dev,ui,audio,stt,secrets,packaging]"
 
 # qualidade
 pytest -q

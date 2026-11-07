@@ -71,7 +71,13 @@ class WindowsAudioSource(AudioSource):
         self._pa: Any | None = None
         self._queue: Queue[AudioFrame] = Queue(maxsize=_READ_QUEUE_MAX)
         self._streams: list[Any] = []
+        self._active_sources: set[str] = set()
         self._closed = False
+
+    @property
+    def active_sources(self) -> tuple[str, ...]:
+        """Fontes cujos streams foram abertos com sucesso."""
+        return tuple(sorted(self._active_sources))
 
     # -- ciclo de vida do backend -------------------------------------------
     def _backend(self) -> Any:
@@ -183,16 +189,36 @@ class WindowsAudioSource(AudioSource):
         if self._streams:
             raise AudioUnavailable("captura já iniciada")
         self._closed = False
+        optional = set(config.optional_sources)
         for source in config.sources:
-            device = self._resolve_device(source, config)
-            device_rate = device.default_sample_rate or _FALLBACK_RATE
-            channels = device.channels or _DEFAULT_CHANNELS
-            frames = max(1, device_rate * config.frame_ms // 1000)
-            self._streams.append(
-                self._open_stream(
-                    device, device_rate, channels, frames, source, config.target_sample_rate
+            try:
+                device = self._resolve_device(source, config)
+                device_rate = device.default_sample_rate or _FALLBACK_RATE
+                channels = device.channels or _DEFAULT_CHANNELS
+                frames = max(1, device_rate * config.frame_ms // 1000)
+                self._streams.append(
+                    self._open_stream(
+                        device,
+                        device_rate,
+                        channels,
+                        frames,
+                        source,
+                        config.target_sample_rate,
+                    )
                 )
-            )
+                self._active_sources.add(source)
+            except DeviceNotFound:
+                if source in optional:
+                    continue
+                self.close()
+                raise
+            except AudioUnavailable:
+                if source in optional:
+                    continue
+                self.close()
+                raise
+        if not self._streams:
+            raise AudioUnavailable("nenhuma fonte de áudio pôde ser aberta")
 
     def _open_stream(
         self,
@@ -259,6 +285,7 @@ class WindowsAudioSource(AudioSource):
             except Exception:  # noqa: BLE001
                 pass
         self._streams.clear()
+        self._active_sources.clear()
         if self._pa is not None:
             try:
                 self._pa.terminate()

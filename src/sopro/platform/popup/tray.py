@@ -14,6 +14,8 @@ from PySide6.QtCore import QObject, Qt, Signal
 from PySide6.QtGui import QAction, QColor, QIcon, QPainter, QPixmap
 from PySide6.QtWidgets import QMenu, QSystemTrayIcon
 
+from sopro.core.audio.contracts import SOURCE_SYSTEM, source_label
+from sopro.core.audio.status import CaptureStatus, MicState
 from sopro.platform.popup.theme import DARK, indicator_colors
 
 STATE_COLORS = indicator_colors(DARK)
@@ -81,6 +83,9 @@ class TrayIcon(QObject):
         self._menu = QMenu()
         self._state_action = self._menu.addAction(STATE_LABELS[self._state])
         self._state_action.setEnabled(False)
+        self._source_action = self._menu.addAction("")
+        self._source_action.setEnabled(False)
+        self._source_action.setVisible(False)
         self._remote_action = self._menu.addAction("")
         self._remote_action.setEnabled(False)
         self._remote_action.setVisible(False)
@@ -125,6 +130,26 @@ class TrayIcon(QObject):
     def tray(self) -> QSystemTrayIcon:
         return self._tray
 
+    def set_capture(self, capture: CaptureStatus) -> None:
+        parts = []
+        if capture.system.enabled:
+            parts.append(source_label(SOURCE_SYSTEM))
+        if capture.mic.active:
+            timeout = (
+                f" ({capture.timeout_remaining_s:.0f}s)"
+                if capture.mic_state is MicState.ACTIVE
+                else ""
+            )
+            parts.append(f"microfone ativo{timeout}")
+        elif capture.mic_state is MicState.STANDBY:
+            parts.append('microfone em standby ("sopro")')
+        self._source_text = " + ".join(parts)
+        self._source_action.setText(
+            f"Captura: {self._source_text or 'nenhuma fonte'}"
+        )
+        self._source_action.setVisible(bool(self._source_text))
+        self._apply_tooltip()
+
     def set_remote(self, active: bool) -> None:
         """Liga/desliga o aviso persistente de nuvem ativa."""
         self._remote = active
@@ -138,7 +163,11 @@ class TrayIcon(QObject):
 
     def _apply_tooltip(self) -> None:
         prefix = "Nuvem ativa (Groq) — " if self._remote else ""
-        self._tray.setToolTip(f"Sopro — {prefix}{STATE_LABELS[self._state]}")
+        source = getattr(self, "_source_text", "")
+        suffix = f" — {source}" if source else ""
+        self._tray.setToolTip(
+            f"Sopro — {prefix}{STATE_LABELS[self._state]}{suffix}"
+        )
 
     def set_state(self, state: TrayState) -> None:
         self._state = state

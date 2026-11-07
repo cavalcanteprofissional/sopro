@@ -128,7 +128,7 @@ Ajustar antes do primeiro build.
 ### 3.4 Build local (Windows)
 
 ```powershell
-python -m pip install -e ".[packaging]"
+python -m pip install -e ".[packaging,secrets]"
 powershell -ExecutionPolicy Bypass -File scripts/build-windows.ps1
 ```
 
@@ -221,7 +221,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: { python-version: "3.12" }
-      - run: pip install -e ".[dev,stt]" pyinstaller
+      - run: pip install -e ".[dev,stt,secrets]" pyinstaller
       - run: pytest -q
       - run: pyinstaller sopro.spec
       - run: iscc /DVersion=${{ github.ref_name }} installer.iss

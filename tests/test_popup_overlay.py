@@ -14,6 +14,7 @@ from sopro.app.detection import Detection  # noqa: E402
 from sopro.core.config import Settings  # noqa: E402
 from sopro.platform.popup.overlay import (  # noqa: E402
     OverlayController,
+    PopupCard,
     card_content,
     stack_positions,
 )
@@ -151,6 +152,35 @@ def test_overlay_respects_disabled_sound(qt_app):
 
     assert calls == []
     controller.stop()
+
+
+def test_update_settings_preserves_injected_sound(qt_app):
+    calls: list[str] = []
+    settings = Settings(popup_sound=True)
+    controller = OverlayController(
+        settings,
+        screen_rect=lambda: (0, 0, 1000, 800),
+        clock=lambda: 0.0,
+        sound=lambda: calls.append("beep"),
+    )
+
+    controller.update_settings(Settings(popup_sound=True))
+    controller.present(_detection("a"))
+
+    assert calls == ["beep"]
+    controller.stop()
+
+
+def test_card_shows_colored_source_chip(qt_app):
+    from PySide6.QtWidgets import QLabel
+
+    card = PopupCard(
+        _detection("transformer", source="mic"),
+        show_source=True,
+    )
+    names = {label.objectName() for label in card.findChildren(QLabel)}
+    assert "SoproSourceMic" in names
+    card.deleteLater()
 
 
 def test_card_surface_is_opaque():

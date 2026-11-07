@@ -13,7 +13,8 @@ import threading
 import time
 from collections.abc import Callable
 
-from sopro.core.audio import SAMPLE_RATE_HZ
+from sopro.core.audio import SAMPLE_RATE_HZ, SOURCE_MIC
+from sopro.core.hotword.constants import WAKE_WORD
 from sopro.core.hotword.detector import DetCallback, HotwordDetector
 from sopro.core.stt import AudioSegment, STTProvider
 from sopro.core.text.normalize import normalize
@@ -32,13 +33,13 @@ class SttShortHotwordDetector(HotwordDetector):
 
     def __init__(
         self,
-        phrase: str = "sopro",
+        phrase: str = WAKE_WORD,
         sensitivity: float = 0.5,
         device: str | None = None,
         provider_factory: Callable[[], STTProvider] | None = None,
         **kwargs,
     ):
-        self._phrase = normalize(phrase or "sopro")
+        self._phrase = normalize(phrase or WAKE_WORD)
         self._sensitivity = float(max(0.0, min(1.0, sensitivity)))
         self._device = device
         self._provider_factory = provider_factory
@@ -79,6 +80,7 @@ class SttShortHotwordDetector(HotwordDetector):
         if (
             not self._running
             or not self._enabled
+            or source != SOURCE_MIC
             or not pcm
             or time.monotonic() < self._mute_until
         ):
@@ -134,10 +136,10 @@ class SttShortHotwordDetector(HotwordDetector):
         phrase = self._phrase.replace(" ", "")
         return bool(phrase) and phrase in compact
 
-    def _audio(self, speech: SpeechSegment) -> AudioSegment:
+    def _audio(self, speech: SpeechSegment, source: str) -> AudioSegment:
         return AudioSegment(
             pcm=_SILENCE_PAD + speech.pcm + _SILENCE_PAD,
-            source="system",
+            source=source,
             vocabulary_hint=(self._phrase,),
         )
 
@@ -152,12 +154,12 @@ class SttShortHotwordDetector(HotwordDetector):
                 self._enabled = False
         return self._provider
 
-    def _heard(self, speech: SpeechSegment) -> bool:
+    def _heard(self, speech: SpeechSegment, source: str = SOURCE_MIC) -> bool:
         provider = self._get_provider()
         if provider is None:
             return False
         try:
-            transcript = provider.transcribe(self._audio(speech))
+            transcript = provider.transcribe(self._audio(speech, source))
         except Exception:
             log.debug("transcrição do hotword falhou", exc_info=True)
             return False
@@ -196,7 +198,7 @@ class SttShortHotwordDetector(HotwordDetector):
                 for speech in segmenter.feed(pcm):
                     if self._stop.is_set() or not self._enabled:
                         break
-                    if not self._heard(speech):
+                    if not self._heard(speech, source):
                         continue
                     now = time.monotonic()
                     if now - self._last_trigger < _DEBOUNCE_S:
@@ -205,7 +207,7 @@ class SttShortHotwordDetector(HotwordDetector):
                     self._trigger()
             for segmenter in segmenters.values():
                 for speech in segmenter.flush():
-                    if self._heard(speech):
+                    if self._heard(speech, SOURCE_MIC):
                         self._trigger()
                         return
         finally:

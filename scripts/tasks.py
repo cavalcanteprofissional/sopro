@@ -25,7 +25,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-EXTRAS = "dev,ui,audio,stt"
+EXTRAS = "dev,ui,audio,stt,secrets"
 POWERSHELL = "powershell.exe"
 
 

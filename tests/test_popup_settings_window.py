@@ -37,6 +37,8 @@ def test_dialog_edits_are_collected(qt_app):
     dialog._popup_max.setValue(5)
     dialog._theme.setCurrentText("dark")
     dialog._matcher_fuzzy.setChecked(True)
+    dialog._save_transcript.setChecked(True)
+    dialog._llm_candidates.setChecked(True)
     dialog._domain_checks["law-en-pt"].setChecked(True)
 
     result = dialog.current_settings()
@@ -45,7 +47,66 @@ def test_dialog_edits_are_collected(qt_app):
     assert result.popup_max == 5
     assert result.theme == "dark"
     assert result.matcher_fuzzy is True
+    assert result.save_transcript is True
+    assert result.llm_candidates is True
     assert set(result.active_domains) == {"tech-en-pt", "law-en-pt"}
+
+
+def test_dialog_exposes_volume_sound_and_mic_timeout(qt_app):
+    settings = Settings(
+        active_domains=("tech-en-pt",),
+        popup_volume=0.3,
+        hotword_volume=0.4,
+        hotword_sound=False,
+        show_source=False,
+        mic_wake_timeout_s=30,
+    )
+    dialog = SettingsDialog(settings, domain_slugs=("tech-en-pt",))
+
+    dialog._popup_volume.setValue(0.7)
+    dialog._hotword_volume.setValue(0.8)
+    dialog._hotword_sound.setChecked(True)
+    dialog._show_source.setChecked(True)
+    dialog._mic_wake_timeout.setValue(45)
+
+    result = dialog.current_settings()
+
+    assert result.popup_volume == 0.7
+    assert result.hotword_volume == 0.8
+    assert result.hotword_sound is True
+    assert result.show_source is True
+    assert result.mic_wake_timeout_s == 45
+    assert not hasattr(dialog._page, "_hotword_phrase")
+
+
+def test_dialog_selects_audio_devices_by_id(qt_app):
+    settings = Settings(active_domains=("tech-en-pt",))
+    dialog = SettingsDialog(
+        settings,
+        domain_slugs=("tech-en-pt",),
+        device_choices=(
+            ("system", "3", "Alto-falantes (sistema)"),
+            ("mic", "5", "Microfone USB (microfone)"),
+        ),
+    )
+
+    dialog._system_device.setCurrentIndex(dialog._system_device.findData("3"))
+    dialog._mic_device.setCurrentIndex(dialog._mic_device.findData("5"))
+    result = dialog.current_settings()
+
+    assert result.system_device_id == "3"
+    assert result.mic_device_id == "5"
+
+
+def test_api_key_is_not_persisted_in_settings(qt_app):
+    settings = Settings(active_domains=("tech-en-pt",))
+    dialog = SettingsDialog(settings, domain_slugs=("tech-en-pt",))
+
+    dialog._groq_api_key.setText("  gsk_teste  ")
+
+    assert "gsk_teste" not in repr(dialog.current_settings())
+    assert dialog.take_api_key() == "gsk_teste"
+    assert dialog.take_api_key() is None
 
 
 def test_dialog_invalid_state_raises(qt_app):

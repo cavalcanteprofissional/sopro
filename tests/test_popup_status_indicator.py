@@ -8,6 +8,7 @@ import pytest  # noqa: E402
 from PySide6.QtCore import QPointF, Qt  # noqa: E402
 from PySide6.QtGui import QMouseEvent, QPainter, QPixmap  # noqa: E402
 
+from sopro.core.audio.status import CaptureStatus, MicState, SourceStatus  # noqa: E402
 from sopro.platform.popup.status_indicator import (  # noqa: E402
     IndicatorState,
     StatusDot,
@@ -49,6 +50,35 @@ def test_status_dot_state_and_level(qt_app):
     assert dot.level == 1.0
     dot.set_level(-1.0)
     assert dot.level == 0.0
+
+
+def test_status_dot_reflects_capture_sources(qt_app):
+    dot = StatusDot(size=48)
+    dot.set_capture(
+        CaptureStatus(
+            system=SourceStatus("system", enabled=True, active=True, level=0.5),
+            mic=SourceStatus("mic", enabled=True, active=True, level=0.7),
+            mic_state=MicState.ACTIVE,
+            timeout_remaining_s=12,
+        )
+    )
+    assert dot.source == "both"
+    assert dot.mic_state is MicState.ACTIVE
+    assert dot.level == 0.7
+
+
+def test_status_indicator_tooltip_names_mic_and_system(qt_app):
+    indicator = StatusIndicator(size=48)
+    indicator.set_capture(
+        CaptureStatus(
+            system=SourceStatus("system", enabled=True, active=True),
+            mic=SourceStatus("mic", enabled=True, active=False),
+            mic_state=MicState.STANDBY,
+        )
+    )
+    tooltip = indicator.toolTip()
+    assert "Áudio do sistema" in tooltip
+    assert 'standby (diga "sopro")' in tooltip
 
 
 def test_status_indicator_is_frameless_tool_window(qt_app):

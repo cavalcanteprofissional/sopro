@@ -112,6 +112,8 @@ class CaptureConfig:
     """Seleção de fontes e dispositivos para uma sessão de captura."""
 
     sources: tuple[str, ...] = (SOURCE_SYSTEM, SOURCE_MIC)
+    optional_sources: tuple[str, ...] = ()
+    """Fontes que podem falhar sem derrubar a captura (ex.: mic em standby)."""
     system_device_id: str | None = None
     mic_device_id: str | None = None
     target_sample_rate: int = SAMPLE_RATE_HZ
@@ -123,6 +125,11 @@ class CaptureConfig:
         unknown = [source for source in self.sources if source not in SOURCE_LABELS]
         if unknown:
             raise ValueError(f"fontes desconhecidas: {unknown!r}")
+        unknown_optional = [
+            source for source in self.optional_sources if source not in SOURCE_LABELS
+        ]
+        if unknown_optional:
+            raise ValueError(f"fontes opcionais desconhecidas: {unknown_optional!r}")
         if self.target_sample_rate <= 0:
             raise ValueError("target_sample_rate deve ser positivo")
         if not MIN_FRAME_MS <= self.frame_ms <= MAX_FRAME_MS:

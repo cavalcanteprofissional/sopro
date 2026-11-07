@@ -10,7 +10,7 @@
 [![Versão](https://img.shields.io/badge/vers%C3%A3o-0.1.1-blue)](CHANGELOG.md)
 [![Python](https://img.shields.io/badge/python-3.11%20%7C%203.12-3776AB?logo=python&logoColor=white)](pyproject.toml)
 [![Plataforma](https://img.shields.io/badge/plataforma-Windows%2010%2F11-0078D4?logo=windows&logoColor=white)](#instalação-windows)
-[![Testes](https://img.shields.io/badge/testes-445%20passando-success)](tests)
+[![Testes](https://img.shields.io/badge/testes-478%20passando-success)](tests)
 [![Licença](https://img.shields.io/badge/licen%C3%A7a-MIT-blue)](LICENSE)
 
 [Visão geral](#-por-que-o-sopro) ·
@@ -38,7 +38,7 @@ interromper a aula e sem roubar o foco da janela.
 > (captura → VAD → transcrição → matcher → pop-up → histórico) roda de ponta a ponta, com
 > instalador Windows, assistente de primeira execução, logs sem conteúdo de fala e gestão de
 > glossários. A **Fase 5** (escala e portabilidade) está em andamento; a **Fase 6** (curadoria
-> assistida) e a **Fase 7** (conta, dados em nuvem e backup) estão planejadas. **445 testes
+> assistida) e a **Fase 7** (conta, dados em nuvem e backup) estão planejadas. **478 testes
 > automatizados** passando.
 
 ## ✨ Por que o Sopro
@@ -175,11 +175,16 @@ em [`docs/roadmap/`](docs/roadmap/README.md) — em especial
 
 - **Pop-ups** sem borda, sempre no topo e sem receber foco; superfície opaca de alto contraste,
   pausa no hover, ação “fixar” e **som opcional** ao exibir.
-- **Indicador de estado** flutuante e arrastável, com pulso em tempo real pelo nível de áudio
-  e estados `Carregando`, `Ouvindo`, `Analisando`, `Pausado` e `Erro`.
-- **Hotword por voz** (`sopro`) usando STT curto sobre o áudio já capturado, com frase,
-  sensibilidade, backend e dispositivo configuráveis; VAD por fonte e proteção contra o
-  auto-disparo dos próprios efeitos sonoros, sem abrir um segundo microfone.
+- **Indicador de estado** flutuante e arrastável, com pulso em tempo real pelo nível de áudio,
+  estados `Carregando`, `Ouvindo`, `Analisando`, `Pausado` e `Erro` e anel/badge por fonte
+  (sistema em ciano, microfone ativo em verde, standby tracejado).
+- **Hotword por voz fixa** (`sopro`) usando STT curto sobre o áudio já capturado, com
+  sensibilidade, backend, dispositivo e sons configuráveis. O detector escuta apenas o
+  microfone; ao ouvir a palavra, o mic entra em `ACTIVE` e volta ao standby após 30 s de
+  silêncio, sem abrir um segundo dispositivo.
+- **Duas fontes com identidade** — sistema e microfone têm VAD, contexto e nível próprios;
+  com o mic ativo, o sistema aguarda 500 ms para a mesma fala ser atribuída ao microfone.
+  Falas repetidas são deduplicadas e o cartão/bandeja mostram a origem.
 - **Tema dark-tech** (ciano/violeta) com tokens centralizados e tema claro preservado.
 - **Hub** único com Status, Configurações, Glossários, Termos, Histórico e Demonstração.
 - **Histórico** com busca, filtro por “aprendido” e período, além de exportação CSV/Markdown.
@@ -257,6 +262,7 @@ python -m pip install -e ".[dev]"
 python -m pip install -e ".[stt]"     # STT local (modelos de ~75–460 MB)
 python -m pip install -e ".[audio]"   # captura WASAPI no Windows
 python -m pip install -e ".[ui]"      # overlay, bandeja, indicador e hub (PySide6)
+python -m pip install -e ".[secrets]" # cofre do SO para a chave Groq (keyring)
 python -m pip install -e ".[rag]"     # embeddings reais (sem ele, usa o embedder offline)
 
 # rodar o app (precisa de 'ui' e, para áudio real, de 'audio' + 'stt')
@@ -283,7 +289,7 @@ completo está em [docs/10-dev-workflow.md](docs/10-dev-workflow.md).
 ### Build local do executável
 
 ```powershell
-python -m pip install -e ".[packaging]"
+python -m pip install -e ".[packaging,secrets]"
 powershell -ExecutionPolicy Bypass -File scripts/build-windows.ps1
 # ou: python scripts/tasks.py build
 ```
@@ -385,7 +391,7 @@ Veja [CONTRIBUTING.md](CONTRIBUTING.md) e o [Código de Conduta](CODE_OF_CONDUCT
 segue as regras do **Prompt-mestre** em [docs/05-prompts.md](docs/05-prompts.md).
 
 ```bash
-python -m pip install -e ".[dev,ui,audio,stt]"
+python -m pip install -e ".[dev,ui,audio,stt,secrets]"
 pytest -q
 ```
 

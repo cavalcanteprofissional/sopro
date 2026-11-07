@@ -10,7 +10,8 @@ from sopro.core.config import Settings  # noqa: E402
 from sopro.core.repo import Database, Repository  # noqa: E402
 from sopro.core.repo.models import SenseInput  # noqa: E402
 from sopro.platform.popup.hub import HubWindow  # noqa: E402
-from sopro.platform.popup.pages import StatusPage, TermsPage  # noqa: E402
+from sopro.core.audio.status import CaptureStatus, MicState, SourceStatus  # noqa: E402
+from sopro.platform.popup.pages import HistoryPage, StatusPage, TermsPage  # noqa: E402
 from sopro.platform.popup.status_indicator import IndicatorState  # noqa: E402
 
 
@@ -60,6 +61,21 @@ def test_hub_reflects_state_and_level(qt_app, tmp_path):
     assert hub._status._dot.state is IndicatorState.ANALYZING
 
 
+def test_hub_emits_secret_without_persisting_it(qt_app, tmp_path):
+    repo = _repo()
+    hub = HubWindow(repo, Settings(active_domains=("tech-en-pt",)), tmp_path)
+    hub._nav.setCurrentRow(1)
+    keys = []
+    hub.secret_saved.connect(keys.append)
+
+    hub._settings_page._groq_api_key.setText("gsk_teste")
+    hub._apply_current()
+
+    assert keys == ["gsk_teste"]
+    assert hub._settings_page._groq_api_key.text() == ""
+    assert "gsk_teste" not in repr(hub._settings_page.current_settings())
+
+
 def test_hub_applies_settings_page(qt_app, tmp_path):
     repo = _repo()
     hub = HubWindow(repo, Settings(active_domains=("tech-en-pt",)), tmp_path)
@@ -99,3 +115,38 @@ def test_status_page_reflects_state(qt_app):
 
     assert page._dot.state is IndicatorState.PAUSED
     assert page._toggle.text() == "Retomar"
+
+
+def test_history_page_marks_selected_detection_learned(qt_app):
+    repo = _repo()
+    session = repo.start_session("teste")
+    repo.add_detection(session, source="mic")
+    page = HistoryPage(repo)
+
+    page.refresh()
+    page._table.selectRow(0)
+    assert page.selected_detection_id() is not None
+    page._mark_learned()
+
+    entry = repo.history()[0]
+    assert entry.learned is True
+    assert entry.detection_id > 0
+
+
+def test_status_page_shows_capture_per_source(qt_app):
+    page = StatusPage(Settings(active_domains=("tech-en-pt",)))
+
+    page.set_capture(
+        CaptureStatus(
+            system=SourceStatus("system", enabled=True, active=True, level=0.4),
+            mic=SourceStatus("mic", enabled=True, active=True, level=0.8),
+            mic_state=MicState.ACTIVE,
+            timeout_remaining_s=12,
+            analyzing_source="mic",
+        )
+    )
+
+    assert "analisando" in page._source_labels["mic"].text()
+    assert "12s" in page._source_labels["mic"].text()
+    assert page._source_bars["mic"].value() == 80
+    assert page._source_bars["system"].value() == 40

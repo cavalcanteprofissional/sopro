@@ -107,3 +107,4 @@ class HistoryEntry:
     method: str
     learned: bool
     context_snippet: str | None = None
+    detection_id: int = 0

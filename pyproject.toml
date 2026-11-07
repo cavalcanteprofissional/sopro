@@ -31,8 +31,8 @@ dependencies = []
 stt = ["faster-whisper>=1.0"]
 # Captura de áudio no Windows (loopback WASAPI + microfone); MIT, ~1 MB.
 audio = ["PyAudioWPatch>=0.2.12"]
-# Hotword opcional via openWakeWord (o padrão usa STT curto sobre o áudio já capturado).
-hotword = ["openwakeword>=0.6"]
+# Cofre de credenciais do SO para a chave Groq (opcional).
+secrets = ["keyring>=24"]
 # Overlay, bandeja e configurações (docs/06 §5); LGPL, ~150 MB.
 ui = ["PySide6>=6.6"]
 # Embeddings reais para desambiguação (opcional); o hashing embutido não exige nada.

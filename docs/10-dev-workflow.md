@@ -19,7 +19,7 @@ python -m venv .venv
 
 # dependências completas (dev + UI + áudio + STT)
 python scripts/tasks.py install
-# equivalente a: python -m pip install -e ".[dev,ui,audio,stt]"
+# equivalente a: python -m pip install -e ".[dev,ui,audio,stt,secrets]"
 ```
 
 Extras disponíveis (`pyproject.toml`):
@@ -45,7 +45,7 @@ ambiente corrente. Argumentos extras são repassados ao comando.
 | `bench` | `python -m sopro.app.benchmark_cli ...` |
 | `validate` | `python -m sopro.core.glossary.validate ...` |
 | `build` | `scripts/build-windows.ps1` (executável portátil) |
-| `install` | `pip install -e ".[dev,ui,audio,stt]"` |
+| `install` | `pip install -e ".[dev,ui,audio,stt,secrets]"` |
 
 ```bash
 python scripts/tasks.py test

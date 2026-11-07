@@ -314,6 +314,20 @@ def card_stylesheet(theme: str) -> str:
         color: {colors.muted};
         font-size: 9pt;
     }}
+    #SoproSourceMic, #SoproSourceSystem {{
+        font-size: 8.5pt;
+        font-weight: 600;
+        border-radius: 6px;
+        padding: 1px 6px;
+    }}
+    #SoproSourceMic {{
+        color: {colors.accent_contrast};
+        background-color: {colors.accent};
+    }}
+    #SoproSourceSystem {{
+        color: {colors.text};
+        background-color: {colors.surface_muted};
+    }}
     #SoproTranslation {{
         color: {colors.text};
         font-size: 13pt;

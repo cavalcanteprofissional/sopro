@@ -15,6 +15,7 @@ from collections.abc import Sequence
 from dataclasses import dataclass, replace
 from typing import Callable
 
+from sopro.app.source_dedup import SourceDeduplicator
 from sopro.core.audio.contracts import SAMPLE_RATE_HZ, SOURCE_SYSTEM
 from sopro.core.glossary.package import DomainPackage, Sense, Term
 from sopro.core.llm import GeneratedEntryService, RateLimiter, extract_candidates
@@ -51,6 +52,16 @@ class Detection:
     track: str | None = None
 
 
+@dataclass(frozen=True)
+class Analysis:
+    """Resultado de uma transcrição antes de persistir/enfileirar (arbitragem)."""
+
+    text: str
+    speech: SpeechSegment
+    source: str
+    detections: tuple[Detection, ...]
+
+
 def _primary_sense(term: Term) -> Sense | None:
     """Acepção primária: menor ordinal, usada quando não há resolvedor."""
     if not term.senses:
@@ -83,6 +94,7 @@ class DetectionService:
         language: str = "en",
         vocab_limit: int | None = None,
         min_confidence: float = DEFAULT_MIN_CONFIDENCE,
+        deduper: SourceDeduplicator | None = None,
         clock: Callable[[], float] | None = None,
     ) -> None:
         self._provider = provider
@@ -105,7 +117,7 @@ class DetectionService:
             + [alias.lower() for t in package.terms for alias in t.aliases]
         )
         self._context_window_s = context_window_s
-        self._context: list[tuple[int, str]] = []
+        self._context: dict[str, list[tuple[int, str]]] = {}
         self._save_context = save_context
         self._language = language
         self._min_confidence = max(0.0, min(1.0, min_confidence))
@@ -115,6 +127,7 @@ class DetectionService:
             else vocabulary_hint(package, active_tracks=active_tracks)
         )
         self._clock = clock or time.monotonic
+        self._deduper = deduper or SourceDeduplicator(clock=self._clock)
 
     @property
     def popup(self) -> PopupQueue | None:
@@ -124,6 +137,13 @@ class DetectionService:
         self, speech: SpeechSegment, source: str = SOURCE_SYSTEM
     ) -> list[Detection]:
         """Transcreve um segmento e devolve as detecções (já persistidas/enfileiradas)."""
+        analysis = self.analyze(speech, source=source)
+        return self.commit(analysis) if analysis is not None else []
+
+    def analyze(
+        self, speech: SpeechSegment, source: str = SOURCE_SYSTEM
+    ) -> Analysis | None:
+        """Transcreve e casa termos sem persistir; permite arbitragem entre fontes."""
         transcript = self._provider.transcribe(
             AudioSegment(
                 pcm=speech.pcm,
@@ -141,17 +161,36 @@ class DetectionService:
                 "transcrição descartada por baixa confiança (%.3f)",
                 transcript.confidence,
             )
-            return []
+            return None
+        if self._deduper.duplicate_transcript(source, transcript.text):
+            log.debug("transcrição duplicada de outra fonte descartada")
+            return None
+        context = self._context_text(source, speech.end_ms, transcript.text)
+        detections = [
+            self._build(match, speech, source, context)
+            for match in self._matcher.match(transcript.text)
+        ]
+        detections.extend(
+            self._generated_detections(transcript.text, speech, source)
+        )
+        return Analysis(
+            text=transcript.text,
+            speech=speech,
+            source=source,
+            detections=tuple(detections),
+        )
+
+    def commit(self, analysis: Analysis) -> list[Detection]:
+        """Deduplica termos, persiste e enfileira uma análise; devolve o aceito."""
         detections: list[Detection] = []
-        context = self._context_text(speech.end_ms, transcript.text)
-        for match in self._matcher.match(transcript.text):
-            detection = self._build(match, speech, source, context)
-            detection_id = self._persist(detection, transcript.text)
+        for detection in analysis.detections:
+            if self._deduper.duplicate_term(analysis.source, detection.term):
+                continue
+            detection_id = self._persist(detection, analysis.text)
             if detection_id is not None:
                 detection = replace(detection, detection_id=detection_id)
             self._enqueue(detection)
             detections.append(detection)
-        detections.extend(self._generated_detections(transcript.text, speech, source))
         return detections
 
     def _generated_detections(
@@ -173,23 +212,20 @@ class DetectionService:
             result = self._generated.explain(candidate.surface, context=text)
             if result is None:
                 continue
-            detection = Detection(
-                term=candidate.surface,
-                surface=candidate.surface,
-                source=source,
-                start_ms=speech.start_ms,
-                end_ms=speech.end_ms,
-                ambiguous=False,
-                sense_count=0,
-                translation=result.translation,
-                definition=result.definition,
-                resolve_method="llm",
+            detections.append(
+                Detection(
+                    term=candidate.surface,
+                    surface=candidate.surface,
+                    source=source,
+                    start_ms=speech.start_ms,
+                    end_ms=speech.end_ms,
+                    ambiguous=False,
+                    sense_count=0,
+                    translation=result.translation,
+                    definition=result.definition,
+                    resolve_method="llm",
+                )
             )
-            detection_id = self._persist(detection, text)
-            if detection_id is not None:
-                detection = replace(detection, detection_id=detection_id)
-            self._enqueue(detection)
-            detections.append(detection)
         return detections
 
     def process_pcm(
@@ -204,16 +240,17 @@ class DetectionService:
             detections.extend(self.process(speech, source=source))
         return detections
 
-    def _context_text(self, end_ms: int, current: str) -> str:
-        """Janela deslizante: últimos N segundos de texto transcrito (docs/05 A7)."""
+    def _context_text(self, source: str, end_ms: int, current: str) -> str:
+        """Janela deslizante por fonte: últimos N segundos transcritos (docs/05 A7)."""
         if self._context_window_s <= 0:
             return current
-        self._context.append((end_ms, current))
+        history = self._context.setdefault(source, [])
+        history.append((end_ms, current))
         cutoff = end_ms - int(self._context_window_s * 1000)
-        self._context = [
-            (seen_ms, text) for seen_ms, text in self._context if seen_ms >= cutoff
+        history[:] = [
+            (seen_ms, text) for seen_ms, text in history if seen_ms >= cutoff
         ]
-        return " ".join(text for _seen_ms, text in self._context)
+        return " ".join(text for _seen_ms, text in history)
 
     def _sense_for(self, term: Term, text: str) -> tuple[Sense | None, str]:
         """Escolhe a acepção: resolvedor contextual (Fase 3) ou primária."""

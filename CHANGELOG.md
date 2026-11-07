@@ -8,14 +8,40 @@ adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 ## [Unreleased]
 
 ### Added
+- **Microfone por voz e hotword fixa (A8.2/A8.3)**: `sopro` é a única palavra de ativação,
+  imutável na UI/configuração. Com a hotword ligada, o microfone abre em standby (mesmo fora
+  de `audio_sources`) e passa a `ACTIVE` ao ouvir a palavra, voltando após 30 s de silêncio
+  (`mic_wake_timeout_s`, 10–300 s). Falha do microfone opcional desativa a hotword com aviso
+  e mantém o áudio do sistema.
+- **Identidade e deduplicação de fontes**: segmentador, contexto e nível por fonte; com o
+  microfone ativo, trechos do sistema aguardam 500 ms e perdem para a mesma fala do mic.
+  Falas repetidas também são deduplicadas (`source_dedup_window_s`, padrão 2 s). Detector de
+  hotword ignora o áudio do sistema.
+- **Análise e commit separados** no `DetectionService`, permitindo arbitragem antes de
+  persistir/enfileirar e mantendo a deduplicação de termos no commit.
+- **Indicador com fonte**: anel/badge para sistema (ciano), microfone ativo (verde), standby
+  (cinza tracejado) e análise (âmbar), com dispositivo e tempo restante no tooltip.
+- **Sons configuráveis**: volumes do pop-up e do hotword, toggle dos efeitos de
+  ativação/standby e botões de teste em Configurações.
 - **Ícone de marca definitivo**: mestres do Illustrator em `docs/assets/brand/`
   (`sopro-icon.ai`, `.svg` e `.png`) e runtime `sopro.ico` multi-resolução (16–256) +
   `sopro.png` em `src/sopro/platform/popup/assets/`, gerados por `scripts/make-icon.py`.
-- **Hotword por voz (B2)**: backend padrão `stt_short` reaproveita os quadros PCM do pipeline
+- **Hotword por voz (B2)**: backend único `stt_short` reaproveita os quadros PCM do pipeline
   de captura (VAD + STT curto, modelo carregado uma vez, debounce) e não abre um segundo
-  dispositivo. `openwakeword` permanece opcional e só dispara com modelo cujo nome casa com a
-  frase. Novos controles em Configurações (ativar, frase, backend, sensibilidade e
-  dispositivo) e sinal Qt para alternar pausa/retomada na thread da UI.
+  dispositivo. OpenWakeWord foi removido do código, do extra opcional e do build; configurações
+  antigas migram para `stt_short`.
+- **Worker de STT com fila por fonte**: a captura e o processamento rodam em threads
+  separadas, com microfone prioritário na fila, evitando descarte de quadros enquanto o
+  modelo transcreve.
+- **Seleção de dispositivos de áudio**: Configurações lista dispositivos de sistema/microfone
+  (além de “automático”); conflitos de I/O são detectados por ID e nome normalizado.
+- **Chave Groq utilizável**: campo seguro em Configurações, sem persistir em `Settings`;
+  `secret_store` ligado ao STT e ao LLM. O extra `secrets` instala `keyring` para o cofre do
+  SO; sem ele, a chave vale apenas para a sessão.
+- **Histórico aprendido**: `HistoryEntry.detection_id` e ação “marcar como aprendido” na
+  página de Histórico.
+- **Opções restantes expostas** com validação em Configurações: `show_source`,
+  `save_context`, `save_transcript`, `matcher_fuzzy` e `llm_candidates`.
 - **Modelo principal verificado**: `whisper-small-en` no `data/models.json` com URL, SHA-256
   e tamanho reais; seletor de modelo STT em Configurações.
 - **Trilhas tri-state (B5)**: `tracks_mode` (`all`/`base`/`custom`) com migração de configs
@@ -26,16 +52,29 @@ adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 - Testes de hotword STT, modos de trilha, `resolve_active_tracks` e validação de hotword.
 
 ### Changed
+- **Hotword**: o campo de frase saiu da UI; valores antigos são normalizados para `sopro`.
+  O hotword ativa o microfone, em vez de pausar/retomar o app.
+- **Bolha do pop-up** refeita com glide, fade e 180 ms; sons de hotword com timbres distintos.
+- **Configurações** ganharam `hotword_sound`, `hotword_volume`, `mic_wake_timeout_s` e
+  `source_dedup_window_s`, com validação.
 - Indicador e bandeja usam as mesmas cores de estado, centralizadas em `theme.py`.
-- Licença declarada como MIT no `pyproject.toml`; `openwakeword`/`numpy` considerados no
+- Licença declarada como MIT no `pyproject.toml`; `numpy` permanece considerado no
   `sopro.spec`.
-- Conflito de áudio compara IDs **e** nomes normalizados de microfone/loopback.
+- Conflito de áudio compara IDs **e** nomes normalizados de microfone/loopback, inclusive na
+  inicialização do pipeline.
 
 ### Fixed
+- **Som do pop-up inaudível**: `sound.py` não combina mais `SND_MEMORY` com `SND_ASYNC`;
+  a reprodução ocorre em worker serializado `sopro-sound`, sem bloquear a UI.
+- **Bolha com cliques/estalos**: envelope com fade-in/out e limpeza das bordas.
+- **Fonte do cartão**: `OverlayController.update_settings` preserva o callback de som
+  injetado, e o chip de fonte usa a etiqueta `mic`/`system` correta.
+- **Contexto misturado**: desambiguação agora mantém janela por fonte.
 - **Ícone no executável/instalador**: `sopro.spec` agora embute a pasta de assets e define
   `icon=` no `EXE`; `installer.iss` usa `SetupIconFile`. Antes o build congelado não continha
   `sopro.ico` e o ícone da janela caía no disco de estado.
-- Hotword não dispara mais com qualquer modelo default do openWakeWord.
+- Hotword não dispara com modelos genéricos: o backend OpenWakeWord foi removido e o
+  `stt_short` só aceita a frase fixa `sopro`.
 - **Hotword mais robusto**: a frase configurada vai como `vocabulary_hint`, o trecho recebe
   100 ms de silêncio nas bordas e o casamento ignora espaços. Sem isso, “sopro” virava
   “Seprow”/“Soapro”/“So pro” em vozes sintéticas e o gatilho não disparava.

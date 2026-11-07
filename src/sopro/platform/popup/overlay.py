@@ -260,7 +260,8 @@ class PopupCard(QFrame):
             meta.addStretch(1)
             if self._show_source and content.source:
                 source = QLabel(source_label(content.source, short=True))
-                source.setObjectName("SoproSource")
+                suffix = "Mic" if content.source == "mic" else "System"
+                source.setObjectName(f"SoproSource{suffix}")
                 meta.addWidget(source)
             body.addLayout(meta)
         if content.translation:
@@ -378,6 +379,7 @@ class OverlayController(QObject):
         self._show_source = getattr(settings, "show_source", False)
         self._screen_rect = screen_rect or _primary_screen_rect
         self._clock = clock or time.monotonic
+        self._sound_factory = sound
         plays = getattr(settings, "popup_sound", True)
         volume = float(getattr(settings, "popup_volume", 0.25) or 0.25)
         self._sound = (
@@ -392,9 +394,8 @@ class OverlayController(QObject):
         self._show_source = getattr(settings, "show_source", False)
         volume = float(getattr(settings, "popup_volume", 0.25) or 0.25)
         plays = getattr(settings, "popup_sound", True)
-        self._sound = (
-            (partial(play_popup_sound, volume=volume)) if plays else None
-        )
+        factory = self._sound_factory or partial(play_popup_sound, volume=volume)
+        self._sound = factory if plays else None
 
     @property
     def queue(self) -> PopupQueue:

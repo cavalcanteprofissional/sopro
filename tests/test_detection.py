@@ -6,6 +6,7 @@ import pytest
 
 from sopro.app.detection import Detection, DetectionService
 from sopro.core.glossary.package import load_package
+from sopro.core.matcher import MatcherConfig
 from sopro.core.repo import Database, Repository, import_package
 from sopro.core.stt.provider import STTProvider, Transcript
 from sopro.core.vad import SpeechSegment
@@ -145,6 +146,46 @@ def test_no_repo_means_no_persistence_id():
     detections = _service(provider).process(_speech())
 
     assert detections[0].detection_id is None
+
+
+def test_duplicate_transcript_from_other_source_is_deduped():
+    provider = FakeProvider("the transformer model")
+    service = _service(
+        provider,
+        matcher_config=MatcherConfig(cooldown_s=0.0, max_popups_per_minute=100),
+    )
+
+    first = service.process(_speech(), source="mic")
+    duplicate = service.process(_speech(), source="system")
+    again = service.process(_speech(), source="mic")
+
+    assert [d.term for d in first] == ["transformer"]
+    assert duplicate == []
+    assert [d.term for d in again] == ["transformer"]
+
+
+def test_context_does_not_mix_sources():
+    provider = FakeProvider("the transformer model")
+    repo = Repository(Database(":memory:"))
+    domain_id = import_package(repo, SEED_PATH)
+    session_id = repo.start_session("contexto")
+    service = _service(
+        provider,
+        repo=repo,
+        domain_id=domain_id,
+        session_id=session_id,
+        save_context=True,
+        context_window_s=10,
+        matcher_config=MatcherConfig(cooldown_s=0.0, max_popups_per_minute=100),
+    )
+
+    service.process(_speech(), source="mic")
+    provider.text = "the api returns data"
+    service.process(_speech(), source="system")
+
+    stored = repo.list_detections(session_id)
+    system = next(item for item in stored if item.source == "system")
+    assert "transformer" not in (system.context_snippet or "")
 
 
 def test_process_pcm_segments_and_detects():

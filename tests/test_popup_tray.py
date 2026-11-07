@@ -6,6 +6,7 @@ os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
 import pytest  # noqa: E402
 
+from sopro.core.audio.status import CaptureStatus, MicState, SourceStatus  # noqa: E402
 from sopro.platform.popup.tray import (  # noqa: E402
     STATE_LABELS,
     TrayIcon,
@@ -72,6 +73,21 @@ def test_set_remote_toggles_indicator_and_tooltip(qt_app):
     tray.set_remote(False)
     assert tray.is_remote is False
     assert "Nuvem" not in tray.tray.toolTip()
+
+
+def test_set_capture_updates_tooltip_and_menu(qt_app):
+    tray = TrayIcon()
+    tray.set_capture(
+        CaptureStatus(
+            system=SourceStatus("system", enabled=True, active=True),
+            mic=SourceStatus("mic", enabled=True, active=True),
+            mic_state=MicState.ACTIVE,
+            timeout_remaining_s=18,
+        )
+    )
+    assert "microfone ativo" in tray.tray.toolTip()
+    texts = [a.text() for a in tray.tray.contextMenu().actions() if a.text()]
+    assert any("Captura:" in text for text in texts)
 
 
 def test_menu_actions_emit_signals(qt_app):

@@ -1,6 +1,6 @@
 """Interface e backends para detecção de hotword.
 
-Recomendação: openWakeWord (ONNX) com fallback para STT curto + VAD.
+Backend único: STT curto + VAD, reaproveitando os quadros do pipeline.
 """
 from __future__ import annotations
 

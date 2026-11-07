@@ -25,6 +25,7 @@ from PySide6.QtWidgets import (
     QLineEdit,
     QListWidget,
     QListWidgetItem,
+    QProgressBar,
     QPushButton,
     QScrollArea,
     QSpinBox,
@@ -34,6 +35,8 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from sopro.core.audio.contracts import SOURCE_LABELS, source_label
+from sopro.core.audio.status import CaptureStatus, MicState
 from sopro.core.config import Settings
 from sopro.core.repo import Repository
 from sopro.core.repo.export import history_to_csv, history_to_markdown
@@ -76,6 +79,22 @@ class StatusPage(QWidget):
         self._remote_label.setObjectName("SoproWarning")
         self._summary = QLabel()
         self._summary.setWordWrap(True)
+        self._source_labels: dict[str, QLabel] = {}
+        self._source_bars: dict[str, QProgressBar] = {}
+        sources = QVBoxLayout()
+        for source in SOURCE_LABELS:
+            row = QHBoxLayout()
+            label = QLabel(source_label(source))
+            bar = QProgressBar()
+            bar.setRange(0, 100)
+            bar.setValue(0)
+            bar.setTextVisible(False)
+            bar.setFixedHeight(8)
+            self._source_labels[source] = label
+            self._source_bars[source] = bar
+            row.addWidget(label, 1)
+            row.addWidget(bar, 2)
+            sources.addLayout(row)
 
         header = QHBoxLayout()
         header.addWidget(self._dot)
@@ -116,6 +135,7 @@ class StatusPage(QWidget):
         layout = QVBoxLayout(self)
         layout.addLayout(header)
         layout.addWidget(self._remote_label)
+        layout.addLayout(sources)
         layout.addWidget(self._summary)
         layout.addLayout(actions)
         layout.addStretch(1)
@@ -138,6 +158,32 @@ class StatusPage(QWidget):
 
     def set_level(self, level: float) -> None:
         self._dot.set_level(level)
+
+    def set_capture(self, capture: CaptureStatus) -> None:
+        self._dot.set_capture(capture)
+        system = capture.system
+        mic = capture.mic
+        for source, status in ((SOURCE_LABELS[0], system), (SOURCE_LABELS[1], mic)):
+            bar = self._source_bars[source]
+            bar.setValue(int(max(0.0, min(1.0, status.level)) * 100))
+            if source == SOURCE_LABELS[1]:
+                if capture.mic_state is MicState.ACTIVE:
+                    state = f"ativo ({capture.timeout_remaining_s:.0f}s p/ standby)"
+                elif capture.mic_state is MicState.STANDBY:
+                    state = 'standby — diga "sopro"'
+                elif capture.mic.active:
+                    state = "ativo (hotword desligada)"
+                else:
+                    state = "desativado"
+            else:
+                state = "ativo" if status.enabled else "desligado"
+            analyzing = " • analisando" if capture.analyzing_source == source else ""
+            device = ""
+            if source == SOURCE_LABELS[1]:
+                device = f" [{capture.mic_device or 'padrão'}]"
+            self._source_labels[source].setText(
+                f"{source_label(source)}: {state}{device}{analyzing}"
+            )
 
     def set_remote(self, active: bool) -> None:
         self._remote_label.setText(
@@ -184,6 +230,9 @@ class HistoryPage(QWidget):
         self._use_dates = QCheckBox("Usar período")
         refresh_button = QPushButton("Atualizar")
         refresh_button.clicked.connect(self.refresh)
+        self._learn_button = QPushButton("Marcar como aprendido")
+        self._learn_button.setEnabled(False)
+        self._learn_button.clicked.connect(self._mark_learned)
         csv_button = QPushButton("Exportar CSV…")
         csv_button.clicked.connect(self._export_csv)
         md_button = QPushButton("Exportar MD…")
@@ -196,6 +245,7 @@ class HistoryPage(QWidget):
         filters.addWidget(self._from)
         filters.addWidget(self._to)
         filters.addWidget(refresh_button)
+        filters.addWidget(self._learn_button)
         filters.addStretch(1)
         filters.addWidget(csv_button)
         filters.addWidget(md_button)
@@ -208,6 +258,13 @@ class HistoryPage(QWidget):
             QHeaderView.ResizeMode.Stretch
         )
         self._table.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
+        self._table.setSelectionBehavior(
+            QTableWidget.SelectionBehavior.SelectRows
+        )
+        self._table.setSelectionMode(
+            QTableWidget.SelectionMode.SingleSelection
+        )
+        self._table.itemSelectionChanged.connect(self._update_learn_button)
 
         layout = QVBoxLayout(self)
         layout.addLayout(filters)
@@ -252,7 +309,31 @@ class HistoryPage(QWidget):
                 "sim" if entry.learned else "não",
             ]
             for column, text in enumerate(cells):
-                self._table.setItem(row, column, QTableWidgetItem(text))
+                item = QTableWidgetItem(text)
+                if column == 0:
+                    item.setData(Qt.ItemDataRole.UserRole, entry.detection_id)
+                self._table.setItem(row, column, item)
+        self._update_learn_button()
+
+    def _update_learn_button(self) -> None:
+        self._learn_button.setEnabled(self.selected_detection_id() is not None)
+
+    def selected_detection_id(self) -> int | None:
+        row = self._table.currentRow()
+        if row < 0:
+            return None
+        item = self._table.item(row, 0)
+        if item is None:
+            return None
+        value = item.data(Qt.ItemDataRole.UserRole)
+        return int(value) if value else None
+
+    def _mark_learned(self) -> None:
+        detection_id = self.selected_detection_id()
+        if detection_id is None:
+            return
+        self._repo.set_detection_learned(detection_id, True)
+        self.refresh()
 
     def _qt_choose(self, caption: str) -> str | None:
         return QFileDialog.getSaveFileName(self, caption)[0] or None

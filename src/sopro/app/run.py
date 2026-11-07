@@ -23,7 +23,11 @@ from pathlib import Path
 from sopro.app.detection import DetectionService
 from sopro.app.home import db_path, ensure_home, resolve_home
 from sopro.app.logging_setup import configure_logging
+from sopro.app.mic import MicController
 from sopro.app.realtime import RealtimePipeline
+from sopro.app.source_dedup import SourceDeduplicator
+from sopro.core.audio import SOURCE_MIC, SOURCE_SYSTEM, CaptureConfig, source_label
+from sopro.core.audio.status import CaptureStatus, MicState, SourceStatus
 from sopro.core.config import (
     ConfigError,
     Settings,
@@ -32,7 +36,7 @@ from sopro.core.config import (
     save_settings,
 )
 from sopro.core.hotkeys import HotkeyError, parse_hotkey
-from sopro.core.hotword import create_hotword_detector
+from sopro.core.hotword import WAKE_WORD, create_hotword_detector
 from sopro.core.paths import data_path
 from sopro.core.rag import default_embedder
 from sopro.core.repo import Database, Repository, import_package
@@ -199,14 +203,14 @@ def _matcher_config(settings: Settings):
     )
 
 
-def _build_llm_provider(settings):
+def _build_llm_provider(settings, secret_store=None):
     """Monta o provedor de LLM quando configurado; ``None`` se desligado/indisponível."""
     if settings.llm_provider == "off":
         return None
     from sopro.platform.llm import create_provider
 
     try:
-        return create_provider(settings)
+        return create_provider(settings, secret_store=secret_store)
     except Exception as exc:  # noqa: BLE001 - LLM é opcional; degrada sem ele
         logging.getLogger("sopro").warning(
             "LLM indisponível (%s); seguindo sem LLM", exc
@@ -257,8 +261,10 @@ def _build_resolver(repo, loaded, settings, provider):
     )
 
 
-def _build_service(settings, loaded, repo, session_id, provider):
-    llm = _build_llm_provider(settings)
+def _build_service(
+    settings, loaded, repo, session_id, provider, secret_store=None
+):
+    llm = _build_llm_provider(settings, secret_store)
     generated, limiter = _build_generated(settings, loaded.package, repo, llm)
     return DetectionService(
         provider,
@@ -273,12 +279,12 @@ def _build_service(settings, loaded, repo, session_id, provider):
         candidate_limiter=limiter,
         context_window_s=settings.resolution_window_s,
         save_context=settings.save_context,
+        deduper=SourceDeduplicator(settings.source_dedup_window_s),
         language="en",
     )
 
 
 def _build_provider(settings: Settings, home: Path, secret_store=None, on_progress=None):
-    from sopro.core.stt import STTError
     from sopro.platform.stt.factory import create_provider, faster_whisper
 
     if settings.stt_provider != "groq":
@@ -295,7 +301,7 @@ def _build_provider(settings: Settings, home: Path, secret_store=None, on_progre
             secret_store=secret_store,
             progress=on_progress,
         )
-    except STTError as exc:
+    except Exception as exc:  # noqa: BLE001 - nuvem é degradação, não erro fatal
         logging.getLogger("sopro").warning(
             "Groq indisponível (%s); usando transcrição local", exc
         )
@@ -311,6 +317,42 @@ def _build_audio_source(settings: Settings):
     from sopro.platform.audio import WindowsAudioSource
 
     return WindowsAudioSource()
+
+
+def _build_secret_store():
+    """Cofre do SO quando disponível; senão memória (só nesta sessão)."""
+    from sopro.core.config.secrets import (
+        GROQ_API_KEY,
+        InMemorySecretStore,
+        KeyringSecretStore,
+    )
+
+    try:
+        store = KeyringSecretStore()
+        store.get(GROQ_API_KEY)
+        return store
+    except Exception:  # noqa: BLE001 - backend opcional
+        return InMemorySecretStore()
+
+
+def _audio_device_choices() -> tuple[tuple[str, str | None, str], ...]:
+    """Lista dispositivos para a UI; falha de áudio vira lista vazia."""
+    try:
+        from sopro.platform.audio import WindowsAudioSource
+
+        source = WindowsAudioSource()
+        try:
+            devices = source.list_devices()
+        finally:
+            source.close()
+    except Exception:  # noqa: BLE001 - configuração continua utilizável
+        return ()
+    choices: list[tuple[str, str | None, str]] = []
+    for device in devices:
+        if device.source in (SOURCE_SYSTEM, SOURCE_MIC):
+            suffix = source_label(device.source)
+            choices.append((device.source, device.id, f"{device.name} ({suffix})"))
+    return tuple(choices)
 
 
 def _launch_demo_instance() -> None:
@@ -466,9 +508,13 @@ def _run(args, home, repo, settings, domains_root, instance=None) -> int:
 
     class StatusBridge(QObject):
         level = Signal(float, bool)
+        source_level = Signal(str, float, bool)
         analyzing = Signal(bool)
+        analyzing_source = Signal(str, bool)
+        capture = Signal(object)
         progress = Signal(float)
         ready = Signal()
+        warning = Signal(str)
         failed = Signal(str)
 
     status_bridge = StatusBridge()
@@ -484,9 +530,34 @@ def _run(args, home, repo, settings, domains_root, instance=None) -> int:
 
     overlay = OverlayController(settings)
     tray = TrayIcon()
-    state = {"paused": False, "running": True, "status": IndicatorState.LISTENING}
+    secret_store = _build_secret_store()
+    state = {
+        "paused": False,
+        "running": True,
+        "status": IndicatorState.LISTENING,
+        "analyzing_source": None,
+    }
     hub = None
     hotword_holder: dict[str, object | None] = {"detector": None}
+    pipeline_holder: dict[str, object | None] = {"obj": None}
+    mic_failed = {"value": False}
+    capture_state = {
+        SOURCE_SYSTEM: {
+            "enabled": SOURCE_SYSTEM in settings.audio_sources,
+            "available": True,
+            "level": 0.0,
+            "speaking": False,
+            "last_activity": 0.0,
+        },
+        SOURCE_MIC: {
+            "enabled": bool(settings.hotword_enabled)
+            or SOURCE_MIC in settings.audio_sources,
+            "available": True,
+            "level": 0.0,
+            "speaking": False,
+            "last_activity": 0.0,
+        },
+    }
 
     def mute_hotword(seconds: float = 2.0) -> None:
         detector = hotword_holder["detector"]
@@ -495,6 +566,8 @@ def _run(args, home, repo, settings, domains_root, instance=None) -> int:
             mute(seconds)
 
     def feed_hotword(frame) -> None:
+        if frame.source != SOURCE_MIC:
+            return
         detector = hotword_holder["detector"]
         if detector is not None:
             detector.feed(frame.pcm, frame.source)
@@ -530,6 +603,108 @@ def _run(args, home, repo, settings, domains_root, instance=None) -> int:
             indicator.set_state(kind)
         if hub is not None:
             hub.set_state(kind)
+
+    def mic_detection_active() -> bool:
+        if not settings.hotword_enabled:
+            return SOURCE_MIC in settings.audio_sources
+        return mic.is_active
+
+    def _capture_snapshot() -> CaptureStatus:
+        system = capture_state[SOURCE_SYSTEM]
+        mic_status = capture_state[SOURCE_MIC]
+        return CaptureStatus(
+            system=SourceStatus(
+                source=SOURCE_SYSTEM,
+                enabled=bool(system["enabled"]),
+                active=bool(system["enabled"]) and not state["paused"],
+                available=bool(system["available"]),
+                level=float(system["level"]),
+                speaking=bool(system["speaking"]),
+                last_activity=float(system["last_activity"]),
+            ),
+            mic=SourceStatus(
+                source=SOURCE_MIC,
+                enabled=bool(mic_status["enabled"]),
+                active=mic_detection_active() and not state["paused"],
+                available=bool(mic_status["available"]),
+                level=float(mic_status["level"]),
+                speaking=bool(mic_status["speaking"]),
+                last_activity=float(mic_status["last_activity"]),
+            ),
+            mic_state=mic.state,
+            hotword_enabled=bool(settings.hotword_enabled),
+            timeout_remaining_s=mic.remaining(),
+            analyzing_source=state.get("analyzing_source"),
+            system_device=settings.system_device_id,
+            mic_device=settings.mic_device_id,
+        )
+
+    def emit_capture() -> None:
+        status_bridge.capture.emit(_capture_snapshot())
+
+    def sync_pipeline_sources() -> None:
+        pipeline = pipeline_holder["obj"]
+        if pipeline is None:
+            return
+        pipeline.set_source_active(
+            SOURCE_SYSTEM,
+            SOURCE_SYSTEM in settings.audio_sources and not state["paused"],
+        )
+        pipeline.set_source_active(
+            SOURCE_MIC, mic_detection_active() and not state["paused"]
+        )
+
+    def on_mic_change(mic_state: MicState) -> None:
+        if mic_state is MicState.ACTIVE:
+            if getattr(settings, "hotword_sound", True):
+                play_hotword_on(getattr(settings, "hotword_volume", 0.4))
+            log.info("microfone ativado pela hotword")
+        elif mic_state is MicState.STANDBY:
+            if getattr(settings, "hotword_sound", True):
+                play_hotword_off(getattr(settings, "hotword_volume", 0.4))
+            log.info("microfone voltou ao standby")
+        sync_pipeline_sources()
+        emit_capture()
+
+    mic = MicController(
+        enabled=bool(settings.hotword_enabled),
+        timeout_s=settings.mic_wake_timeout_s,
+        on_change=on_mic_change,
+    )
+
+    def on_hotword_triggered() -> None:
+        if state["paused"]:
+            return
+        if mic.wake():
+            emit_capture()
+
+    def on_capture(capture: CaptureStatus) -> None:
+        if indicator is not None:
+            indicator.set_capture(capture)
+        if hub is not None:
+            hub.set_capture(capture)
+        tray.set_capture(capture)
+
+    def on_source_level(source: str, level: float, speaking: bool) -> None:
+        status = capture_state.get(source)
+        if status is None:
+            return
+        now = time.monotonic()
+        status["level"] = max(0.0, min(1.0, level))
+        status["speaking"] = bool(speaking)
+        status["last_activity"] = now
+        if source == SOURCE_MIC and speaking and mic.is_active:
+            mic.touch()
+        emit_capture()
+
+    def on_analyzing_source(source: str, active: bool) -> None:
+        state["analyzing_source"] = source if active else None
+        emit_capture()
+
+    timeouts = QTimer()
+    timeouts.setInterval(500)
+    timeouts.timeout.connect(lambda: (mic.tick(), emit_capture()))
+    timeouts.start()
 
     class Bridge(QObject):
         detected = Signal(object)
@@ -573,9 +748,16 @@ def _run(args, home, repo, settings, domains_root, instance=None) -> int:
         tray.notify("Sopro", f"Falha ao iniciar a captura: {message}")
 
     status_bridge.level.connect(on_level)
+    status_bridge.source_level.connect(on_source_level)
     status_bridge.analyzing.connect(on_analyzing)
+    status_bridge.analyzing_source.connect(on_analyzing_source)
+    status_bridge.capture.connect(on_capture)
     status_bridge.progress.connect(on_progress)
+    emit_capture()
     status_bridge.ready.connect(on_ready)
+    status_bridge.warning.connect(
+        lambda message: tray.notify("Sopro", message)
+    )
     status_bridge.failed.connect(on_failed)
 
     from sopro.platform.popup.demo_player import DemoPlayer, build_demo_detections
@@ -617,18 +799,24 @@ def _run(args, home, repo, settings, domains_root, instance=None) -> int:
     def start_realtime() -> None:
         """Constrói o pipeline (com download/warmup) e inicia a captura, fora da UI."""
         nonlocal thread
-        from sopro.core.audio import CaptureConfig
 
         def run() -> None:
             try:
                 try:
+                    effective_sources = list(settings.audio_sources)
+                    mic_optional = bool(settings.hotword_enabled) and (
+                        SOURCE_MIC not in effective_sources
+                    )
+                    if mic_optional:
+                        effective_sources.append(SOURCE_MIC)
                     session_id = repo.start_session(
-                        "tempo real", settings.audio_sources
+                        "tempo real", tuple(effective_sources)
                     )
                     session_holder["id"] = session_id
                     provider = _build_provider(
                         settings,
                         home,
+                        secret_store=secret_store,
                         on_progress=lambda done, total: status_bridge.progress.emit(
                             done / total if total else 0.0
                         ),
@@ -636,14 +824,22 @@ def _run(args, home, repo, settings, domains_root, instance=None) -> int:
                     provider_holder["obj"] = provider
                     provider.warmup()
                     service = _build_service(
-                        settings, loaded, repo, session_id, provider
+                        settings,
+                        loaded,
+                        repo,
+                        session_id,
+                        provider,
+                        secret_store,
                     )
                     pipeline = RealtimePipeline(
                         service,
-                        on_level=status_bridge.level.emit,
+                        on_source_level=status_bridge.source_level.emit,
                         on_analyzing=status_bridge.analyzing.emit,
+                        on_analyzing_source=status_bridge.analyzing_source.emit,
                         on_frame=feed_hotword,
                     )
+                    pipeline.set_source_active(SOURCE_MIC, mic_detection_active())
+                    pipeline_holder["obj"] = pipeline
                 except Exception as exc:  # noqa: BLE001 - mantém a bandeja viva
                     logging.getLogger("sopro").exception(
                         "falha ao iniciar o pipeline"
@@ -653,26 +849,67 @@ def _run(args, home, repo, settings, domains_root, instance=None) -> int:
                 status_bridge.ready.emit()
                 source = _build_audio_source(settings)
                 capture = CaptureConfig(
-                    sources=settings.audio_sources,
+                    sources=tuple(effective_sources),
+                    optional_sources=(SOURCE_MIC,) if mic_optional else (),
                     system_device_id=getattr(settings, "system_device_id", None),
                     mic_device_id=getattr(settings, "mic_device_id", None),
                 )
-                # Check audio I/O conflict
+                # Check audio I/O conflict by ID and (when resolvable) name.
                 try:
+                    mic_id = getattr(settings, "mic_device_id", None)
+                    system_id = getattr(settings, "system_device_id", None)
+                    mic_name = system_name = None
+                    if mic_id and system_id:
+                        try:
+                            names = {
+                                device.id: device.name
+                                for device in source.list_devices()
+                            }
+                            mic_name = names.get(mic_id)
+                            system_name = names.get(system_id)
+                        except Exception:  # noqa: BLE001 - segue só com IDs
+                            pass
                     conf = check_audio_io_conflict(
-                        getattr(settings, "mic_device_id", None),
-                        getattr(settings, "system_device_id", None),
+                        mic_id,
+                        system_id,
+                        mic_device_name=mic_name,
+                        system_device_name=system_name,
                     )
                     if conf.has_conflict:
-                        log.warning("Conflito I/O áudio: %s", conf.message)
+                        log.warning(
+                            "Conflito I/O áudio: %s %s",
+                            conf.message,
+                            conf.suggestion,
+                        )
                 except Exception:
                     pass
-                source.start(capture)
                 try:
+                    source.start(capture)
+                    active = getattr(source, "active_sources", None)
+                    if (
+                        mic_optional
+                        and active is not None
+                        and SOURCE_MIC not in active
+                    ):
+                        mic_failed["value"] = True
+                        capture_state[SOURCE_MIC]["available"] = False
+                        mic.disable()
+                        detector = hotword_holder["detector"]
+                        if detector is not None:
+                            detector.set_enabled(False)
+                        emit_capture()
+                        status_bridge.warning.emit(
+                            "Microfone indisponível; a hotword foi desativada. "
+                            "O áudio do sistema continua ativo."
+                        )
                     pipeline.run(
                         source, should_stop=stop.is_set, on_detection=emit
                     )
+                except Exception as exc:  # noqa: BLE001 - mantém a bandeja viva
+                    logging.getLogger("sopro").exception("falha na captura")
+                    status_bridge.failed.emit(str(exc))
                 finally:
+                    pipeline_holder["obj"] = None
                     source.close()
             finally:
                 repo.database.close()
@@ -691,6 +928,7 @@ def _run(args, home, repo, settings, domains_root, instance=None) -> int:
             repo,
             session_holder["id"],
             provider_holder["obj"],
+            secret_store,
         )
         pipeline = RealtimePipeline(
             service,
@@ -722,17 +960,12 @@ def _run(args, home, repo, settings, domains_root, instance=None) -> int:
         state["paused"] = not state["paused"]
         log.info("Sopro %s", "pausado" if state["paused"] else "retomado")
         if state["paused"]:
-            try:
-                play_hotword_off(getattr(settings, "hotword_volume", 0.4))
-            except Exception:
-                pass
+            mic.sleep()
             set_status(IndicatorState.PAUSED)
         else:
-            try:
-                play_hotword_on(getattr(settings, "hotword_volume", 0.4))
-            except Exception:
-                pass
             set_status(IndicatorState.LISTENING)
+        sync_pipeline_sources()
+        emit_capture()
 
     def apply_saved_settings(new_settings, *, domains: bool = False) -> None:
         """Persiste e propaga uma configuração nova para todas as superfícies."""
@@ -750,6 +983,17 @@ def _run(args, home, repo, settings, domains_root, instance=None) -> int:
             settings.hotword_sensitivity,
             settings.hotword_listen_device,
         )
+        audio_changed = (
+            new_settings.audio_sources,
+            new_settings.mic_device_id,
+            new_settings.system_device_id,
+            new_settings.hotword_enabled,
+        ) != (
+            settings.audio_sources,
+            settings.mic_device_id,
+            settings.system_device_id,
+            settings.hotword_enabled,
+        )
         new_settings = replace(
             new_settings,
             indicator_x=settings.indicator_x,
@@ -764,6 +1008,16 @@ def _run(args, home, repo, settings, domains_root, instance=None) -> int:
         if hub is not None:
             hub.update_settings(settings)
             hub.set_remote(remote)
+        capture_state[SOURCE_SYSTEM]["enabled"] = (
+            SOURCE_SYSTEM in settings.audio_sources
+        )
+        capture_state[SOURCE_MIC]["enabled"] = bool(
+            settings.hotword_enabled or SOURCE_MIC in settings.audio_sources
+        )
+        mic.configure(
+            enabled=bool(settings.hotword_enabled),
+            timeout_s=settings.mic_wake_timeout_s,
+        )
         if domains:
             try:
                 loaded = _load_active_glossary(repo, settings, domains_root)
@@ -773,9 +1027,14 @@ def _run(args, home, repo, settings, domains_root, instance=None) -> int:
                 return
             if hub is not None:
                 hub.refresh_history()
-            restart_realtime()
-        if hotword_changed:
+        if audio_changed:
+            mic_failed["value"] = False
+        if hotword_changed or audio_changed:
             restart_hotword()
+        if domains or audio_changed:
+            restart_realtime()
+        sync_pipeline_sources()
+        emit_capture()
 
     def stop_realtime() -> None:
         """Encerra a thread/provider atuais antes de reconstruir o pipeline."""
@@ -802,6 +1061,7 @@ def _run(args, home, repo, settings, domains_root, instance=None) -> int:
             return
         stop_realtime()
         stop.clear()
+        mic_failed["value"] = False
         state["paused"] = False
         set_status(IndicatorState.LOADING)
         start_realtime()
@@ -856,6 +1116,7 @@ def _run(args, home, repo, settings, domains_root, instance=None) -> int:
         if hotkey_history is not None:
             hotkey_history.stop()
         stop_hotword()
+        timeouts.stop()
         if thread is not None:
             thread.join(timeout=2.0)
         overlay.stop()
@@ -866,13 +1127,43 @@ def _run(args, home, repo, settings, domains_root, instance=None) -> int:
         tray.hide()
         app.quit()
 
+    def on_secret_saved(api_key: str) -> None:
+        from sopro.core.config.secrets import GROQ_API_KEY, KeyringSecretStore
+
+        try:
+            secret_store.set(GROQ_API_KEY, api_key)
+        except Exception as exc:  # noqa: BLE001 - cofre opcional
+            log.warning("não foi possível salvar a chave Groq: %s", exc)
+            tray.notify(
+                "Sopro",
+                "Não foi possível salvar a chave no cofre do sistema.",
+            )
+            return
+        if isinstance(secret_store, KeyringSecretStore):
+            tray.notify("Sopro", "Chave Groq salva no cofre do sistema.")
+        else:
+            log.warning("cofre do SO indisponível; chave Groq só nesta sessão")
+            tray.notify(
+                "Sopro",
+                "Cofre do SO indisponível: a chave Groq vale só nesta sessão.",
+            )
+        if cloud_providers(settings):
+            restart_realtime()
+
     def ensure_hub():
         nonlocal hub
         if hub is None:
             from sopro.platform.popup.hub import HubWindow
 
-            hub = HubWindow(repo, settings, domains_root, demo_pairs=demo_pairs)
+            hub = HubWindow(
+                repo,
+                settings,
+                domains_root,
+                demo_pairs=demo_pairs,
+                device_choices=_audio_device_choices(),
+            )
             hub.settings_saved.connect(on_hub_settings)
+            hub.secret_saved.connect(on_secret_saved)
             hub.domains_changed.connect(on_hub_domains)
             hub.toggle_requested.connect(on_toggle)
             hub.demo_requested.connect(on_demo)
@@ -914,7 +1205,7 @@ def _run(args, home, repo, settings, domains_root, instance=None) -> int:
         triggered = Signal()
 
     hotword_bridge = HotwordBridge()
-    hotword_bridge.triggered.connect(on_toggle)
+    hotword_bridge.triggered.connect(on_hotword_triggered)
 
     hotword_detector = None
 
@@ -930,6 +1221,11 @@ def _run(args, home, repo, settings, domains_root, instance=None) -> int:
         stop_hotword()
         if not getattr(current, "hotword_enabled", False) or args.demo:
             return
+        if mic_failed["value"]:
+            capture_state[SOURCE_MIC]["available"] = False
+            mic.disable()
+            emit_capture()
+            return
         try:
             from sopro.platform.stt.factory import faster_whisper
 
@@ -941,7 +1237,7 @@ def _run(args, home, repo, settings, domains_root, instance=None) -> int:
                 )
 
             hotword_detector = create_hotword_detector(
-                phrase=getattr(current, "hotword_phrase", "sopro"),
+                phrase=WAKE_WORD,
                 backend=getattr(current, "hotword_backend", "stt_short"),
                 sensitivity=getattr(current, "hotword_sensitivity", 0.5),
                 device=getattr(current, "hotword_listen_device", None),
@@ -951,9 +1247,21 @@ def _run(args, home, repo, settings, domains_root, instance=None) -> int:
                 hotword_holder["detector"] = hotword_detector
                 hotword_detector.register_callback(hotword_bridge.triggered.emit)
                 hotword_detector.start()
+                capture_state[SOURCE_MIC]["available"] = True
                 log.info("hotword ativo (backend=%s)", current.hotword_backend)
+            else:
+                capture_state[SOURCE_MIC]["available"] = False
+                mic.disable()
+                emit_capture()
+                tray.notify(
+                    "Sopro",
+                    'Hotword indisponível: o microfone não será ativado por "sopro".',
+                )
         except Exception as exc:  # noqa: BLE001 - recurso opcional
             log.warning("hotword não iniciado: %s", exc)
+            capture_state[SOURCE_MIC]["available"] = False
+            mic.disable()
+            emit_capture()
             stop_hotword()
 
     def restart_hotword() -> None:

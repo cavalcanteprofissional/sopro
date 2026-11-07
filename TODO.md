@@ -38,6 +38,96 @@ de fala, erros amigáveis e tela de gerenciamento de glossários (importar/expor
 3. Iniciar a **Fase 7** pelo F7.0 (Clerk, Neon, R2 e Worker) após revisar o plano abaixo;
    a Fase 6 (curadoria) continua planejada.
 
+## Oitava rodada — Áudio, hotword fixa e identidade de fonte (EM ANDAMENTO)
+
+Derivada do reteste: o som de bolha não é ouvido, o microfone não é ativado por “sopro” e
+não está claro se a detecção veio do microfone ou do áudio do sistema. Decisões confirmadas
+pelo mantenedor em 2026-11-05:
+
+- **Hotword fixa:** `sopro` é a única palavra de ativação; não é editável na UI nem por
+  configuração persistida.
+- **Microfone por voz:** o dispositivo fica aberto em standby apenas para ouvir “sopro”;
+  ao ouvir, entra em `ACTIVE` e passa a alimentar VAD/STT. Volta a `STANDBY` após **30 s**
+  de silêncio no microfone (configurável em `mic_wake_timeout_s`, 10–300 s).
+- **Sobreposição:** sistema e microfone são processados juntos, com deduplicação e
+  preferência pelo microfone enquanto ativo (arbitragem de ~500 ms; fallback de 2 s).
+- **Fonte desmarcada:** com hotword habilitado, o microfone abre em standby mesmo fora de
+  `audio_sources`, com aviso explícito de que só ouve a hotword até ser ativado.
+- **Fonte do hotword:** sempre o microfone; “sopro” no áudio do sistema nunca dispara.
+
+### A8.0 — Registrar plano (antes)
+
+- [x] Registrar decisões, arquitetura e ordem de implementação neste TODO.
+- [x] Atualizar `docs/02-arquitetura-e-especificacoes.md`, `docs/roadmap/03-captura-de-audio.md`,
+  `docs/roadmap/02-jornada-do-usuario.md`, `README.md` e consentimento de primeira execução
+  conforme cada item for concluído.
+
+### A8.1 — Som (P0)
+
+- [x] Corrigir `platform/popup/sound.py`: não combinar `SND_MEMORY` com `SND_ASYNC`; tocar em
+  worker serializado sem bloquear a UI e manter fallback gracioso.
+- [x] Refazer a bolha em `core/audio/chime.py`: glide suave, fade-in/out, sem clique, sem
+  clipping e timbre distinto dos sons de hotword.
+- [x] Expor `popup_volume` e `hotword_volume` na UI, com botões de teste e toggle dos sons
+  do hotword; validar volumes em `Settings`.
+- [x] Preservar callback de som injetado em `OverlayController.update_settings`.
+- [x] Testes: flags do `winsound`, volume 0/1, WAV sem clique, fallback, UI e overlay.
+
+### A8.2 — Hotword fixa e microfone por voz (P0)
+
+- [x] Criar `WAKE_WORD = "sopro"` e normalizar valores antigos de `hotword_phrase`.
+- [x] Remover o campo “Palavra do hotword” da UI; manter o texto apenas como dica.
+- [x] Implementar `MicState` (`STANDBY`/`ACTIVE`/`DISABLED`) e `MicController` com timeout
+  de silêncio, reiniciado por fala no microfone ou novo “sopro”.
+- [x] Ligar o callback do hotword à ativação do microfone, não ao pause/resume do app.
+- [x] Abrir microfone em standby quando o hotword estiver habilitado e a fonte estiver
+  desmarcada, com aviso; desabilitar o hotword com aviso se o microfone falhar.
+- [x] Testes: “sopro” no sistema é ignorado; “sopro” no mic ativa; timeout desativa;
+  fala reinicia o contador; hotword fixo e imutável.
+
+### A8.3 — Roteamento e deduplicação (P0)
+
+- [ ] Introduzir `CaptureRouter`/`SourceArbiter`: nível e saúde por fonte, hotword só no mic,
+  microfone em standby sem detecção. *(Capacidades equivalentes já existem em
+  `RealtimePipeline`/`MicController`; falta apenas a classe formal.)*
+- [x] Deduplicar entre fontes (`source_dedup_window_s`, padrão 2 s), preferindo a primeira
+  que chega; o microfone tende a chegar antes do loopback.
+- [x] Arbitragem de 500 ms com prioridade do microfone quando ele está ativo.
+- [x] Separar análise de commit no `DetectionService` para permitir arbitragem antes de
+  persistir/enfileirar.
+- [x] Contexto de desambiguação por fonte (não global).
+- [x] Resetar o `StreamingSegmenter` ao ativar/desativar o microfone; o trecho da hotword não
+  entra no VAD/STT de termos.
+- [x] Teste: contexto não se mistura entre fontes.
+- [x] Testes de integração: mesma fala nas duas fontes gera uma detecção com fonte `mic`;
+  conteúdo diferente do sistema continua sendo processado; fallback após 500 ms.
+
+### A8.4 — Identidade visual da fonte (P0)
+
+- [x] Indicador flutuante com anel/badge de fonte: sistema (ciano), mic ativo (verde),
+  mic em standby (cinza tracejado), analisando (âmbar) e combinação dos dois.
+- [x] Tooltip e StatusPage com estado por fonte, níveis, dispositivo e tempo restante do mic.
+- [x] Bandeja com rótulo da fonte ativa; cartão com chip de fonte colorido e sempre visível.
+- [x] Testes de pintura, tooltip, StatusPage, bandeja e cartão.
+
+### A8.5 — Robustez e lacunas funcionais (P1)
+
+- [x] Worker de STT e filas por fonte para evitar descarte enquanto o modelo transcreve.
+- [x] Seleção de dispositivos de áudio na UI e conflito de I/O detectado por ID/nome (aviso e sugestão).
+- [x] Groq utilizável: chave no cofre, `secret_store` no pipeline e consentimento/indicador.
+- [x] Histórico: ação “marcar como aprendido” (incluir `d.id` em `HistoryEntry`).
+- [x] Expor opções restantes com validação: `show_source`, `save_context`,
+  `save_transcript`, `matcher_fuzzy`, `llm_candidates`.
+
+### A8.6 — Qualidade e release (P1/P2)
+
+- [x] Remover/depreciar OpenWakeWord sem modelo “sopro”; retirar dependência de `core`.
+- [x] Rodar `pytest -q`, `compileall` e smoke `--demo`.
+- [x] Rodar `python scripts/tasks.py test` (478 testes) e `validate` do pacote seed.
+- [ ] Rodar lint/typecheck disponíveis e reteste manual de áudio.
+- [x] Atualizar CHANGELOG, README, docs e este TODO.
+- [ ] Rebuild/reteste do executável.
+
 ### Plano de testes da 0.1.1 (registrado em 2026-10-31)
 
 Roteiro completo, pré-condições e critérios de saída em
@@ -46,8 +136,8 @@ repetido no aceite final (T6).
 
 - [x] **T0 — Gate automatizado:** `pytest -q` (445), validador, smoke `--demo` e
       `sha256sum -c SHA256SUMS.txt`.
-- [x] **T1 — Hotword:** 3 ciclos “sopro” no executável alternaram pausa/retomada sem
-      auto-disparo do bipe; repetir no aceite final.
+- [ ] **T1 — Hotword:** 3 ciclos “sopro” no executável ativam o microfone (sem pausar o app)
+      e voltam ao standby após o timeout, sem auto-disparo do bipe.
 - [ ] **T2 — Trilhas tri-state:** `all`/`base`/`custom`, normalização, persistência e
       disparo apenas de trilhas ativas.
 - [ ] **T3 — Tema:** `dark`/`light`/`system`, contraste nas superfícies e persistência.
